@@ -3,68 +3,221 @@
     --flora-color: #ff5500;
     --louisville-color: #e60000;
     --clay-city-color: #008000;
-    --paper-bg: #ffffdf;
+    --paper-bg: #ffffdf; /* Your specific cream color */
     --smlc-blue: #38b6ff;
     --premium-gold: #fef9c3;
     --plus-blue: #e0f2fe;
 }
 
-body { background-color: #d1d5db; font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; }
+body { 
+    background-color: #d1d5db; 
+    font-family: 'Times New Roman', Times, serif; 
+    margin: 0; 
+    padding: 0; 
+}
 
 /* HEADER & MENU */
-.nav-header { background-color: var(--smlc-blue); color: white; padding: 15px 0; text-align: center; font-weight: bold; width: 100%; }
-.nav-header a { color: white; text-decoration: none; margin: 0 15px; }
+.nav-header { 
+    background-color: var(--smlc-blue); 
+    color: white; 
+    padding: 15px 0; 
+    text-align: center; 
+    font-weight: bold; 
+    width: 100%; 
+}
+.nav-header a { 
+    color: white; 
+    text-decoration: none; 
+    margin: 0 15px; 
+}
 
-.menu-bar { background: #fff; border-bottom: 2px solid #000; padding: 10px 0; position: sticky; top: 0; z-index: 100; }
-.menu-container { width: 95%; max-width: 1600px; margin: 0 auto; display: flex; justify-content: center; gap: 40px; }
-.styled-select { padding: 8px 15px; font-weight: bold; border: 2px solid var(--smlc-blue); cursor: pointer; }
+.menu-bar { 
+    background: #fff; 
+    border-bottom: 2px solid #000; 
+    padding: 10px 0; 
+    position: sticky; 
+    top: 0; 
+    z-index: 100; 
+}
+.menu-container { 
+    width: 95%; 
+    max-width: 1600px; 
+    margin: 0 auto; 
+    display: flex; 
+    justify-content: center; 
+    gap: 40px; 
+}
+.styled-select { 
+    padding: 8px 15px; 
+    font-weight: bold; 
+    border: 2px solid var(--smlc-blue); 
+    cursor: pointer; 
+}
 
 /* GRID & CONTAINERS */
-.site-wrapper { width: 95%; max-width: 1600px; margin: 30px auto; }
-#directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+.site-wrapper { 
+    width: 95%; 
+    max-width: 1600px; 
+    margin: 30px auto; 
+}
+#directory-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+    gap: 25px; 
+}
 
-/* BUSINESS CARD (INDEX) & PROFILE CONTAINER */
+/* BUSINESS CARD & PROFILE CONTAINER - Shared Styles */
 .card, .profile-container { 
     border: 2px solid #000; 
     box-shadow: 10px 10px 0px rgba(0,0,0,0.2); 
     position: relative;
     box-sizing: border-box;
     transition: transform 0.2s;
+    background-color: #ffffdf; /* All boxes now use this background */
 }
 
-/* TIER COLORS */
-.basic { background-color: #ffffff; }
-.plus { background-color: var(--plus-blue); border-color: #0369a1; }
-.premium { background-color: var(--premium-gold); border-color: #a16207; }
+/* TIER BORDER CONTRAST - Differentiation through border color instead of background */
+.basic { border-color: #000; }
+.plus { border-color: #0369a1; }
+.premium { border-color: #a16207; }
 
-/* SHARED CARD ELEMENTS */
-.card { padding: 20px; text-align: center; display: flex; flex-direction: column; height: 380px; overflow: hidden; }
+/* CARD SPECIFIC LAYOUT */
+.card { 
+    padding: 20px; 
+    text-align: center; 
+    display: flex; 
+    flex-direction: column; 
+    height: 380px; 
+    overflow: hidden; 
+}
 .card.premium { cursor: pointer; }
-.card.premium:hover { transform: translateY(-5px); box-shadow: 15px 15px 0px rgba(0,0,0,0.3); }
+.card.premium:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 15px 15px 0px rgba(0,0,0,0.3); 
+}
 
 /* BADGES */
-.plan-badge, .tier-indicator { position: absolute; top: 10px; right: 10px; font-size: 0.6rem; font-weight: bold; border: 1px solid #000; padding: 2px 6px; background: #fff; text-transform: uppercase; z-index: 10; }
-.coupon-badge { position: absolute; top: 10px; left: 10px; font-size: 0.6rem; font-weight: bold; border: 1px solid #000; padding: 2px 6px; background: #22c55e; color: #fff; z-index: 10; }
+.plan-badge, .tier-indicator { 
+    position: absolute; 
+    top: 10px; 
+    right: 10px; 
+    font-size: 0.6rem; 
+    font-weight: bold; 
+    border: 1px solid #000; 
+    padding: 2px 6px; 
+    background: #fff; 
+    text-transform: uppercase; 
+    z-index: 10; 
+}
+.coupon-badge { 
+    position: absolute; 
+    top: 10px; 
+    left: 10px; 
+    font-size: 0.6rem; 
+    font-weight: bold; 
+    border: 1px solid #000; 
+    padding: 2px 6px; 
+    background: #22c55e; 
+    color: #fff; 
+    z-index: 10; 
+}
 
 /* LOGO SECTION */
-.logo-box, .profile-logo { height: 120px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; border-bottom: 1px solid #000; padding-bottom: 10px; }
-.card.basic .logo-box, .card.plus .logo-box { visibility: hidden; border-bottom: none; }
-.logo-box img, .profile-logo img { max-height: 100%; max-width: 100%; object-fit: contain; }
+.logo-box, .profile-logo { 
+    height: 120px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin-bottom: 10px; 
+    border-bottom: 1px solid #000; 
+    padding-bottom: 10px; 
+}
+/* Hide logos on lower tiers to encourage upgrades */
+.card.basic .logo-box, .card.plus .logo-box { 
+    visibility: hidden; 
+    border-bottom: none; 
+}
+.logo-box img, .profile-logo img { 
+    max-height: 100%; 
+    max-width: 100%; 
+    object-fit: contain; 
+}
 
-/* TOWN BAR (MIDDLE) */
-.town-bar { color: white; font-weight: bold; padding: 8px 0; text-transform: uppercase; letter-spacing: 2px; margin: 15px 0; font-size: 1rem; border: 1.5px solid #000; text-align: center;}
+/* TOWN BAR (COLOR CODED) */
+.town-bar { 
+    color: white; 
+    font-weight: bold; 
+    padding: 8px 0; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    margin: 15px 0; 
+    font-size: 1rem; 
+    border: 1.5px solid #000; 
+    text-align: center;
+}
 .flora-bar { background-color: var(--flora-color); }
 .louisville-bar { background-color: var(--louisville-color); }
 .clay-city-bar { background-color: var(--clay-city-color); }
 
 /* TEXT CONTENT */
-.biz-name { font-size: 1.6rem; font-weight: bold; color: #000; margin-bottom: 5px; }
-.cat-text, .biz-meta { font-size: 0.85rem; font-style: italic; color: #444; margin-top: auto; }
+.biz-name { 
+    font-size: 1.6rem; 
+    font-weight: bold; 
+    color: #000; 
+    margin-bottom: 5px; 
+}
+.cat-text, .biz-meta { 
+    font-size: 0.85rem; 
+    font-style: italic; 
+    color: #444; 
+    margin-top: auto; 
+}
 
 /* PROFILE PAGE SPECIFIC */
-.profile-container { width: 90%; max-width: 900px; margin: 40px auto; padding: 40px; }
-.details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
-.info-section h3 { border-bottom: 1.5px solid #000; padding-bottom: 5px; text-transform: uppercase; text-align: left; }
-.bio-box { margin-top: 20px; line-height: 1.6; font-size: 1.1rem; padding: 15px; border-left: 5px solid #000; background: rgba(255,255,255,0.5); text-align: left; }
-.map-box { width: 100%; height: 350px; border: 2px solid #000; margin-top: 20px; }
-.action-btn { display: inline-block; margin-top: 20px; padding: 12px 25px; background: #000; color: #fff; text-decoration: none; font-weight: bold; border: 2px solid #000; }
+.profile-container { 
+    width: 90%; 
+    max-width: 900px; 
+    margin: 40px auto; 
+    padding: 40px; 
+}
+.details-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px; 
+    margin-top: 20px; 
+}
+.info-section h3 { 
+    border-bottom: 1.5px solid #000; 
+    padding-bottom: 5px; 
+    text-transform: uppercase; 
+    text-align: left; 
+}
+.bio-box { 
+    margin-top: 20px; 
+    line-height: 1.6; 
+    font-size: 1.1rem; 
+    padding: 15px; 
+    border-left: 5px solid #000; 
+    background: rgba(255,255,255,0.5); 
+    text-align: left; 
+}
+.map-box { 
+    width: 100%; 
+    height: 350px; 
+    border: 2px solid #000; 
+    margin-top: 20px; 
+}
+.action-btn { 
+    display: inline-block; 
+    margin-top: 20px; 
+    padding: 12px 25px; 
+    background: #000; 
+    color: #fff; 
+    text-decoration: none; 
+    font-weight: bold; 
+    border: 2px solid #000; 
+}
+.action-btn:hover {
+    background-color: #fff;
+    color: #000;
+}

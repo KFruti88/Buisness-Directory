@@ -7,6 +7,8 @@
     "category": "Shopping",
     "phone": "618-662-4411",
     "address": "123 E North Ave, Flora, IL 62839",
+    "website": "https://www.villagefloristflora.com",
+    "facebook_url": "https://www.facebook.com/AngelasVillageFlorist",
     "logo": "https://github.com/KFruti88/images/blob/main/unnamed%20(1).jpg?raw=true",
     "bio": "Premium arrangements for our paid members. Fresh flowers and custom gifts for the Flora community."
   },
@@ -18,8 +20,57 @@
     "category": "Services",
     "phone": "618-665-3311",
     "address": "111 E Main St, Louisville, IL 62858",
+    "website": "https://www.win-fiber.com",
+    "facebook_url": "https://www.facebook.com/WabashIndependentNetworks",
     "logo": "https://raw.githubusercontent.com/KFruti88/Clay-County-Business-Directory/main/logos/wabash.png",
     "bio": "High-speed fiber internet and local phone services connecting the Clay County community."
+  },
+  {
+    "id": "we-deliver",
+    "name": "WE DELIVER",
+    "town": "Flora",
+    "tier": "premium",
+    "category": "Services",
+    "phone": "618-555-1234",
+    "website": "https://supportmylocalcommunity.com",
+    "facebook_url": "https://www.facebook.com/WEDELIVERFLORA",
+    "logo": "https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/logos/we-deliver.png",
+    "bio": "Save time, let us deliver it for you! Serving the Flora area."
+  },
+  {
+    "id": "north-american-lighting",
+    "name": "North American Lighting",
+    "town": "Flora",
+    "tier": "basic",
+    "category": "Manufacturing",
+    "phone": "618-662-4483",
+    "address": "20 Industrial Park, Flora, IL 62839",
+    "website": "https://www.nal.com",
+    "logo": "https://via.placeholder.com/150?text=NAL",
+    "bio": "Leading manufacturer of automotive lighting systems."
+  },
+  {
+    "id": "axiom-gardens",
+    "name": "Axiom Gardens of Flora",
+    "town": "Flora",
+    "tier": "basic",
+    "category": "Healthcare",
+    "phone": "618-662-2111",
+    "address": "Flora, IL 62839",
+    "website": "https://axiomhealthcare.com",
+    "logo": "https://via.placeholder.com/150?text=Axiom",
+    "bio": "New healthcare and landscaping services opened Jan 2026."
+  },
+  {
+    "id": "dimaggios-pizza",
+    "name": "DiMaggio's Pizza",
+    "town": "Flora",
+    "tier": "basic",
+    "category": "Dining",
+    "phone": "618-662-4481",
+    "address": "Flora, IL 62839",
+    "logo": "https://via.placeholder.com/150?text=DiMaggios",
+    "bio": "Family-owned pizzeria serving Flora for generations."
   },
   {
     "id": "daves-auto-repair",
@@ -30,35 +81,5 @@
     "phone": "618-508-3688",
     "logo": "https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/logos/daves-auto.png",
     "bio": "Expert auto repair services serving the Flora community."
-  },
-  {
-    "id": "hanging-rock-auto",
-    "name": "Hanging Rock Auto Repair",
-    "town": "Flora",
-    "tier": "basic",
-    "category": "Services",
-    "phone": "618-662-3090",
-    "logo": "https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/logos/hanging-rock.png",
-    "bio": "Reliable auto maintenance and repairs located in Flora."
-  },
-  {
-    "id": "we-deliver",
-    "name": "WE DELIVER",
-    "town": "Flora",
-    "tier": "premium",
-    "category": "Services",
-    "phone": "618-555-1234",
-    "logo": "https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/logos/we-deliver.png",
-    "bio": "Save time, let us deliver it for you! Serving the Flora area."
-  },
-  {
-    "id": "dimaggios-pizza",
-    "name": "DiMaggio's Pizza",
-    "town": "Flora",
-    "tier": "basic",
-    "category": "Dining",
-    "phone": "618-662-4481",
-    "logo": "https://via.placeholder.com/150?text=DiMaggios",
-    "bio": "Family-owned pizzeria serving Flora for generations."
   }
 ]

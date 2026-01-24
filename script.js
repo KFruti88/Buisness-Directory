@@ -4,7 +4,9 @@ const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9
 const couponImgUrl = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
 // 1. LOCKED EMOJI MAPPING
+// Add this to your catEmojis object
 const catEmojis = {
+    "Emergency": "🚨", // New Emergency Category
     "Church": "⛪", "Post Office": "📬", "Restaurants": "🍴", "Retail": "🛒", 
     "Shopping": "🛍️", "Manufacturing": "🏗️", "Industry": "🏭", 
     "Financial Services": "💰", "Healthcare": "🏥", "Gas Station": "⛽", 

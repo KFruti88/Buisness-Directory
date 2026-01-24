@@ -4,20 +4,27 @@ const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9
 const couponImgUrl = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
 // 1. LOCKED EMOJI MAPPING
-// Add this to your catEmojis object
 const catEmojis = {
-    "Bars": "🍺", // New Category
+    "Bars": "🍺", 
     "Emergency": "🚨", 
-    "Church": "⛪", "Post Office": "📬", "Restaurants": "🍴", "Retail": "🛒", 
-    "Shopping": "🛍️", "Manufacturing": "🏗️", "Industry": "🏭", 
-    "Financial Services": "💰", "Healthcare": "🏥", "Gas Station": "⛽", 
-    "Internet": "🌐", "Services": "🛠️", "Professional Services": "💼"
-};
-};
+    "Church": "⛪", 
+    "Post Office": "📬", 
+    "Restaurants": "🍴", 
+    "Retail": "🛒", 
+    "Shopping": "🛍️", 
+    "Manufacturing": "🏗️", 
+    "Industry": "🏭", 
+    "Financial Services": "💰", 
+    "Healthcare": "🏥", 
+    "Gas Station": "⛽", 
+    "Internet": "🌐", 
+    "Support Services": "🛠️", 
+    "Professional Services": "💼"
+}; // Removed the extra }; that was here
 
 document.addEventListener("DOMContentLoaded", () => { loadDirectory(); });
 
-// 2. SMART IMAGE HELPER: Handles multiple extensions and fallback placeholders
+// 2. SMART IMAGE HELPER
 function getSmartImage(id, isProfile = false) {
     if(!id) return '';
     const cleanID = id.trim();
@@ -44,7 +51,7 @@ async function loadDirectory() {
     });
 }
 
-// 4. RENDER MAIN DIRECTORY (Clean teaser cards)
+// 4. RENDER MAIN DIRECTORY
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
@@ -68,9 +75,7 @@ function renderCards(data) {
             <div class="logo-box">${getSmartImage(imageID)}</div>
             <div class="town-bar ${townClass}-bar">${biz.Town || 'Unknown'}</div>
             <div class="biz-name">${biz.Name || 'Unnamed Business'}</div>
-            
             ${tier === 'plus' ? `<div class="plus-reveal">📞 ${biz.Phone || 'Contact for Info'}</div>` : ''}
-            
             <div class="cat-text">${catEmojis[category] || "📁"} ${category}</div>
         </div>`;
     }).join('');
@@ -79,7 +84,7 @@ function renderCards(data) {
     if (counter) counter.innerText = `${data.length} Businesses Listed`;
 }
 
-// 5. LOAD INDIVIDUAL PROFILE (QR Code logic removed)
+// 5. LOAD INDIVIDUAL PROFILE
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
     const bizId = params.get('id');
@@ -91,7 +96,6 @@ function loadProfile(data) {
         return;
     }
 
-    // MAP URL FIX
     const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` : '';
 
     container.innerHTML = `
@@ -105,7 +109,6 @@ function loadProfile(data) {
                     ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" class="action-btn">🌐 Visit Website</a>` : ''}
                 </div>
             </div>
-
             <div class="details-grid">
                 <div class="info-section">
                     <h3>Contact Information</h3>
@@ -117,7 +120,6 @@ function loadProfile(data) {
                     <div class="bio-box">${biz.Bio || "No description provided."}</div>
                 </div>
             </div>
-            
             ${mapUrl ? `<iframe class="map-box" src="${mapUrl}" width="100%" height="350" style="border:0;" allowfullscreen></iframe>` : ''}
         </div>`;
 }

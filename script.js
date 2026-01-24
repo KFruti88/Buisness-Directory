@@ -1,6 +1,8 @@
 let masterData = [];
+
 // 1. PROJECT CONFIGURATION
-const imageRepo = "https://raw.githubusercontent.com/KFruti88/Clay-County-Fuel/main/images/";
+// Updated to pull from your general images repository
+const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 const couponImgUrl = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
@@ -22,9 +24,9 @@ function getSmartImage(id, bizName, isProfile = false) {
     if(!id && !bizName) return '';
     
     let fileName = id.trim().toLowerCase();
-    const nameLower = bizName.toLowerCase();
+    const nameLower = bizName ? bizName.toLowerCase() : "";
 
-    // Check for shared brands (e.g., Flora Casey's and Clay City Casey's use caseys.png)
+    // Brand logic: Checks if name contains a brand like "Casey's"
     const brandMatch = sharedBrands.find(brand => nameLower.includes(brand));
     if (brandMatch) {
         fileName = brandMatch.replace(/['\s]/g, ""); 
@@ -87,7 +89,7 @@ function renderCards(data) {
     if (counter) counter.innerText = `${data.length} Businesses Listed`;
 }
 
-// 5. LOAD INDIVIDUAL PROFILE
+// 5. LOAD INDIVIDUAL PROFILE (FIXED)
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
     const bizId = params.get('id');
@@ -99,7 +101,10 @@ function loadProfile(data) {
         return;
     }
 
-    const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` : '';
+    // FIXED: Corrected Map URL template literal syntax
+    const simpleMap = biz.Address && biz.Address !== "N/A" 
+        ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` 
+        : '';
 
     container.innerHTML = `
         <div class="profile-container premium">
@@ -123,7 +128,7 @@ function loadProfile(data) {
                     <div class="bio-box">${biz.Bio || "No description provided."}</div>
                 </div>
             </div>
-            ${mapUrl ? `<iframe class="map-box" src="${mapUrl}" width="100%" height="350" style="border:0;" allowfullscreen></iframe>` : ''}
+            ${simpleMap ? `<iframe class="map-box" src="${simpleMap}" width="100%" height="350" style="border:0;" allowfullscreen></iframe>` : ''}
         </div>`;
 }
 

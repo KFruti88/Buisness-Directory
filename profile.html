@@ -1,36 +1,179 @@
-<div class="profile-header">
-    <img id="biz-logo" src="" style="max-width:200px;" />
-    <h1 id="biz-title"></h1>
-</div>
-<div class="profile-content">
-    <p><strong>Town:</strong> <span id="biz-town"></span></p>
-    <p><strong>Contact:</strong> <span id="biz-phone"></span></p>
-    <p id="biz-bio"></p>
-    <button onclick="window.history.back()">Back to Directory</button>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Profile | Clay County Directory</title>
+    
+    <link rel="stylesheet" href="https://KFruti88.github.io/master.html/town-colors.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d1d5db;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-<script>
-    // 1. Get the ID from the URL (e.g., profile.html?id=wabash-networks)
-    const urlParams = new URLSearchParams(window.location.search);
-    const bizId = urlParams.get('id');
+        .nav-header {
+            width: 100%;
+            background-color: #38b6ff;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
 
-    // 2. The same data list (In a real setup, this is shared)
-    const clayCountyData = [
-        { id: 'angela-florist', name: "Angela's Village Florist", town: 'Flora', phone: '618-662-4411', logo: 'logo1.png', bio: 'Beautiful flowers for all occasions.' },
-        { id: 'wabash-networks', name: 'Wabash Independent Networks', town: 'Louisville', phone: '618-665-3311', logo: 'logo2.png', bio: 'Local fiber and phone services.' }
-    ];
+        .nav-header a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+        }
 
-    // 3. Find the specific business that matches the ID
-    const business = clayCountyData.find(b => b.id === bizId);
+        /* Profile Card Styling */
+        .profile-container {
+            max-width: 800px;
+            width: 90%;
+            background-color: #fffaf0;
+            border: 2px solid #000;
+            box-shadow: 10px 10px 5px rgba(0,0,0,0.2);
+            margin: 50px 0;
+            padding: 40px;
+        }
 
-    // 4. Fill in the blanks on the page
-    if (business) {
-        document.getElementById('biz-title').innerText = business.name;
-        document.getElementById('biz-town').innerText = business.town;
-        document.getElementById('biz-phone').innerText = business.phone;
-        document.getElementById('biz-bio').innerText = business.bio;
-        document.getElementById('biz-logo').src = business.logo;
-    } else {
-        document.body.innerHTML = "<h1>Business not found</h1>";
-    }
-</script>
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        #biz-logo {
+            max-width: 250px;
+            max-height: 200px;
+            object-fit: contain;
+        }
+
+        .header-text h1 {
+            font-family: 'Times New Roman', serif;
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        /* Matches your .flora-bar etc. for the profile view */
+        .town-indicator {
+            display: inline-block;
+            color: white;
+            padding: 5px 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        .profile-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .info-row {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .bio-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 5px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-header">
+        <a href="index.html">Back to Full Directory</a>
+        <a href="#">Clay City</a>
+        <a href="#">Flora</a>
+        <a href="#">Louisville</a>
+        <a href="#">Xenia</a>
+    </div>
+
+    <div class="profile-container" id="profile-content-area">
+        <div class="profile-header">
+            <img id="biz-logo" src="" alt="Logo Loading...">
+            <div class="header-text">
+                <h1 id="biz-title">Loading Business...</h1>
+                <div id="town-tag" class="town-indicator"></div>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <div class="info-row">Phone: <span id="biz-phone"></span></div>
+            <div class="info-row">Category: <span id="biz-category"></span></div>
+            
+            <div class="bio-section">
+                <h3>About this Business</h3>
+                <p id="biz-bio">Information coming soon...</p>
+            </div>
+
+            <a href="index.html" class="back-btn">← RETURN TO DIRECTORY</a>
+        </div>
+    </div>
+
+    <script src="https://KFruti88.github.io/master.html/data.js"></script>
+
+    <script>
+        function loadProfile() {
+            // Get the ID from the URL bar (e.g. profile.html?id=wabash-networks)
+            const urlParams = new URLSearchParams(window.location.search);
+            const bizId = urlParams.get('id');
+
+            // Find the business in your clayCountyData list
+            const business = clayCountyData.find(b => b.id === bizId);
+
+            if (business) {
+                // Set the text and images
+                document.getElementById('biz-title').innerText = business.name;
+                document.getElementById('biz-phone').innerText = business.phone || 'Contact for details';
+                document.getElementById('biz-category').innerText = business.category || 'General';
+                document.getElementById('biz-bio').innerText = business.bio || 'This business is a proud member of the Clay County community.';
+                document.getElementById('biz-logo').src = business.logo;
+                
+                // Set the town tag and color bar
+                const townTag = document.getElementById('town-tag');
+                townTag.innerText = business.town;
+                // Applies your GitHub class (e.g. .flora-bar)
+                townTag.className = `town-indicator ${business.town.toLowerCase()}-bar`;
+                
+                // Update the Browser Tab Title
+                document.title = `${business.name} | Clay County Directory`;
+            } else {
+                document.getElementById('profile-content-area').innerHTML = `
+                    <h1>Business Not Found</h1>
+                    <p>We couldn't find a listing for that ID. It may have been removed or moved.</p>
+                    <a href="index.html" class="back-btn">Back to Directory</a>
+                `;
+            }
+        }
+
+        // Run when page opens
+        window.onload = loadProfile;
+    </script>
+</body>
+</html>

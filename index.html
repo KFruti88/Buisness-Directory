@@ -22,7 +22,6 @@
         }
         .filter-btn.active, .filter-btn:hover { background: #38b6ff; color: #fff; }
 
-        /* Multi-column Grid Reinstated */
         #directory-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
@@ -30,18 +29,24 @@
             padding-bottom: 50px; 
         }
         
-        /* The Newspaper Clipping Card */
         .card { 
             background-color: #ffffdf; border: 2px solid #000; box-shadow: 10px 10px 0px rgba(0,0,0,0.2); 
             padding: 25px; text-align: center; display: flex; flex-direction: column; 
-            transition: all 0.3s ease; 
-            cursor: pointer;
-            overflow: hidden;
-            height: fit-content;
+            transition: all 0.3s ease; overflow: hidden; height: fit-content; position: relative;
         }
-        .card:hover { transform: translateY(-5px); box-shadow: 15px 15px 0px rgba(0,0,0,0.3); }
 
-        .logo-container { height: 140px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; border-bottom: 1px solid #000; padding-bottom: 10px;}
+        /* Tier & Coupon Badges */
+        .tier-badge { position: absolute; top: 10px; right: 10px; font-size: 0.6rem; padding: 2px 8px; font-weight: bold; text-transform: uppercase; border: 1px solid #000; background: #eee; }
+        .coupon-badge { background: #22c55e; color: white; font-size: 0.7rem; padding: 4px 10px; position: absolute; top: 40px; right: 10px; font-weight: bold; border: 1px solid #000; box-shadow: 2px 2px 0px #000; }
+
+        /* Tier Logic: Pointer Events */
+        .card.basic, .card.plus { cursor: default; pointer-events: none; }
+        .card.premium { cursor: pointer; }
+        .card.premium:hover { transform: translateY(-5px); box-shadow: 15px 15px 0px rgba(0,0,0,0.3); }
+
+        /* Logos only for Premium */
+        .logo-container { height: 140px; display: none; align-items: center; justify-content: center; margin-bottom: 10px; border-bottom: 1px solid #000; padding-bottom: 10px;}
+        .card.premium .logo-container { display: flex; }
         .logo-container img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
         .town-bar { color: white; font-weight: bold; padding: 8px 0; text-transform: uppercase; letter-spacing: 2px; margin: 10px 0; font-size: 1rem; }
@@ -50,19 +55,19 @@
         .clay-city-bar { background-color: #008000 !important; }
 
         .biz-name { font-size: 1.6rem; font-weight: bold; color: #000; margin-bottom: 5px; }
-        
-        /* HIDDEN SECTION - Shows on click */
+        .cat-tag { font-size: 0.8rem; font-style: italic; color: #555; margin-bottom: 10px; display: block; }
+
+        /* Hidden Info Slide Down */
         .hidden-info { 
             max-height: 0; opacity: 0; transition: all 0.5s ease;
             text-align: left; background: rgba(0,0,0,0.05); border-radius: 5px; 
-            margin-top: 10px; padding: 0 10px; border: 0px solid transparent;
+            margin-top: 10px; padding: 0 10px; overflow: hidden;
         }
         .card.expanded .hidden-info { 
-            max-height: 800px; opacity: 1; padding: 15px; border: 1px solid #000; margin-bottom: 10px;
+            max-height: 1000px; opacity: 1; padding: 15px; border: 1px solid #000; margin-bottom: 10px;
         }
 
         .map-frame { width: 100%; height: 200px; border: 1px solid #000; margin-top: 10px; }
-        .premium-badge { background: #000; color: #fff; font-size: 0.6rem; padding: 2px 8px; position: absolute; top: 10px; right: 10px; }
         .btn-profile { display: block; margin: 10px auto; padding: 10px; background: #000; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.8rem; text-align: center; }
     </style>
 </head>
@@ -83,13 +88,6 @@
                 <button class="filter-btn" onclick="filterData('town', 'Louisville', this)">Louisville</button>
                 <button class="filter-btn" onclick="filterData('town', 'Clay City', this)">Clay City</button>
             </div>
-            <div class="filter-group">
-                <strong>Industries:</strong>
-                <button class="filter-btn active" onclick="filterData('category', 'All', this)">All Types</button>
-                <button class="filter-btn" onclick="filterData('category', 'Restaurants', this)">Restaurants</button>
-                <button class="filter-btn" onclick="filterData('category', 'Industry', this)">Industry</button>
-                <button class="filter-btn" onclick="filterData('category', 'Services', this)">Services</button>
-            </div>
         </div>
 
         <div id="directory-grid"></div>
@@ -108,7 +106,6 @@
                 .catch(err => { document.getElementById('directory-grid').innerHTML = `<h2>Error loading directory.</h2>`; });
         }
 
-        // Toggle Expand Function
         function toggleCard(cardElement) {
             cardElement.classList.toggle('expanded');
         }
@@ -116,35 +113,45 @@
         function renderCards(data) {
             const grid = document.getElementById('directory-grid');
             grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => {
-                const isPremium = biz.tier === "premium";
+                const tier = (biz.tier || 'basic').toLowerCase();
+                const hasCoupon = biz.coupon && biz.coupon !== "N/A";
                 const mapUrl = biz.address ? `https://www.google.com/maps?q=${encodeURIComponent(biz.address)}&output=embed` : '';
 
                 return `
-                <div class="card" onclick="toggleCard(this)">
-                    ${isPremium ? '<div class="premium-badge">PREMIUM</div>' : ''}
+                <div class="card ${tier}" ${tier === 'premium' ? `onclick="toggleCard(this)"` : ''}>
+                    <div class="tier-badge">${tier}</div>
+                    ${hasCoupon ? '<div class="coupon-badge">🏷️ COUPON</div>' : ''}
+                    
                     <div class="logo-container">
                         <img src="${biz.logo}" onerror="this.src='https://via.placeholder.com/150?text=No+Logo'">
                     </div>
+
                     <div class="town-bar ${biz.town.toLowerCase().replace(' ', '-')}-bar">
                         ${biz.town}
                     </div>
+
                     <div class="biz-name">${biz.name}</div>
-                    <div style="font-size: 0.8rem; font-style: italic; color: #555;">Click to reveal information</div>
+                    <span class="cat-tag">Category: ${biz.category || 'General'}</span>
+
+                    ${tier === 'plus' ? `<div style="margin-top: 10px; font-weight: bold;">📞 Phone: ${biz.phone || 'N/A'}</div>` : ''}
                     
-                    <div class="hidden-info" onclick="event.stopPropagation();">
-                        <div style="margin-bottom: 8px;"><strong>📞 Phone:</strong> ${biz.phone || 'N/A'}</div>
-                        ${isPremium && biz.website ? `<div><strong>🌐 Website:</strong> <a href="${biz.website}" target="_blank">Visit Site</a></div>` : ''}
-                        ${isPremium && biz.facebook_url ? `<div><strong>📱 Facebook:</strong> <a href="${biz.facebook_url}" target="_blank">View Page</a></div>` : ''}
-                        ${isPremium && biz.address ? `<div style="margin-top:5px;"><strong>📍 Address:</strong> ${biz.address}</div>` : ''}
-                        
-                        ${isPremium && mapUrl ? `
-                        <div style="height: 150px; border: 1px solid #000; margin-top: 10px;">
-                            <iframe src="${mapUrl}" width="100%" height="100%" frameborder="0" style="border:0;"></iframe>
+                    ${tier === 'premium' ? `
+                        <div style="font-size: 0.8rem; font-style: italic; color: #555;">Click to reveal information</div>
+                        <div class="hidden-info" onclick="event.stopPropagation();">
+                            <div style="margin-bottom: 8px;"><strong>📞 Phone:</strong> ${biz.phone || 'N/A'}</div>
+                            <div><strong>🌐 Website:</strong> <a href="${biz.website}" target="_blank">Visit Site</a></div>
+                            <div><strong>📱 Facebook:</strong> <a href="${biz.facebook_url}" target="_blank">View Page</a></div>
+                            <div style="margin-top:5px;"><strong>📍 Address:</strong> ${biz.address}</div>
+                            
+                            ${hasCoupon ? `<div style="margin-top:10px; color:#166534; font-weight:bold; border:2px dashed #22c55e; padding:10px;">PROMO: ${biz.coupon}</div>` : ''}
+
+                            <div style="height: 150px; border: 1px solid #000; margin-top: 10px;">
+                                <iframe src="${mapUrl}" width="100%" height="100%" frameborder="0" style="border:0;"></iframe>
+                            </div>
+                            
+                            <a href="profile.html?id=${biz.id}" class="btn-profile">View Full Profile</a>
                         </div>
-                        ` : ''}
-                        
-                        <a href="profile.html?id=${biz.id}" class="btn-profile">View Full Profile</a>
-                    </div>
+                    ` : ''}
                 </div>
             `}).join('');
         }

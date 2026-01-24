@@ -3,159 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clay County Business Directory | SMLC</title>
-    
+    <title>Clay County Business Directory | Filterable</title>
     <link rel="stylesheet" href="https://KFruti88.github.io/master.html/town-colors.css">
-    
     <style>
-        /* Grey background for the whole page */
-        body {
-            background-color: #d1d5db; 
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+        body { background-color: #d1d5db; font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        
+        /* Navigation Header */
+        .nav-header { background-color: #38b6ff; color: white; padding: 12px 0; text-align: center; font-size: 0.95rem; font-weight: bold; }
+        .nav-header a { color: white; text-decoration: none; margin: 0 15px; }
 
-        /* Blue Top Navigation Bar */
-        .nav-header {
-            background-color: #38b6ff;
-            color: white;
-            padding: 12px 0;
-            text-align: center;
-            font-size: 0.95rem;
-            font-weight: bold;
+        /* Filter Controls Styling */
+        #filter-controls { background: #fff; padding: 20px; border-bottom: 2px solid #000; text-align: center; margin-bottom: 30px; }
+        .filter-group { margin: 10px 0; }
+        .filter-btn { 
+            background: #fff; border: 2px solid #38b6ff; color: #38b6ff; padding: 8px 15px; 
+            margin: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; 
         }
+        .filter-btn:hover, .filter-btn.active { background: #38b6ff; color: #fff; }
 
-        .nav-header a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
+        /* Grid and Card Layout */
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; }
+        
+        .card { 
+            background-color: #fffaf0; border: 2px solid #000; box-shadow: 10px 10px 5px rgba(0,0,0,0.2); 
+            padding: 25px; text-align: center; cursor: pointer; display: flex; flex-direction: column; min-height: 480px; transition: transform 0.2s;
         }
+        .card:hover { transform: scale(1.02); }
 
-        .container {
-            max-width: 1400px;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-        }
+        /* Category Tag and Logo */
+        .category-tag { font-size: 0.8rem; background: #eee; padding: 4px 12px; border-radius: 12px; margin-bottom: 10px; display: inline-block; align-self: center; font-weight: bold; text-transform: uppercase; }
+        .logo-container { height: 160px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
+        .logo-container img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-        /* The Card Frame from your screenshot */
-        .card {
-            background-color: #fffaf0; /* Off-white color */
-            border: 2px solid #000;
-            box-shadow: 10px 10px 5px rgba(0,0,0,0.2); /* Heavy shadow effect */
-            padding: 25px;
-            text-align: center;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            min-height: 450px;
-            transition: transform 0.2s;
-        }
+        /* Town Bars */
+        .town-bar { color: white; font-weight: bold; padding: 12px 0; text-transform: uppercase; letter-spacing: 2px; margin: 15px 0; font-size: 1.1rem; }
+        .flora-bar { background-color: #ff5500 !important; }
+        .louisville-bar { background-color: #e60000 !important; }
+        .clay-city-bar { background-color: #008000 !important; }
+        .xenia-bar { background-color: #38b6ff !important; }
 
-        .card:hover {
-            transform: scale(1.02);
-        }
-
-        .logo-container {
-            height: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .logo-container img {
-            max-height: 100%;
-            max-width: 100%;
-            object-fit: contain;
-        }
-
-        /* Town bars across the middle */
-        .town-bar {
-            color: white;
-            font-weight: bold;
-            padding: 12px 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 15px 0;
-            font-size: 1.1rem;
-        }
-
-        /* Fallback colors if external CSS fails */
-        .flora-bar { background-color: #ff5500; }
-        .louisville-bar { background-color: #e60000; }
-
-        /* Business name font */
-        .biz-name {
-            font-family: 'Times New Roman', serif;
-            font-size: 1.7rem;
-            font-weight: bold;
-            color: #000;
-            margin-bottom: 10px;
-        }
-
-        /* The phone section with the line above it */
-        .phone-row {
-            text-align: left;
-            font-size: 0.95rem;
-            font-weight: bold;
-            border-top: 1px solid #000;
-            padding-top: 15px;
-            margin-top: auto;
-        }
-
-        /* Read More Button from screenshot 2 */
-        .read-more {
-            margin-top: 15px;
-            border: 1px solid #000;
-            padding: 8px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            font-weight: bold;
-            background: transparent;
-        }
+        .biz-name { font-family: 'Times New Roman', serif; font-size: 1.7rem; font-weight: bold; color: #000; margin-bottom: 10px; }
+        .phone-row { text-align: left; font-size: 0.95rem; font-weight: bold; border-top: 1px solid #000; padding-top: 15px; margin-top: auto; }
+        .read-more { margin-top: 15px; border: 1px solid #000; padding: 8px; font-size: 0.7rem; text-transform: uppercase; font-weight: bold; background: transparent; }
     </style>
 </head>
 <body>
 
     <div class="nav-header">
         <a href="#">SMLC Home Page</a>
-        <a href="#">Clay City</a>
-        <a href="#">Flora</a>
-        <a href="#">Louisville</a>
-        <a href="#">Sailor Springs</a>
-        <a href="#">Xenia</a>
+        <a href="#">Help Center</a>
+        <a href="#">Contact Us</a>
+    </div>
+
+    <div id="filter-controls">
+        <div class="filter-group">
+            <strong>Towns:</strong>
+            <button class="filter-btn active" onclick="filterData('town', 'All', this)">All Towns</button>
+            <button class="filter-btn" onclick="filterData('town', 'Flora', this)">Flora</button>
+            <button class="filter-btn" onclick="filterData('town', 'Louisville', this)">Louisville</button>
+            <button class="filter-btn" onclick="filterData('town', 'Clay-City', this)">Clay City</button>
+        </div>
+        <div class="filter-group">
+            <strong>Industries:</strong>
+            <button class="filter-btn active" onclick="filterData('category', 'All', this)">All Types</button>
+            <button class="filter-btn" onclick="filterData('category', 'Restaurant', this)">Restaurants</button>
+            <button class="filter-btn" onclick="filterData('category', 'Industry', this)">Industry</button>
+            <button class="filter-btn" onclick="filterData('category', 'Service', this)">Services</button>
+            <button class="filter-btn" onclick="filterData('category', 'Shopping', this)">Retail</button>
+        </div>
     </div>
 
     <div class="container" id="directory-grid">
         </div>
 
     <script>
-        fetch('./directory.json')
-            .then(res => { 
-                if(!res.ok) throw new Error('Could not find directory.json'); 
-                return res.json(); 
-            })
-            .then(data => {
-                const grid = document.getElementById('directory-grid');
-                grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => `
-                    <div class="card" onclick="window.location.href='profile.html?id=${biz.id}'">
-                        <div class="logo-container">
-                            <img src="${biz.logo}" onerror="this.src='https://via.placeholder.com/150?text=No+Logo'">
-                        </div>
-                        <div class="town-bar ${biz.town.toLowerCase()}-bar">
-                            ${biz.town}
-                        </div>
-                        <div class="biz-name">${biz.name}</div>
-                        <div class="phone-row">
-                            Phone : ${biz.phone || 'N/A'}
-                        </div>
-                        <button class="read-more">Read More</button>
+        let masterData = [];
+
+        function renderCards(data) {
+            const grid = document.getElementById('directory-grid');
+            grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => `
+                <div class="card" onclick="window.location.href='profile.html?id=${biz.id}'">
+                    <div class="category-tag">${biz.category || 'General'}</div>
+                    <div class="logo-container">
+                        <img src="${biz.logo}" onerror="this.src='https://via.placeholder.com/150?text=No+Logo'">
                     </div>
-                `).join('');
+                    <div class="town-bar ${biz.town.toLowerCase().replace(' ', '-')}-bar">
+                        ${biz.town}
+                    </div>
+                    <div class="biz-name">${biz.name}</div>
+                    <div class="phone-row">
+                        Phone : ${biz.phone || 'N/A'}
+                    </div>
+                    <button class="read-more">Read More</button>
+                </div>
+            `).join('');
+        }
+
+        function filterData(type, value, btn) {
+            // Update Active Button UI
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Apply Filtering logic
+            if (value === 'All') {
+                renderCards(masterData);
+            } else {
+                const filtered = masterData.filter(biz => biz[type] === value);
+                renderCards(filtered);
+            }
+        }
+
+        // Auto-Updating Fetch from GitHub
+        fetch('https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/directory.json')
+            .then(res => res.json())
+            .then(data => {
+                masterData = data;
+                renderCards(data);
             })
             .catch(err => {
                 document.getElementById('directory-grid').innerHTML = `<h2>Error: ${err.message}</h2>`;

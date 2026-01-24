@@ -47,7 +47,8 @@ function renderCards(data) {
     // Sort alphabetically by town for a clean look
     grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => {
         const tier = (biz.tier || 'basic').toLowerCase();
-        const hasCoupon = biz.coupon && biz.coupon !== "N/A";
+        // Check for coupon validity
+        const hasCoupon = biz.coupon && biz.coupon !== "N/A" && biz.coupon !== "";
         const autoLogo = `${imageRepo}${biz.id}.jpg`; 
 
         return `
@@ -59,7 +60,7 @@ function renderCards(data) {
             </div>
             <div class="town-bar ${biz.town.toLowerCase().replace(' ', '-')}-bar">${biz.town}</div>
             <div class="biz-name">${biz.name}</div>
-            ${tier === 'plus' ? `<div class="plus-phone">PH: ${biz.phone}</div>` : ''}
+            ${tier === 'plus' && biz.phone ? `<div class="plus-phone">PH: ${biz.phone}</div>` : ''}
             <div class="cat-text">${biz.category || ''}</div>
         </div>`;
     }).join('');
@@ -80,10 +81,15 @@ function loadProfile(data) {
     container.className = `profile-container ${tier}`;
 
     const autoLogo = `${imageRepo}${biz.id}.jpg`;
-    const mapUrl = biz.address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.address)}&t=&z=15&ie=UTF8&iwloc=&output=embed` : '';
+    const mapUrl = biz.address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.address)}&output=embed` : '';
 
-    const facebookHtml = (biz.facebook_url && biz.facebook_url !== "N/A") 
+    // LOGIC: Only create HTML if the link exists and isn't "N/A" or empty
+    const facebookHtml = (biz.facebook_url && biz.facebook_url !== "N/A" && biz.facebook_url !== "") 
         ? `<div class="info-item"><strong>Facebook:</strong> <a href="${biz.facebook_url}" target="_blank">View Page</a></div>` 
+        : '';
+
+    const websiteBtn = (tier === 'premium' && biz.website && biz.website !== "N/A" && biz.website !== "")
+        ? `<a href="${biz.website}" target="_blank" class="action-btn">Visit Website</a>`
         : '';
 
     document.getElementById('profile-details').innerHTML = `
@@ -94,7 +100,7 @@ function loadProfile(data) {
             <div>
                 <h1 class="biz-title">${biz.name}</h1>
                 <p class="biz-meta">${biz.town} — ${biz.category}</p>
-                ${tier === 'premium' && biz.website && biz.website !== "N/A" ? `<a href="${biz.website}" target="_blank" class="action-btn">Visit Website</a>` : ''}
+                ${websiteBtn}
             </div>
         </div>
         <div class="details-grid">

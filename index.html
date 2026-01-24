@@ -12,7 +12,6 @@
             padding: 0; 
         }
         
-        /* Navigation Header */
         .nav-header { 
             background-color: #38b6ff; 
             color: white; 
@@ -26,7 +25,6 @@
 
         .site-wrapper { width: 95%; max-width: 1800px; margin: 0 auto; padding: 20px 0; }
 
-        /* Filter Controls Section */
         #filter-controls { 
             background: #fff; 
             padding: 30px; 
@@ -43,7 +41,6 @@
         }
         .filter-btn.active, .filter-btn:hover { background: #38b6ff; color: #fff; }
 
-        /* Grid Layout */
         #directory-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
@@ -51,9 +48,9 @@
             padding-bottom: 50px;
         }
         
-        /* THE CLIPPING CARD - Matches Your Reference Image */
+        /* UPDATED: Card background is now #ffffdf */
         .card { 
-            background-color: #fff; 
+            background-color: #ffffdf; 
             border: 2px solid #000; 
             box-shadow: 10px 10px 0px rgba(0,0,0,0.2); 
             padding: 25px; 
@@ -62,13 +59,14 @@
             flex-direction: column; 
             min-height: 480px;
             transition: transform 0.2s;
+            position: relative;
         }
         .card:hover { transform: translateY(-5px); }
 
         .logo-container { height: 160px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border-bottom: 1px solid #000; padding-bottom: 10px;}
         .logo-container img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-        /* Bold Town Bars */
+        /* Town Bars */
         .town-bar { 
             color: white; 
             font-weight: bold; 
@@ -88,6 +86,17 @@
         .btn-sm { 
             margin-top: 15px; border: 1px solid #000; padding: 8px; font-size: 0.7rem; 
             text-transform: uppercase; font-weight: bold; text-decoration: none; color: #000; display: inline-block;
+        }
+
+        /* Premium Badge */
+        .premium-badge {
+            background: #000;
+            color: #fff;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
         }
     </style>
 </head>
@@ -123,26 +132,26 @@
     <script>
         let masterData = [];
 
-        // Logic to fetch data from your GitHub JSON
         function loadDirectory() {
+            // Updated to fetch from your GitHub repository
             fetch('https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/directory.json')
-                .then(res => {
-                    if (!res.ok) throw new Error('Data source not reachable');
-                    return res.json();
-                })
+                .then(res => res.json())
                 .then(data => {
                     masterData = data;
                     renderCards(data);
                 })
                 .catch(err => {
-                    document.getElementById('directory-grid').innerHTML = `<h2>Error loading directory data.</h2>`;
+                    document.getElementById('directory-grid').innerHTML = `<h2>Error loading directory data. Check your JSON formatting.</h2>`;
                 });
         }
 
         function renderCards(data) {
             const grid = document.getElementById('directory-grid');
-            grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => `
+            grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => {
+                const isPremium = biz.tier === "premium";
+                return `
                 <div class="card">
+                    ${isPremium ? '<div class="premium-badge">PREMIUM</div>' : ''}
                     <div class="logo-container">
                         <img src="${biz.logo}" onerror="this.src='https://via.placeholder.com/150?text=No+Logo'">
                     </div>
@@ -153,9 +162,13 @@
                     <div class="phone-row">
                         Phone : ${biz.phone || ''}
                     </div>
-                    <a href="profile.html?id=${biz.id}" class="btn-sm">Read More</a>
+                    <div style="display: flex; gap: 5px; justify-content: center;">
+                        ${isPremium && biz.website ? `<a href="${biz.website}" target="_blank" class="btn-sm">Website</a>` : ''}
+                        ${isPremium && biz.facebook_url ? `<a href="${biz.facebook_url}" target="_blank" class="btn-sm">FB</a>` : ''}
+                        <a href="profile.html?id=${biz.id}" class="btn-sm">Read More</a>
+                    </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         function filterData(type, value, btn) {
@@ -171,7 +184,6 @@
             }
         }
 
-        // Initialize by loading the data
         loadDirectory();
     </script>
 </body>

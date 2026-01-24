@@ -12,7 +12,7 @@
             padding: 0; 
         }
         
-        /* Navigation Header - Matches Image 2 */
+        /* Navigation Header */
         .nav-header { 
             background-color: #38b6ff; 
             color: white; 
@@ -26,7 +26,7 @@
 
         .site-wrapper { width: 95%; max-width: 1800px; margin: 0 auto; padding: 20px 0; }
 
-        /* White Filter Box from Image 1 */
+        /* Filter Controls Section */
         #filter-controls { 
             background: #fff; 
             padding: 30px; 
@@ -51,11 +51,11 @@
             padding-bottom: 50px;
         }
         
-        /* THE CLIPPING CARD - Matches Image 2 */
+        /* THE CLIPPING CARD - Matches Your Reference Image */
         .card { 
             background-color: #fff; 
             border: 2px solid #000; 
-            box-shadow: 10px 10px 0px rgba(0,0,0,0.2); /* Hard drop shadow */
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.2); 
             padding: 25px; 
             text-align: center; 
             display: flex; 
@@ -120,9 +120,25 @@
         <div id="directory-grid"></div>
     </div>
 
-    <script src="data.js"></script>
-
     <script>
+        let masterData = [];
+
+        // Logic to fetch data from your GitHub JSON
+        function loadDirectory() {
+            fetch('https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/directory.json')
+                .then(res => {
+                    if (!res.ok) throw new Error('Data source not reachable');
+                    return res.json();
+                })
+                .then(data => {
+                    masterData = data;
+                    renderCards(data);
+                })
+                .catch(err => {
+                    document.getElementById('directory-grid').innerHTML = `<h2>Error loading directory data.</h2>`;
+                });
+        }
+
         function renderCards(data) {
             const grid = document.getElementById('directory-grid');
             grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => `
@@ -155,14 +171,8 @@
             }
         }
 
-        // Initialize page using the masterData variable from data.js
-        window.onload = () => {
-            if (typeof masterData !== 'undefined') {
-                renderCards(masterData);
-            } else {
-                document.getElementById('directory-grid').innerHTML = "<h2>Error: Data not found. Check your data.js file.</h2>";
-            }
-        };
+        // Initialize by loading the data
+        loadDirectory();
     </script>
 </body>
 </html>

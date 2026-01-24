@@ -1,20 +1,24 @@
 [
   {
-    "id": "village-florist",
+    "id": "angela-florist",
     "name": "Angela's Village Florist",
     "town": "Flora",
-    "color": "orange",
+    "tier": "premium",
+    "category": "Shopping",
     "phone": "618-662-4411",
-    "logo": "florist-logo.png",
-    "bio": "Serving Flora with fresh flowers since..."
+    "address": "123 E North Ave, Flora, IL 62839",
+    "logo": "https://raw.githubusercontent.com/KFruti88/Clay-County-Business-Directory/main/logos/florist.png",
+    "bio": "Premium arrangements for our paid members. Fresh flowers and custom gifts for the Flora community."
   },
   {
     "id": "wabash-networks",
     "name": "Wabash Independent Networks",
     "town": "Louisville",
-    "color": "red",
+    "tier": "premium",
+    "category": "Services",
     "phone": "618-665-3311",
-    "logo": "wabash-logo.png",
-    "bio": "Your local connection for fiber and voice."
+    "address": "111 E Main St, Louisville, IL 62858",
+    "logo": "https://raw.githubusercontent.com/KFruti88/Clay-County-Business-Directory/main/logos/wabash.png",
+    "bio": "High-speed fiber internet and local phone services connecting the Clay County community."
   }
 ]

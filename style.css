@@ -64,7 +64,7 @@ select {
     justify-content: space-between;
     transition: all 0.3s ease; 
     overflow: hidden; 
-    height: 440px; 
+    height: 480px; /* Increased slightly to fit QR code comfortably */
     position: relative;
     box-sizing: border-box;
 }
@@ -90,7 +90,6 @@ select {
 
 .biz-name { font-size: 1.5rem; font-weight: bold; color: #000; margin: 5px 0; }
 
-/* Updated Category Styling with Emoji Alignment */
 .cat-text { 
     font-size: 1rem; 
     color: #444; 
@@ -98,8 +97,8 @@ select {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px; /* Space between emoji and text */
-    font-style: normal; /* Category text is now straight to match emojis */
+    gap: 8px; 
+    font-style: normal; 
 }
 
 /* --- 5. TOWN BAR COLORS --- */
@@ -134,19 +133,46 @@ select {
     z-index: 10; 
 }
 
-/* --- 7. INTERACTIVITY & INFINITE SHINE --- */
+/* --- 7. INTERACTIVITY & QR CODES --- */
 
-/* Hover Lift (Plus & Premium Only) */
+/* Hover Lift */
 .card.plus:hover, .card.premium:hover { 
     transform: translateY(-3px); 
     box-shadow: 10px 10px 0px rgba(0,0,0,0.3); 
 }
 
-/* Premium Card Shine Setup */
+/* THE CLICK FIX: Prevents images/text from stealing the click from the card */
+.card.premium * {
+    pointer-events: none;
+}
+
 .card.premium {
     cursor: pointer;
 }
 
+/* QR Code styling */
+.qr-code {
+    width: 80px;      
+    height: 80px;
+    border: 2px solid #000;
+    background: #fff;
+    padding: 5px;
+    margin: 10px auto;
+    display: block;   
+    pointer-events: none; /* Critical so it doesn't block the card click */
+}
+
+.premium-info {
+    text-align: center;
+    padding: 5px;
+}
+
+.premium-phone {
+    font-weight: bold;
+    color: #000;
+}
+
+/* Premium Infinite Shine */
 .card.premium::after {
     content: "";
     position: absolute;

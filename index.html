@@ -9,26 +9,71 @@
 
     <style>
         :root {
+            /* TOWN COLORS */
             --flora-color: #ff5500;
             --louisville-color: #e60000;
             --clay-city-color: #008000;
             --xenia-color: #7c3aed;
             --sailor-springs-color: #0891b2;
-            --paper-bg: #ffffdf;
+            
+            /* UI COLORS */
+            --card-bg: #fff5b; /* YOUR REQUESTED BOX COLOR */
             --smlc-blue: #38b6ff;
-            --premium-gold: #fef9c3;
         }
 
         body { background-color: #d1d5db; font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; }
-        .nav-header { background-color: var(--smlc-blue); color: white; padding: 12px 0; text-align: center; font-weight: bold; width: 100%; }
-        .nav-header a { color: white; text-decoration: none; margin: 0 15px; }
 
+        /* --- THE TOWN NAVIGATION HEADER --- */
+        .nav-header { 
+            background-color: #f8fafc; 
+            padding: 15px 0; 
+            text-align: center; 
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            width: 100%;
+            border-bottom: 2px solid #000;
+        }
+
+        .town-nav-link {
+            text-decoration: none;
+            font-weight: 800;
+            padding: 10px 20px;
+            border: 2px solid;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            background-color: #fff;
+        }
+
+        /* REVERSE HOVER LOGIC */
+        .home-link { color: var(--smlc-blue); border-color: var(--smlc-blue); }
+        .home-link:hover { background-color: var(--smlc-blue); color: #fff; }
+
+        .clay-city-link { color: var(--clay-city-color); border-color: var(--clay-city-color); }
+        .clay-city-link:hover { background-color: var(--clay-city-color); color: #fff; }
+
+        .flora-link { color: var(--flora-color); border-color: var(--flora-color); }
+        .flora-link:hover { background-color: var(--flora-color); color: #fff; }
+
+        .louisville-link { color: var(--louisville-color); border-color: var(--louisville-color); }
+        .louisville-link:hover { background-color: var(--louisville-color); color: #fff; }
+
+        .sailor-springs-link { color: var(--sailor-springs-color); border-color: var(--sailor-springs-color); }
+        .sailor-springs-link:hover { background-color: var(--sailor-springs-color); color: #fff; }
+
+        .xenia-link { color: var(--xenia-color); border-color: var(--xenia-color); }
+        .xenia-link:hover { background-color: var(--xenia-color); color: #fff; }
+
+        /* --- DIRECTORY MENU BAR --- */
         .menu-bar { background: #fff; border-bottom: 2px solid #000; padding: 10px 0; position: sticky; top: 0; z-index: 100; }
         .menu-container { width: 95%; max-width: 1600px; margin: 0 auto; display: flex; justify-content: center; gap: 40px; }
         .styled-select { padding: 8px 15px; font-weight: bold; border: 2px solid var(--smlc-blue); cursor: pointer; }
-
         .biz-count { align-self: center; font-weight: bold; background: var(--smlc-blue); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; }
 
+        /* --- DIRECTORY GRID & BOXES --- */
         .site-wrapper { width: 95%; max-width: 1600px; margin: 30px auto; }
         #directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
 
@@ -42,15 +87,10 @@
             height: 380px; 
             position: relative;
             box-sizing: border-box;
-            background-color: var(--paper-bg);
+            background-color: var(--card-bg); /* UPDATED TO #fff5b */
         }
 
-        .card.premium { border: 2px solid #a16207; cursor: pointer; }
-        .plan-badge { position: absolute; top: 10px; right: 10px; font-size: 0.6rem; font-weight: bold; border: 1px solid #000; padding: 2px 6px; background: #fff; text-transform: uppercase; }
-        
-        .logo-box { height: 120px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; border-bottom: 1px solid #000; padding-bottom: 10px; }
-        .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
-
+        /* COLOR CODED TOWN BARS WITHIN BOXES */
         .town-bar { color: white; font-weight: bold; padding: 8px 0; text-transform: uppercase; letter-spacing: 2px; margin: 15px 0; font-size: 1rem; border: 1.5px solid #000; }
         .flora-bar { background-color: var(--flora-color); }
         .louisville-bar { background-color: var(--louisville-color); }
@@ -65,9 +105,12 @@
 <body>
 
     <div class="nav-header">
-        <a href="#">SMLC Home Page</a>
-        <a href="#">Clay County Bulletin</a>
-        <a href="#">Contact Us</a>
+        <a href="https://supportmylocalcommunity.com/" class="town-nav-link home-link">Home</a>
+        <a href="https://supportmylocalcommunity.com/clay-city/" class="town-nav-link clay-city-link">Clay City</a>
+        <a href="https://ourflora.com/" class="town-nav-link flora-link">Flora</a>
+        <a href="https://supportmylocalcommunity.com/louisville/" class="town-nav-link louisville-link">Louisville</a>
+        <a href="https://supportmylocalcommunity.com/sailor-springs/" class="town-nav-link sailor-springs-link">Sailor Springs</a>
+        <a href="https://supportmylocalcommunity.com/xenia/" class="town-nav-link xenia-link">Xenia</a>
     </div>
 
     <div class="menu-bar">

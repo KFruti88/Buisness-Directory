@@ -42,7 +42,7 @@ async function loadDirectory() {
     });
 }
 
-// 4. RENDER MAIN DIRECTORY (QR Codes added for Premium)
+// --- 4. RENDER MAIN DIRECTORY (CLEAN CARDS) ---
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
@@ -55,17 +55,12 @@ function renderCards(data) {
         const emoji = catEmojis[category] || "📁";
         const hasCoupon = biz.Coupon && biz.Coupon.toUpperCase() !== "N/A" && biz.Coupon.trim() !== "";
 
-        // --- QR CODE LOGIC ---
-        // This creates a link to the profile page
-        const profileUrl = `https://kfruti88.github.io/Buisness-Directory/profile.html?id=${encodeURIComponent(imageID)}`;
-        // This sends that link to Google's API to get back a QR image
-        const qrCodeUrl = `https://chart.googleapis.com/chart?cht=qr&chs=100x100&chl=${encodeURIComponent(profileUrl)}`;
-
         let clickAttr = "";
         if (tier === 'premium') {
-            const targetUrl = `profile.html?id=${encodeURIComponent(imageID)}`;
-            clickAttr = `onclick="window.location.href='${targetUrl}';"`;
+            // THE REDIRECT: Sends user to profile.html with the business ID
+            clickAttr = `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID)}'"` ;
         } else if (tier === 'plus') {
+            // THE REVEAL: Keeps user on page to see phone
             clickAttr = `onclick="this.classList.toggle('expanded')"`;
         }
 
@@ -76,59 +71,64 @@ function renderCards(data) {
             <div class="logo-box">${getSmartImage(imageID)}</div>
             <div class="town-bar ${townClass}-bar">${biz.Town || 'Unknown'}</div>
             <div class="biz-name">${biz.Name || 'Unnamed Business'}</div>
-
-            ${tier === 'plus' ? `<div class="plus-reveal">📞 ${biz.Phone || 'Contact for info'}</div>` : ''}
             
-            ${tier === 'premium' ? `
-                <div class="premium-info">
-                    <div class="premium-phone">📞 ${biz.Phone || 'N/A'}</div>
-                    <img src="${qrCodeUrl}" class="qr-code" alt="Scan for info">
-                </div>
-            ` : ''}
-
+            ${tier === 'plus' ? `<div class="plus-reveal">📞 ${biz.Phone || 'Click for Info'}</div>` : ''}
+            
             <div class="cat-text">${emoji} ${category}</div>
         </div>`;
     }).join('');
 }
 
-// 5. LOAD PROFILE
+// --- 5. LOAD INDIVIDUAL PROFILE (THE DEEP DIVE) ---
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
     const bizId = params.get('id');
     const biz = data.find(b => (b["Image ID"] || "").trim() === bizId);
     
+    // Redirect if no data found or not Premium
     if (!biz || (biz.Teir || "").toLowerCase() !== 'premium') {
         window.location.href = 'index.html'; 
         return;
     }
 
     const emoji = catEmojis[biz.Category] || "📁";
-    const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&output=embed` : '';
-    
-    document.getElementById('profile-details').innerHTML = `
-        <div class="tier-indicator">Premium Member</div>
-        <a class="back-link" href="index.html">← Back to Directory</a>
-        <div class="profile-header">
-            ${getSmartImage(biz["Image ID"], true)}
-            <div>
-                <h1 class="biz-title">${biz.Name}</h1>
-                <p class="biz-meta">${emoji} ${biz.Town} — ${biz.Category}</p>
-                ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" class="action-btn">🌐 Visit Website</a>` : ''}
+    const profileUrl = window.location.href; 
+    // QR Code API: Automatically generates code for this specific business
+    const qrCodeUrl = `https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=${encodeURIComponent(profileUrl)}`;
+    const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` : '';
+
+    document.getElementById('profile-wrap').innerHTML = `
+        <div class="profile-container premium">
+            <a class="back-link" href="index.html">← Back to Directory</a>
+            
+            <div class="profile-header">
+                <div class="profile-logo-box">${getSmartImage(biz["Image ID"], true)}</div>
+                <div class="profile-titles">
+                    <h1 class="biz-title">${biz.Name}</h1>
+                    <p class="biz-meta">${emoji} ${biz.Town} — ${biz.Category}</p>
+                    ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" class="action-btn">🌐 Visit Website</a>` : ''}
+                </div>
             </div>
+
+            <div class="details-grid">
+                <div class="info-section">
+                    <h3>Contact Information</h3>
+                    <div class="info-item">📞 <strong>Phone:</strong> ${biz.Phone || 'N/A'}</div>
+                    ${biz.Facebook && biz.Facebook !== "N/A" ? `<div class="info-item">📱 <strong>Facebook:</strong> <a href="${biz.Facebook}" target="_blank">View Page</a></div>` : ''}
+                    <div class="info-item">📍 <strong>Location:</strong> ${biz.Address || 'N/A'}</div>
+                    <div class="qr-wrap">
+                        <p><strong>Scan to Save:</strong></p>
+                        <img src="${qrCodeUrl}" class="profile-qr" alt="Scan to save">
+                    </div>
+                </div>
+                <div class="info-section">
+                    <h3>About Us</h3>
+                    <div class="bio-box">${biz.Bio || "No description provided."}</div>
+                </div>
+            </div>
+            
+            ${mapUrl ? `<iframe class="map-box" src="${mapUrl}" width="100%" height="350" style="border:0;" allowfullscreen></iframe>` : ''}
         </div>
-        <div class="details-grid">
-            <div class="info-section">
-                <h3>Contact & Social</h3>
-                <div class="info-item">📞 <strong>Phone:</strong> ${biz.Phone || 'N/A'}</div>
-                ${biz.Facebook && biz.Facebook !== "N/A" ? `<div class="info-item">📱 <strong>Facebook:</strong> <a href="${biz.Facebook}" target="_blank">View Page</a></div>` : ''}
-                <div class="info-item">📍 <strong>Location:</strong> ${biz.Address || 'N/A'}</div>
-            </div>
-            <div class="info-section">
-                <h3>About Us</h3>
-                <div class="bio-box">${biz.Bio || "No description provided."}</div>
-            </div>
-        </div>
-        ${mapUrl ? `<iframe class="map-box" src="${mapUrl}" width="100%" height="350" style="border:0;" allowfullscreen></iframe>` : ''}
     `;
 }
 

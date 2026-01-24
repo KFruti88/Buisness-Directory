@@ -1,10 +1,16 @@
-/* style.css */
+/* --- 1. BASE STYLES (LOCKED) --- */
+body { 
+    background-color: #d1d5db; 
+    font-family: 'Times New Roman', Times, serif; 
+    margin: 0; 
+    padding: 0; 
+}
 
 /* --- 2. THE MENU BAR (Center Top Layout) --- */
 .menu-bar { 
     background: #fff; 
     border-bottom: 2px solid #000; 
-    padding: 15px 0; /* Balanced padding for the top bar */
+    padding: 15px 0; 
     position: sticky; 
     top: 0; 
     z-index: 100; 
@@ -15,13 +21,26 @@
     max-width: 1600px; 
     margin: 0 auto; 
     display: flex; 
-    /* THIS FORCES THE DROPDOWNS TO THE CENTER TOP */
-    justify-content: center; 
+    justify-content: center; /* Forces dropdowns to the center */
     align-items: center; 
-    gap: 30px; /* Professional spacing between dropdowns */
+    gap: 30px; 
 }
 
-/* Restoring the #fff5b box color and vertical centering for the cards below */
+/* --- 3. DIRECTORY GRID & CARDS --- */
+.site-wrapper { 
+    width: 95%; 
+    max-width: 1800px; 
+    margin: 0 auto; 
+    padding: 20px 0; 
+}
+
+#directory-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 20px; 
+    padding-bottom: 50px; 
+}
+
 .card { 
     border: 2px solid #000; 
     box-shadow: 10px 10px 0px rgba(0,0,0,0.2); 
@@ -34,13 +53,72 @@
     justify-content: space-between; 
     height: 440px; 
     overflow: hidden; 
-    background-color: #fff5b !important; /* YOUR LOCKED BOX COLOR */
+    background-color: #ffffdf !important; /* LOCKED BOX COLOR */
+    transition: all 0.3s ease;
 }
 
-/* VERTICAL CENTERING FOR TOWN BARS */
-.logo-box { height: 100px; display: flex; align-items: center; justify-content: center; margin-bottom: auto; }
-.town-bar { font-weight: 900 !important; padding: 12px 0; text-transform: uppercase; margin: auto 0; border: 2px solid #000; display: block !important; }
-.biz-name { font-size: 1.7rem; font-weight: bold; color: #000; margin-top: 5px; }
-.cat-text { font-size: 1rem; font-style: italic; color: #444; margin-top: 0; margin-bottom: auto; }
+/* --- 4. CARD CONTENT & VERTICAL CENTERING --- */
+.logo-box { 
+    height: 120px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin-bottom: auto; 
+}
 
-/* ... (Keep your town-bar colors: flora-bar, louisville-bar, etc.) ... */
+.logo-box img { 
+    max-height: 100%; 
+    max-width: 100%; 
+    object-fit: contain; 
+}
+
+.town-bar { 
+    font-weight: 900 !important; 
+    padding: 12px 0; 
+    text-transform: uppercase; 
+    margin: auto 0; 
+    border: 2px solid #000; 
+    display: block !important; 
+    color: white;
+    letter-spacing: 1px;
+}
+
+.biz-name { 
+    font-size: 1.7rem; 
+    font-weight: bold; 
+    color: #000; 
+    margin-top: 10px; 
+}
+
+.cat-text { 
+    font-size: 1rem; 
+    font-style: italic; 
+    color: #444; 
+    margin-top: 5px; 
+    margin-bottom: auto; 
+}
+
+/* --- 5. TOWN BAR COLORS (LOCKED) --- */
+.flora-bar { background-color: #ff5500 !important; }
+.louisville-bar { background-color: #e60000 !important; }
+.clay-city-bar { background-color: #008000 !important; }
+.xenia-bar { background-color: #38b6ff !important; } /* Standardized for Xenia */
+
+/* --- 6. INTERACTIVITY --- */
+.card.premium { cursor: pointer; }
+.card.premium:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 15px 15px 0px rgba(0,0,0,0.3); 
+}
+
+.tier-badge { 
+    position: absolute; 
+    top: 5px; 
+    right: 5px; 
+    font-size: 0.6rem; 
+    padding: 2px 6px; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    border: 1px solid #000; 
+    background: #fff; 
+}

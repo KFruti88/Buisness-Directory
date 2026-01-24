@@ -20,7 +20,7 @@ const catEmojis = {
     "Internet": "🌐", 
     "Support Services": "🛠️", 
     "Professional Services": "💼"
-}; // Removed the extra }; that was here
+};
 
 document.addEventListener("DOMContentLoaded", () => { loadDirectory(); });
 
@@ -96,6 +96,7 @@ function loadProfile(data) {
         return;
     }
 
+    // FIXED: Correct template literal syntax for Map URL
     const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` : '';
 
     container.innerHTML = `

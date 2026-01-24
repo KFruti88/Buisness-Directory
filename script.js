@@ -74,12 +74,12 @@ function renderCards(data) {
         const category = biz.Category || "Industry"; 
         const hasCoupon = biz.Coupon && biz.Coupon.toUpperCase() !== "N/A" && biz.Coupon.trim() !== "";
         
-        // Emoji Logic - Unified for all tiers
         const emoji = catEmojis[category] || "📁";
 
+        // URL ENCODING ADDED HERE
         let clickAction = "";
         if (tier === 'premium') {
-            clickAction = `onclick="window.location.href='profile.html?id=${imageID}'"`;
+            clickAction = `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID)}'"` ;
         } else if (tier === 'plus') {
             clickAction = `onclick="this.classList.toggle('expanded')"`;
         }
@@ -115,6 +115,7 @@ function loadProfile(data) {
     const container = document.getElementById('profile-wrap');
     if (!container) return;
     
+    // FIXED MAP URL SYNTAX
     const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&output=embed` : '';
     const emoji = catEmojis[biz.Category] || "📁";
 

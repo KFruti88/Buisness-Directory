@@ -1,0 +1,19 @@
+<div id="directory-grid" class="container">
+    </div>
+
+<script>
+// This function builds the cards you wanted
+function renderDirectory(data) {
+    const grid = document.getElementById('directory-grid');
+    grid.innerHTML = data.map(biz => `
+        <div class="card" onclick="window.location.href='profile.html?id=${biz.id}'">
+            <div class="logo-container">
+                <img src="${biz.logo}" alt="${biz.name}">
+            </div>
+            <div class="town-bar ${biz.town.toLowerCase()}-bar">${biz.town}</div>
+            <div class="biz-name">${biz.name}</div>
+            <div class="phone">Phone : ${biz.phone}</div>
+        </div>
+    `).join('');
+}
+</script>

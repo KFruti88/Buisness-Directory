@@ -1,96 +1,32 @@
 /* style.css */
-:root {
-    /* TOWN COLOR LOCKS - (Text/Accent Color and Background Color) */
-    --flora-color: #fe4f00;
-    --flora-bg: #0c0b82;
-    --louisville-color: #eb1c24;
-    --louisville-bg: #010101;
-    --clay-city-color: #8a8a88;
-    --clay-city-bg: #0c30f0;
-    --xenia-color: #fdb813;
-    --xenia-bg: #000000;
-    --sailor-springs-color: #a020f0;
-    --sailor-springs-bg: #000000;
 
-    /* General Theme Colors */
-    --paper-bg: #ffffdf; 
-    --smlc-blue: #38b6ff;
-    
-    /* Tier Background Colors */
-    --basic-bg: #ffffff;
-    --plus-bg: #e0f2fe;
-    --premium-bg: #fef9c3;
+/* --- 2. THE MENU BAR (Center Top Layout) --- */
+.menu-bar { 
+    background: #fff; 
+    border-bottom: 2px solid #000; 
+    padding: 15px 0; /* Balanced padding for the top bar */
+    position: sticky; 
+    top: 0; 
+    z-index: 100; 
 }
 
-body { 
-    background-color: #d1d5db; 
-    font-family: 'Times New Roman', Times, serif; 
-    margin: 0; 
-    padding: 0; 
-}
-
-/* --- THE TOWN NAVIGATION HEADER --- */
-.nav-header { 
-    background-color: #f8fafc; 
-    padding: 15px 0; 
-    text-align: center; 
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    width: 100%;
-    border-bottom: 2px solid #000;
-}
-
-.town-nav-link {
-    text-decoration: none;
-    font-weight: 800;
-    padding: 10px 20px;
-    border: 2px solid;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    background-color: #fff;
-}
-
-/* REVERSE HOVER LOGIC */
-.home-link { color: var(--smlc-blue); border-color: var(--smlc-blue); }
-.home-link:hover { background-color: var(--smlc-blue); color: #fff; }
-
-.clay-city-link { color: var(--clay-city-bg); border-color: var(--clay-city-bg); }
-.clay-city-link:hover { background-color: var(--clay-city-bg); color: #fff; }
-
-.flora-link { color: var(--flora-color); border-color: var(--flora-color); }
-.flora-link:hover { background-color: var(--flora-color); color: #fff; }
-
-.louisville-link { color: var(--louisville-color); border-color: var(--louisville-color); }
-.louisville-link:hover { background-color: var(--louisville-color); color: #fff; }
-
-.sailor-springs-link { color: var(--sailor-springs-color); border-color: var(--sailor-springs-color); }
-.sailor-springs-link:hover { background-color: var(--sailor-springs-color); color: #fff; }
-
-.xenia-link { color: var(--xenia-color); border-color: var(--xenia-color); }
-.xenia-link:hover { background-color: var(--xenia-color); color: #fff; }
-
-/* --- DIRECTORY GRID & CARDS --- */
-.site-wrapper { 
+.menu-container { 
     width: 95%; 
     max-width: 1600px; 
-    margin: 30px auto; 
-}
-#directory-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-    gap: 25px; 
+    margin: 0 auto; 
+    display: flex; 
+    /* THIS FORCES THE DROPDOWNS TO THE CENTER TOP */
+    justify-content: center; 
+    align-items: center; 
+    gap: 30px; /* Professional spacing between dropdowns */
 }
 
+/* Restoring the #fff5b box color and vertical centering for the cards below */
 .card { 
     border: 2px solid #000; 
     box-shadow: 10px 10px 0px rgba(0,0,0,0.2); 
     position: relative;
     box-sizing: border-box;
-    transition: transform 0.2s;
     padding: 20px; 
     text-align: center; 
     display: flex; 
@@ -98,59 +34,13 @@ body {
     justify-content: space-between; 
     height: 440px; 
     overflow: hidden; 
+    background-color: #fff5b !important; /* YOUR LOCKED BOX COLOR */
 }
 
-/* TIER BACKGROUND COLORS */
-.card.basic { background-color: var(--basic-bg); }
-.card.plus { background-color: var(--plus-bg); border-color: #0369a1; }
-.card.premium { background-color: var(--premium-bg); border-color: #a16207; cursor: pointer; }
+/* VERTICAL CENTERING FOR TOWN BARS */
+.logo-box { height: 100px; display: flex; align-items: center; justify-content: center; margin-bottom: auto; }
+.town-bar { font-weight: 900 !important; padding: 12px 0; text-transform: uppercase; margin: auto 0; border: 2px solid #000; display: block !important; }
+.biz-name { font-size: 1.7rem; font-weight: bold; color: #000; margin-top: 5px; }
+.cat-text { font-size: 1rem; font-style: italic; color: #444; margin-top: 0; margin-bottom: auto; }
 
-/* GLOSSY SHINE EFFECT - ONLY FOR PREMIUM */
-.card.premium::after {
-    content: ""; position: absolute; top: -50%; left: -100%; width: 40%; height: 200%;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.6), transparent);
-    transform: rotate(30deg); transition: 0.7s; opacity: 0; pointer-events: none;
-}
-.card.premium:hover::after { left: 150%; opacity: 1; }
-
-/* BADGES */
-.coupon-badge { position: absolute; top: 10px; left: 10px; background: #22c55e; color: #fff; padding: 4px 8px; font-weight: bold; font-size: 0.7rem; border-radius: 3px; border: 1px solid #000; z-index: 5; }
-.tier-badge { position: absolute; top: 10px; right: 10px; background: #fff; color: #000; padding: 2px 6px; font-weight: bold; font-size: 0.7rem; border: 1px solid #000; text-transform: uppercase; z-index: 5; }
-
-/* 1. IMAGE SECTION (TOP) */
-.logo-box { 
-    height: 100px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    margin-bottom: auto; 
-}
-.logo-box img { max-height: 100%; max-width: 90%; object-fit: contain; }
-
-/* 2. TOWN BAR (LOCKED IN THE DEAD CENTER) */
-.town-bar { 
-    color: white; font-weight: bold; padding: 8px 0; 
-    text-transform: uppercase; letter-spacing: 2px; 
-    margin: auto 0; 
-    font-size: 1rem; border: 1.5px solid #000; 
-}
-.flora-bar { background-color: var(--flora-bg); color: var(--flora-color); }
-.louisville-bar { background-color: var(--louisville-bg); color: var(--louisville-color); }
-.clay-city-bar { background-color: var(--clay-city-bg); color: var(--clay-city-color); }
-.xenia-bar { background-color: var(--xenia-bg); color: var(--xenia-color); }
-.sailor-springs-bar { background-color: var(--sailor-springs-bg); color: var(--sailor-springs-color); }
-
-/* 3. BUSINESS NAME & 4. CATEGORY (BELOW TOWN BAR) */
-.biz-name { 
-    font-size: 1.7rem; 
-    font-weight: bold; 
-    color: #000; 
-    margin-top: 5px;
-}
-
-.cat-text { 
-    font-size: 1rem; font-style: italic; color: #444; 
-    margin-top: 0;
-    margin-bottom: auto; 
-    padding-bottom: 10px; 
-}
+/* ... (Keep your town-bar colors: flora-bar, louisville-bar, etc.) ... */

@@ -11,6 +11,8 @@
             --clay-city-color: #008000;
             --paper-bg: #ffffdf;
             --smlc-blue: #38b6ff;
+            --premium-gold: #fef9c3;
+            --plus-blue: #e0f2fe;
         }
 
         body { background-color: #d1d5db; font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; }
@@ -26,7 +28,6 @@
 
         /* THE BUSINESS CARD - UNIFIED LAYOUT */
         .card { 
-            background-color: var(--paper-bg); 
             border: 2px solid #000; 
             box-shadow: 10px 10px 0px rgba(0,0,0,0.2); 
             padding: 20px; 
@@ -36,30 +37,34 @@
             height: 380px; 
             position: relative;
             box-sizing: border-box;
+            transition: transform 0.2s;
         }
 
-        /* 1. PLAN (Top Right) & COUPON (Top Left) */
+        /* TIER COLORS */
+        .card.basic { background-color: #ffffff; }
+        .card.plus { background-color: var(--plus-blue); border: 2px solid #0369a1; }
+        .card.premium { background-color: var(--premium-gold); border: 2px solid #a16207; cursor: pointer; }
+
+        .card.premium:hover { transform: translateY(-5px); box-shadow: 15px 15px 0px rgba(0,0,0,0.3); }
+
+        /* BADGES */
         .plan-badge { position: absolute; top: 10px; right: 10px; font-size: 0.6rem; font-weight: bold; border: 1px solid #000; padding: 2px 6px; background: #fff; text-transform: uppercase; }
         .coupon-badge { position: absolute; top: 10px; left: 10px; font-size: 0.6rem; font-weight: bold; border: 1px solid #000; padding: 2px 6px; background: #22c55e; color: #fff; }
 
-        /* 2. IMAGE AT TOP (Premium Only) */
+        /* IMAGE SECTION */
         .logo-box { height: 120px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; border-bottom: 1px solid #000; padding-bottom: 10px; }
         .card.basic .logo-box, .card.plus .logo-box { visibility: hidden; border-bottom: none; }
         .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-        /* 3. TOWN BAR (Middle) */
+        /* TOWN BARS */
         .town-bar { color: white; font-weight: bold; padding: 8px 0; text-transform: uppercase; letter-spacing: 2px; margin: 15px 0; font-size: 1rem; border: 1.5px solid #000; }
         .flora-bar { background-color: var(--flora-color); }
         .louisville-bar { background-color: var(--louisville-color); }
         .clay-city-bar { background-color: var(--clay-city-color); }
 
-        /* 4. BIZ NAME (Under Town) & CATEGORY (Bottom) */
         .biz-name { font-size: 1.6rem; font-weight: bold; color: #000; margin-bottom: 5px; }
-        .cat-text { font-size: 0.85rem; font-style: italic; color: #444; margin-top: auto; }
-
-        .card.premium { cursor: pointer; transition: transform 0.2s; }
-        .card.premium:hover { transform: translateY(-5px); box-shadow: 15px 15px 0px rgba(0,0,0,0.3); }
         .plus-phone { font-weight: bold; margin-top: 10px; font-size: 1rem; }
+        .cat-text { font-size: 0.85rem; font-style: italic; color: #444; margin-top: auto; }
     </style>
 </head>
 <body>
@@ -91,51 +96,7 @@
         <div id="directory-grid"></div>
     </div>
 
-    <script>
-        let masterData = [];
+    <script src="script.js"></script>
 
-        async function loadDirectory() {
-            try {
-                // SYNCED: Pulls from your GitHub JSON link
-                const res = await fetch('https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/directory.json');
-                masterData = await res.json();
-                renderCards(masterData);
-            } catch (err) {
-                document.getElementById('directory-grid').innerHTML = "<h2>Error: Could not sync with directory.json</h2>";
-            }
-        }
-
-        function renderCards(data) {
-            const grid = document.getElementById('directory-grid');
-            grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => {
-                const tier = (biz.tier || 'basic').toLowerCase();
-                const hasCoupon = biz.coupon && biz.coupon !== "N/A";
-                
-                return `
-                <div class="card ${tier}" ${tier === 'premium' ? `onclick="window.location.href='profile.html?id=${biz.id}'"` : ''}>
-                    <div class="plan-badge">${tier}</div>
-                    ${hasCoupon ? '<div class="coupon-badge">COUPON</div>' : ''}
-                    <div class="logo-box"><img src="${biz.logo}" onerror="this.src='https://via.placeholder.com/150?text=Logo+Pending'"></div>
-                    <div class="town-bar ${biz.town.toLowerCase().replace(' ', '-')}-bar">${biz.town}</div>
-                    <div class="biz-name">${biz.name}</div>
-                    ${tier === 'plus' ? `<div class="plus-phone">PH: ${biz.phone}</div>` : ''}
-                    <div class="cat-text">${biz.category || ''}</div>
-                </div>`;
-            }).join('');
-        }
-
-        function applyFilters() {
-            const townVal = document.getElementById('town-select').value;
-            const catVal = document.getElementById('cat-select').value;
-            const filtered = masterData.filter(biz => {
-                const townMatch = (townVal === 'All' || biz.town === townVal);
-                const catMatch = (catVal === 'All' || biz.category === catVal);
-                return townMatch && catMatch;
-            });
-            renderCards(filtered);
-        }
-
-        loadDirectory();
-    </script>
 </body>
 </html>

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "village-florist",
+    "name": "Angela's Village Florist",
+    "town": "Flora",
+    "color": "orange",
+    "phone": "618-662-4411",
+    "logo": "florist-logo.png",
+    "bio": "Serving Flora with fresh flowers since..."
+  },
+  {
+    "id": "wabash-networks",
+    "name": "Wabash Independent Networks",
+    "town": "Louisville",
+    "color": "red",
+    "phone": "618-665-3311",
+    "logo": "wabash-logo.png",
+    "bio": "Your local connection for fiber and voice."
+  }
+]

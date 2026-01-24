@@ -5,70 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clay County Business Directory | SMLC</title>
     <style>
-        body { background-color: #d1d5db; font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; }
-        .nav-header { background-color: #38b6ff; color: white; padding: 12px 0; text-align: center; font-size: 0.9rem; font-weight: bold; width: 100%; }
-        .nav-header a { color: white; text-decoration: none; margin: 0 15px; }
-        
-        .site-wrapper { width: 95%; max-width: 1800px; margin: 0 auto; padding: 20px 0; }
+        :root {
+            --flora-color: #ff5500;
+            --louisville-color: #e60000;
+            --clay-city-color: #008000;
+            --paper-bg: #ffffdf;
+        }
 
-        #filter-controls { 
-            background: #fff; padding: 30px; border: 2px solid #000; border-radius: 20px;
-            text-align: center; margin-bottom: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .filter-group { margin: 10px 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .filter-btn { 
-            background: #fff; border: 2px solid #38b6ff; color: #38b6ff; padding: 8px 18px; 
-            cursor: pointer; font-weight: bold; border-radius: 20px; transition: 0.3s; 
-        }
-        .filter-btn.active, .filter-btn:hover { background: #38b6ff; color: #fff; }
+        body { background-color: #d1d5db; font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; }
+        .nav-header { background-color: #38b6ff; color: white; padding: 12px 0; text-align: center; font-weight: bold; width: 100%; }
+        .nav-header a { color: white; text-decoration: none; margin: 0 15px; }
+        .site-wrapper { width: 95%; max-width: 1600px; margin: 20px auto; }
 
         #directory-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
-            gap: 30px; 
-            padding-bottom: 50px; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+            gap: 25px; 
         }
-        
+
+        /* 1. THE UNIFIED BOX - Fixed height like your screenshot */
         .card { 
-            background-color: #ffffdf; border: 2px solid #000; box-shadow: 10px 10px 0px rgba(0,0,0,0.2); 
-            padding: 25px; text-align: center; display: flex; flex-direction: column; 
-            transition: all 0.3s ease; overflow: hidden; height: fit-content; position: relative;
+            background-color: var(--paper-bg); 
+            border: 2px solid #000; 
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.2); 
+            padding: 20px; 
+            text-align: center; 
+            display: flex; 
+            flex-direction: column; 
+            height: 400px; /* Standardized height for all */
+            transition: all 0.3s ease;
+            position: relative;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
-        /* Tier & Coupon Badges */
-        .tier-badge { position: absolute; top: 10px; right: 10px; font-size: 0.6rem; padding: 2px 8px; font-weight: bold; text-transform: uppercase; border: 1px solid #000; background: #eee; }
-        .coupon-badge { background: #22c55e; color: white; font-size: 0.7rem; padding: 4px 10px; position: absolute; top: 40px; right: 10px; font-weight: bold; border: 1px solid #000; box-shadow: 2px 2px 0px #000; }
+        /* 2. TOP LEFT COUPON & TOP RIGHT PLAN */
+        .coupon-badge { position: absolute; top: 10px; left: 10px; font-size: 0.6rem; font-weight: bold; border: 1px solid #000; padding: 2px 6px; background: #22c55e; color: #fff; z-index: 10; }
+        .plan-badge { position: absolute; top: 10px; right: 10px; font-size: 0.6rem; font-weight: bold; border: 1px solid #000; padding: 2px 6px; background: #fff; text-transform: uppercase; z-index: 10; }
 
-        /* Tier Logic: Pointer Events */
-        .card.basic, .card.plus { cursor: default; pointer-events: none; }
-        .card.premium { cursor: pointer; }
-        .card.premium:hover { transform: translateY(-5px); box-shadow: 15px 15px 0px rgba(0,0,0,0.3); }
+        /* 3. IMAGE SECTION AT TOP (Uniform for all) */
+        .logo-box { height: 120px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; border-bottom: 1px solid #ccc; }
+        .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-        /* Logos only for Premium */
-        .logo-container { height: 140px; display: none; align-items: center; justify-content: center; margin-bottom: 10px; border-bottom: 1px solid #000; padding-bottom: 10px;}
-        .card.premium .logo-container { display: flex; }
-        .logo-container img { max-height: 100%; max-width: 100%; object-fit: contain; }
+        /* 4. TOWN BAR IN THE MIDDLE */
+        .town-bar { color: white; font-weight: bold; padding: 8px 0; text-transform: uppercase; letter-spacing: 2px; margin: 15px 0; font-size: 1rem; border: 1.5px solid #000; }
+        .flora-bar { background-color: var(--flora-color); }
+        .louisville-bar { background-color: var(--louisville-color); }
+        .clay-city-bar { background-color: var(--clay-city-color); }
 
-        .town-bar { color: white; font-weight: bold; padding: 8px 0; text-transform: uppercase; letter-spacing: 2px; margin: 10px 0; font-size: 1rem; }
-        .flora-bar { background-color: #ff5500 !important; }
-        .louisville-bar { background-color: #e60000 !important; }
-        .clay-city-bar { background-color: #008000 !important; }
+        /* 5. NAME & CATEGORY UNDER TOWN */
+        .biz-name { font-size: 1.5rem; font-weight: bold; color: #000; margin-top: 5px; line-height: 1.2; }
+        .cat-text { font-size: 0.85rem; font-style: italic; color: #444; margin-top: 5px; }
 
-        .biz-name { font-size: 1.6rem; font-weight: bold; color: #000; margin-bottom: 5px; }
-        .cat-tag { font-size: 0.8rem; font-style: italic; color: #555; margin-bottom: 10px; display: block; }
+        /* 6. EXPANSION LOGIC (Only Premium/Plus are interactive) */
+        .card.premium, .card.plus { cursor: pointer; }
+        .card.basic { cursor: default; }
+        .card.expanded { height: auto; min-height: 580px; z-index: 20; }
 
-        /* Hidden Info Slide Down */
         .hidden-info { 
-            max-height: 0; opacity: 0; transition: all 0.5s ease;
-            text-align: left; background: rgba(0,0,0,0.05); border-radius: 5px; 
-            margin-top: 10px; padding: 0 10px; overflow: hidden;
+            display: none; text-align: left; background: rgba(0,0,0,0.05); 
+            border: 1px solid #000; margin-top: 15px; padding: 15px; font-size: 0.9rem;
         }
-        .card.expanded .hidden-info { 
-            max-height: 1000px; opacity: 1; padding: 15px; border: 1px solid #000; margin-bottom: 10px;
-        }
-
-        .map-frame { width: 100%; height: 200px; border: 1px solid #000; margin-top: 10px; }
-        .btn-profile { display: block; margin: 10px auto; padding: 10px; background: #000; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.8rem; text-align: center; }
+        .card.expanded .hidden-info { display: block; }
+        .map-frame { width: 100%; height: 180px; border: 1px solid #000; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -80,34 +79,20 @@
     </div>
 
     <div class="site-wrapper">
-        <div id="filter-controls">
-            <div class="filter-group">
-                <strong>Towns:</strong>
-                <button class="filter-btn active" onclick="filterData('town', 'All', this)">All Towns</button>
-                <button class="filter-btn" onclick="filterData('town', 'Flora', this)">Flora</button>
-                <button class="filter-btn" onclick="filterData('town', 'Louisville', this)">Louisville</button>
-                <button class="filter-btn" onclick="filterData('town', 'Clay City', this)">Clay City</button>
-            </div>
-        </div>
-
         <div id="directory-grid"></div>
     </div>
 
     <script>
         let masterData = [];
 
-        function loadDirectory() {
-            fetch('https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/directory.json')
-                .then(res => res.json())
-                .then(data => {
-                    masterData = data;
-                    renderCards(data);
-                })
-                .catch(err => { document.getElementById('directory-grid').innerHTML = `<h2>Error loading directory.</h2>`; });
-        }
-
-        function toggleCard(cardElement) {
-            cardElement.classList.toggle('expanded');
+        async function loadDirectory() {
+            try {
+                const res = await fetch('https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/directory.json');
+                masterData = await res.json();
+                renderCards(masterData);
+            } catch (err) {
+                document.getElementById('directory-grid').innerHTML = "<h2>Error Loading Directory Data</h2>";
+            }
         }
 
         function renderCards(data) {
@@ -115,15 +100,16 @@
             grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => {
                 const tier = (biz.tier || 'basic').toLowerCase();
                 const hasCoupon = biz.coupon && biz.coupon !== "N/A";
-                const mapUrl = biz.address ? `https://www.google.com/maps?q=${encodeURIComponent(biz.address)}&output=embed` : '';
+                const mapUrl = biz.address ? `http://googleusercontent.com/maps.google.com/5{encodeURIComponent(biz.address)}&output=embed` : '';
 
                 return `
-                <div class="card ${tier}" ${tier === 'premium' ? `onclick="toggleCard(this)"` : ''}>
-                    <div class="tier-badge">${tier}</div>
-                    ${hasCoupon ? '<div class="coupon-badge">🏷️ COUPON</div>' : ''}
+                <div class="card ${tier}" onclick="${tier !== 'basic' ? 'this.classList.toggle(\'expanded\')' : ''}">
+                    <div class="plan-badge">${tier}</div>
                     
-                    <div class="logo-container">
-                        <img src="${biz.logo}" onerror="this.src='https://via.placeholder.com/150?text=No+Logo'">
+                    ${hasCoupon ? '<div class="coupon-badge">COUPON</div>' : ''}
+
+                    <div class="logo-box">
+                        <img src="${biz.logo}" onerror="this.src='https://via.placeholder.com/150?text=Logo+Pending'">
                     </div>
 
                     <div class="town-bar ${biz.town.toLowerCase().replace(' ', '-')}-bar">
@@ -131,37 +117,24 @@
                     </div>
 
                     <div class="biz-name">${biz.name}</div>
-                    <span class="cat-tag">Category: ${biz.category || 'General'}</span>
 
-                    ${tier === 'plus' ? `<div style="margin-top: 10px; font-weight: bold;">📞 Phone: ${biz.phone || 'N/A'}</div>` : ''}
-                    
-                    ${tier === 'premium' ? `
-                        <div style="font-size: 0.8rem; font-style: italic; color: #555;">Click to reveal information</div>
-                        <div class="hidden-info" onclick="event.stopPropagation();">
-                            <div style="margin-bottom: 8px;"><strong>📞 Phone:</strong> ${biz.phone || 'N/A'}</div>
-                            <div><strong>🌐 Website:</strong> <a href="${biz.website}" target="_blank">Visit Site</a></div>
-                            <div><strong>📱 Facebook:</strong> <a href="${biz.facebook_url}" target="_blank">View Page</a></div>
-                            <div style="margin-top:5px;"><strong>📍 Address:</strong> ${biz.address}</div>
-                            
-                            ${hasCoupon ? `<div style="margin-top:10px; color:#166534; font-weight:bold; border:2px dashed #22c55e; padding:10px;">PROMO: ${biz.coupon}</div>` : ''}
+                    <div class="cat-text">${biz.category || ''}</div>
 
-                            <div style="height: 150px; border: 1px solid #000; margin-top: 10px;">
-                                <iframe src="${mapUrl}" width="100%" height="100%" frameborder="0" style="border:0;"></iframe>
-                            </div>
-                            
-                            <a href="profile.html?id=${biz.id}" class="btn-profile">View Full Profile</a>
-                        </div>
-                    ` : ''}
+                    ${tier !== 'basic' ? '<div style="font-size: 0.7rem; margin-top: auto; color: #666;">Click to reveal info</div>' : ''}
+
+                    <div class="hidden-info" onclick="event.stopPropagation();">
+                        ${tier === 'plus' || tier === 'premium' ? `<div><strong>Phone:</strong> ${biz.phone}</div>` : ''}
+                        ${tier === 'premium' ? `
+                            <div><strong>Website:</strong> <a href="${biz.website}" target="_blank">Visit Site</a></div>
+                            <div><strong>Facebook:</strong> <a href="${biz.facebook_url}" target="_blank">View Page</a></div>
+                            <div style="margin-top:5px;"><strong>Address:</strong> ${biz.address}</div>
+                            <iframe class="map-frame" src="${mapUrl}"></iframe>
+                        ` : ''}
+                        <a href="profile.html?id=${biz.id}" style="display:block; margin-top:10px; text-align:center; font-weight:bold; color:#000;">Full Profile</a>
+                    </div>
                 </div>
-            `}).join('');
-        }
-
-        function filterData(type, value, btn) {
-            const parent = btn.parentElement;
-            parent.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const filtered = value === 'All' ? masterData : masterData.filter(biz => biz[type] === value);
-            renderCards(filtered);
+                `;
+            }).join('');
         }
 
         loadDirectory();

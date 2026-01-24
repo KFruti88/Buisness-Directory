@@ -69,8 +69,10 @@ function renderCards(data) {
         // --- DETERMINING THE CLICK ACTION ---
         let clickAction = "";
         if (tier === 'premium') {
+            // Requirement: Navigate to full info profile
             clickAction = `onclick="window.location.href='profile.html?id=${imageID}'"`;
         } else if (tier === 'plus') {
+            // Requirement: Reveal phone number on the same card
             clickAction = `onclick="this.classList.toggle('expanded')"`;
         }
 
@@ -94,43 +96,45 @@ function renderCards(data) {
     }).join('');
 }
 
-// 4. LOAD INDIVIDUAL PROFILE PAGE
+// 4. LOAD INDIVIDUAL PROFILE PAGE (Premium Only)
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
     const bizId = params.get('id');
+    
+    // Find business matching the ID from URL
     const biz = data.find(b => b["Image ID"] === bizId);
-    if (!biz) return;
+    
+    // REQUIREMENT CHECK: If not found or NOT Premium, redirect home
+    if (!biz || (biz.Teir || "").toLowerCase() !== 'premium') {
+        console.error("Access Denied: Full info is reserved for Premium members.");
+        window.location.href = 'index.html'; 
+        return;
+    }
 
-    const tier = (biz.Teir || 'basic').toLowerCase();
     const container = document.getElementById('profile-wrap');
     if (!container) return;
     
-    container.className = `profile-container ${tier}`;
+    container.className = `profile-container premium`;
 
-    const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` : '';
+    // Map URL Logic
+    const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&output=embed` : '';
     
-    const facebookHtml = (biz.Facebook && biz.Facebook !== "N/A" && biz.Facebook !== "") 
-        ? `<div class="info-item"><strong>Facebook:</strong> <a href="${biz.Facebook}" target="_blank">View Page</a></div>` : '';
-    
-    const websiteBtn = (tier === 'premium' && biz.Website && biz.Website !== "N/A" && biz.Website !== "")
-        ? `<a href="${biz.Website}" target="_blank" class="action-btn">Visit Website</a>` : '';
-
     document.getElementById('profile-details').innerHTML = `
-        <div class="tier-indicator">${tier} Member</div>
-        <a class="back-link" onclick="history.back()">← Back to Directory</a>
+        <div class="tier-indicator">Premium Member</div>
+        <a class="back-link" href="index.html">← Back to Directory</a>
         <div class="profile-header">
             ${getSmartImage(biz["Image ID"], true)}
             <div>
                 <h1 class="biz-title">${biz.Name}</h1>
                 <p class="biz-meta">${biz.Town} — ${biz.Category}</p>
-                ${websiteBtn}
+                ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" class="action-btn">Visit Website</a>` : ''}
             </div>
         </div>
         <div class="details-grid">
             <div class="info-section">
-                <h3>Contact Information</h3>
+                <h3>Contact & Social</h3>
                 <div class="info-item"><strong>Phone:</strong> ${biz.Phone || 'N/A'}</div>
-                ${facebookHtml}
+                ${biz.Facebook && biz.Facebook !== "N/A" ? `<div class="info-item"><strong>Facebook:</strong> <a href="${biz.Facebook}" target="_blank">View Page</a></div>` : ''}
                 <div class="info-item"><strong>Location:</strong> ${biz.Address || 'N/A'}</div>
             </div>
             <div class="info-section">
@@ -138,7 +142,7 @@ function loadProfile(data) {
                 <div class="bio-box">${biz.Bio || "No description provided."}</div>
             </div>
         </div>
-        ${tier === 'premium' && mapUrl ? `<iframe class="map-box" src="${mapUrl}"></iframe>` : ''}
+        ${mapUrl ? `<iframe class="map-box" src="${mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>` : ''}
     `;
 }
 

@@ -1,0 +1,36 @@
+<div class="profile-header">
+    <img id="biz-logo" src="" style="max-width:200px;" />
+    <h1 id="biz-title"></h1>
+</div>
+<div class="profile-content">
+    <p><strong>Town:</strong> <span id="biz-town"></span></p>
+    <p><strong>Contact:</strong> <span id="biz-phone"></span></p>
+    <p id="biz-bio"></p>
+    <button onclick="window.history.back()">Back to Directory</button>
+</div>
+
+<script>
+    // 1. Get the ID from the URL (e.g., profile.html?id=wabash-networks)
+    const urlParams = new URLSearchParams(window.location.search);
+    const bizId = urlParams.get('id');
+
+    // 2. The same data list (In a real setup, this is shared)
+    const clayCountyData = [
+        { id: 'angela-florist', name: "Angela's Village Florist", town: 'Flora', phone: '618-662-4411', logo: 'logo1.png', bio: 'Beautiful flowers for all occasions.' },
+        { id: 'wabash-networks', name: 'Wabash Independent Networks', town: 'Louisville', phone: '618-665-3311', logo: 'logo2.png', bio: 'Local fiber and phone services.' }
+    ];
+
+    // 3. Find the specific business that matches the ID
+    const business = clayCountyData.find(b => b.id === bizId);
+
+    // 4. Fill in the blanks on the page
+    if (business) {
+        document.getElementById('biz-title').innerText = business.name;
+        document.getElementById('biz-town').innerText = business.town;
+        document.getElementById('biz-phone').innerText = business.phone;
+        document.getElementById('biz-bio').innerText = business.bio;
+        document.getElementById('biz-logo').src = business.logo;
+    } else {
+        document.body.innerHTML = "<h1>Business not found</h1>";
+    }
+</script>

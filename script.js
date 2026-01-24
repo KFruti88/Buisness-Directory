@@ -3,6 +3,7 @@ const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 const couponImgUrl = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
+// 1. LOCKED EMOJI MAPPING
 const catEmojis = {
     "Church": "⛪", "Post Office": "📬", "Restaurants": "🍴", "Retail": "🛒", 
     "Shopping": "🛍️", "Manufacturing": "🏗️", "Industry": "🏭", 
@@ -12,7 +13,7 @@ const catEmojis = {
 
 document.addEventListener("DOMContentLoaded", () => { loadDirectory(); });
 
-// SMART IMAGE HELPER: Handles multiple extensions and fallback placeholders
+// 2. SMART IMAGE HELPER: Handles multiple extensions and fallback placeholders
 function getSmartImage(id, isProfile = false) {
     if(!id) return '';
     const cleanID = id.trim();
@@ -24,18 +25,22 @@ function getSmartImage(id, isProfile = false) {
             this.onerror=function(){this.src='${placeholder}'};">`;
 }
 
+// 3. DATA LOADING ENGINE
 async function loadDirectory() {
     Papa.parse(csvUrl, {
         download: true, header: true, skipEmptyLines: true,
         complete: function(results) {
             masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
-            if (document.getElementById('directory-grid')) renderCards(masterData);
-            else if (document.getElementById('profile-wrap')) loadProfile(masterData);
+            if (document.getElementById('directory-grid')) {
+                renderCards(masterData);
+            } else if (document.getElementById('profile-wrap')) {
+                loadProfile(masterData);
+            }
         }
     });
 }
 
-// RENDER MAIN DIRECTORY (Clean teaser cards)
+// 4. RENDER MAIN DIRECTORY (Clean teaser cards)
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
@@ -45,9 +50,6 @@ function renderCards(data) {
         const imageID = (biz["Image ID"] || "").trim(); 
         const category = (biz.Category || "Industry").trim(); 
         const townClass = (biz.Town || "unknown").toLowerCase().replace(/\s+/g, '-');
-        
-        // Define the profile URL for the QR and Redirect
-        const profileUrl = `https://kfruti88.github.io/Buisness-Directory/profile.html?id=${encodeURIComponent(imageID)}`;
 
         let clickAttr = "";
         if (tier === 'premium') {
@@ -73,7 +75,7 @@ function renderCards(data) {
     if (counter) counter.innerText = `${data.length} Businesses Listed`;
 }
 
-// LOAD INDIVIDUAL PROFILE (Deep dive with QR and Maps)
+// 5. LOAD INDIVIDUAL PROFILE (QR Code logic removed)
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
     const bizId = params.get('id');
@@ -85,10 +87,6 @@ function loadProfile(data) {
         return;
     }
 
-    // QR CODE FIX: Uses the current page URL and standard Google Charts API
-    const currentUrl = window.location.href;
-    const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=${encodeURIComponent(currentUrl)}`;
-    
     // MAP URL FIX
     const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` : '';
 
@@ -109,10 +107,6 @@ function loadProfile(data) {
                     <h3>Contact Information</h3>
                     <div class="info-item">📞 <strong>Phone:</strong> ${biz.Phone || 'N/A'}</div>
                     <div class="info-item">📍 <strong>Location:</strong> ${biz.Address || 'N/A'}</div>
-                    <div class="qr-wrap" style="text-align:center; margin-top:20px;">
-                        <p><strong>Scan to Save:</strong></p>
-                        <img src="${qrUrl}" class="profile-qr" alt="Scan to save">
-                    </div>
                 </div>
                 <div class="info-section">
                     <h3>About Us</h3>
@@ -124,6 +118,7 @@ function loadProfile(data) {
         </div>`;
 }
 
+// 6. FILTER LOGIC
 function applyFilters() {
     const catVal = document.getElementById('cat-select').value;
     const townVal = document.getElementById('town-select').value;

@@ -4,96 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clay County Business Directory | SMLC</title>
-    <link rel="stylesheet" href="https://KFruti88.github.io/master.html/town-colors.css">
     <style>
-        /* Base Styles & "Wow" Background */
         body { 
-            background: linear-gradient(135deg, #d1d5db 0%, #adb5bd 100%); 
-            font-family: 'Segoe UI', Arial, sans-serif; 
+            background-color: #d1d5db; 
+            font-family: 'Times New Roman', Times, serif; 
             margin: 0; 
             padding: 0; 
-            min-height: 100vh;
         }
         
-        /* Navigation Header */
-        .nav-header { background-color: #38b6ff; color: white; padding: 15px 0; text-align: center; font-size: 0.95rem; font-weight: bold; width: 100%; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .nav-header a { color: white; text-decoration: none; margin: 0 15px; transition: opacity 0.3s; }
-        .nav-header a:hover { opacity: 0.8; }
+        /* Navigation Header - Matches Image 2 */
+        .nav-header { 
+            background-color: #38b6ff; 
+            color: white; 
+            padding: 12px 0; 
+            text-align: center; 
+            font-size: 0.9rem; 
+            font-weight: bold; 
+            width: 100%; 
+        }
+        .nav-header a { color: white; text-decoration: none; margin: 0 15px; }
 
         .site-wrapper { width: 95%; max-width: 1800px; margin: 0 auto; padding: 20px 0; }
 
-        /* Glossy Filter Controls */
+        /* White Filter Box from Image 1 */
         #filter-controls { 
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 25px; 
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 15px;
+            background: #fff; 
+            padding: 30px; 
+            border: 2px solid #000; 
+            border-radius: 20px;
             text-align: center; 
             margin-bottom: 40px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .filter-group { margin: 15px 0; }
+        .filter-group { margin: 10px 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .filter-btn { 
-            background: white; border: 2px solid #38b6ff; color: #38b6ff; padding: 10px 20px; 
-            margin: 5px; cursor: pointer; font-weight: bold; border-radius: 25px; transition: all 0.3s; 
+            background: #fff; border: 2px solid #38b6ff; color: #38b6ff; padding: 8px 18px; 
+            cursor: pointer; font-weight: bold; border-radius: 20px; transition: 0.3s; 
         }
-        .filter-btn:hover, .filter-btn.active { background: #38b6ff; color: #fff; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(56, 182, 255, 0.3); }
+        .filter-btn.active, .filter-btn:hover { background: #38b6ff; color: #fff; }
 
         /* Grid Layout */
         #directory-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
-            gap: 35px; 
+            gap: 30px; 
             padding-bottom: 50px;
         }
         
-        /* THE GLOSSY CARD */
+        /* THE CLIPPING CARD - Matches Image 2 */
         .card { 
-            background: rgba(255, 255, 255, 0.7); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3); 
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1); 
-            border-radius: 20px; 
-            padding: 30px; 
+            background-color: #fff; 
+            border: 2px solid #000; 
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.2); /* Hard drop shadow */
+            padding: 25px; 
             text-align: center; 
             display: flex; 
             flex-direction: column; 
-            min-height: 520px; 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
+            min-height: 480px;
+            transition: transform 0.2s;
         }
+        .card:hover { transform: translateY(-5px); }
 
-        /* Hover & Shine Effect */
-        .card:hover { transform: translateY(-12px); background: rgba(255, 255, 255, 0.9); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
-        .card::before {
-            content: ""; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg); transition: 0.75s;
+        .logo-container { height: 160px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border-bottom: 1px solid #000; padding-bottom: 10px;}
+        .logo-container img { max-height: 100%; max-width: 100%; object-fit: contain; }
+
+        /* Bold Town Bars */
+        .town-bar { 
+            color: white; 
+            font-weight: bold; 
+            padding: 10px 0; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            margin: 15px 0; 
+            font-size: 1.1rem; 
         }
-        .card:hover::before { left: 150%; }
+        .flora-bar { background-color: #ff5500 !important; }
+        .louisville-bar { background-color: #e60000 !important; }
+        .clay-city-bar { background-color: #008000 !important; }
 
-        /* Card Content Styles */
-        .category-tag { font-size: 0.75rem; background: rgba(0,0,0,0.05); padding: 5px 15px; border-radius: 20px; margin-bottom: 15px; display: inline-block; align-self: center; font-weight: bold; color: #555; }
-        .logo-container { height: 140px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
-        .logo-container img { max-height: 100%; max-width: 90%; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.05)); }
-
-        .town-bar { color: white; font-weight: bold; padding: 12px 0; text-transform: uppercase; letter-spacing: 2px; margin: 15px -30px; font-size: 1rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
-        .flora-bar { background: #ff5500 !important; }
-        .louisville-bar { background: #e60000 !important; }
-        .clay-city-bar { background: #008000 !important; }
-        .xenia-bar { background: #38b6ff !important; }
-
-        .biz-name { font-family: 'Georgia', serif; font-size: 1.6rem; font-weight: bold; color: #1a1a1a; margin-bottom: 12px; line-height: 1.2; }
+        .biz-name { font-size: 1.7rem; font-weight: bold; color: #000; margin-bottom: 10px; }
+        .phone-row { text-align: left; font-size: 0.95rem; font-weight: bold; margin-top: auto; padding-top: 10px; }
         
-        /* Links & Info */
-        .info-row { text-align: left; font-size: 0.9rem; margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.05); }
-        .links-row { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
-        .btn-sm { padding: 6px 12px; font-size: 0.75rem; text-decoration: none; border-radius: 5px; font-weight: bold; border: 1px solid #ddd; color: #333; transition: 0.2s; }
-        .btn-sm:hover { background: #f0f0f0; border-color: #bbb; }
+        .btn-sm { 
+            margin-top: 15px; border: 1px solid #000; padding: 8px; font-size: 0.7rem; 
+            text-transform: uppercase; font-weight: bold; text-decoration: none; color: #000; display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -111,7 +106,7 @@
                 <button class="filter-btn active" onclick="filterData('town', 'All', this)">All Towns</button>
                 <button class="filter-btn" onclick="filterData('town', 'Flora', this)">Flora</button>
                 <button class="filter-btn" onclick="filterData('town', 'Louisville', this)">Louisville</button>
-                <button class="filter-btn" onclick="filterData('town', 'Clay-City', this)">Clay City</button>
+                <button class="filter-btn" onclick="filterData('town', 'Clay City', this)">Clay City</button>
             </div>
             <div class="filter-group">
                 <strong>Industries:</strong>
@@ -125,14 +120,13 @@
         <div id="directory-grid"></div>
     </div>
 
-    <script>
-        let masterData = [];
+    <script src="data.js"></script>
 
+    <script>
         function renderCards(data) {
             const grid = document.getElementById('directory-grid');
             grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => `
                 <div class="card">
-                    <div class="category-tag">${biz.category || 'General'}</div>
                     <div class="logo-container">
                         <img src="${biz.logo}" onerror="this.src='https://via.placeholder.com/150?text=No+Logo'">
                     </div>
@@ -140,16 +134,10 @@
                         ${biz.town}
                     </div>
                     <div class="biz-name">${biz.name}</div>
-                    
-                    <div class="info-row">
-                        <strong>Phone:</strong> ${biz.phone || 'N/A'}
+                    <div class="phone-row">
+                        Phone : ${biz.phone || ''}
                     </div>
-
-                    <div class="links-row">
-                        ${biz.website && biz.website !== 'N/A' ? `<a href="${biz.website}" target="_blank" class="btn-sm">Website</a>` : ''}
-                        ${biz.facebook && biz.facebook !== 'N/A' ? `<a href="${biz.facebook}" target="_blank" class="btn-sm">Facebook</a>` : ''}
-                        <a href="profile.html?id=${biz.id}" class="btn-sm" style="background: #38b6ff; color: white; border: none;">View Profile</a>
-                    </div>
+                    <a href="profile.html?id=${biz.id}" class="btn-sm">Read More</a>
                 </div>
             `).join('');
         }
@@ -167,15 +155,14 @@
             }
         }
 
-        fetch('https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/directory.json')
-            .then(res => res.json())
-            .then(data => {
-                masterData = data;
-                renderCards(data);
-            })
-            .catch(err => {
-                document.getElementById('directory-grid').innerHTML = `<h2>Error loading directory data.</h2>`;
-            });
+        // Initialize page using the masterData variable from data.js
+        window.onload = () => {
+            if (typeof masterData !== 'undefined') {
+                renderCards(masterData);
+            } else {
+                document.getElementById('directory-grid').innerHTML = "<h2>Error: Data not found. Check your data.js file.</h2>";
+            }
+        };
     </script>
 </body>
 </html>

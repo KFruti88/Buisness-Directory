@@ -1,6 +1,7 @@
 /* script.js */
 let masterData = [];
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
+// Ensure this URL is the "Published as CSV" link from Google Sheets
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -29,27 +30,34 @@ function getSmartImage(id, isProfile = false) {
     return `<img src="${firstUrl}" class="${isProfile ? 'profile-logo' : ''}" onerror="${errorChain}">`;
 }
 
+// 2. LOAD DATA: Uses PapaParse with 'download: true' for Google Sheets sync
 async function loadDirectory() {
     try {
-        const res = await fetch(csvUrl);
-        const csvText = await res.text();
-        Papa.parse(csvText, {
+        Papa.parse(csvUrl, {
+            download: true,
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
                 masterData = results.data;
+                console.log("Data successfully synced. Count:", masterData.length);
+                
+                // Determine which page we are on and render appropriately
                 if (document.getElementById('directory-grid')) {
                     renderCards(masterData);
                 } else if (document.getElementById('profile-wrap')) {
                     loadProfile(masterData);
                 }
+            },
+            error: function(err) {
+                console.error("Live Sync Error (PapaParse):", err);
             }
         });
     } catch (err) {
-        console.error("Live Sync Error:", err);
+        console.error("General Script Error:", err);
     }
 }
 
+// 3. RENDER MAIN DIRECTORY
 function renderCards(data) {
     const counter = document.getElementById('counter-display');
     if (counter) { counter.innerText = `${data.length} Businesses Listed`; }
@@ -57,7 +65,8 @@ function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => {
+    // Sorts by town name and builds the HTML cards
+    grid.innerHTML = data.sort((a,b) => (a.town || "").localeCompare(b.town || "")).map(biz => {
         const tier = (biz.tier || 'basic').toLowerCase();
         const hasCoupon = biz.coupon && biz.coupon !== "N/A" && biz.coupon !== "";
 
@@ -68,7 +77,7 @@ function renderCards(data) {
             <div class="logo-box">
                 ${getSmartImage(biz.id)}
             </div>
-            <div class="town-bar ${biz.town.toLowerCase().replace(' ', '-')}-bar">${biz.town}</div>
+            <div class="town-bar ${(biz.town || "unknown").toLowerCase().replace(' ', '-')}-bar">${biz.town}</div>
             <div class="biz-name">${biz.name}</div>
             ${tier === 'plus' && biz.phone ? `<div class="plus-phone">PH: ${biz.phone}</div>` : ''}
             <div class="cat-text">${biz.category || ''}</div>
@@ -76,6 +85,7 @@ function renderCards(data) {
     }).join('');
 }
 
+// 4. LOAD INDIVIDUAL PROFILE PAGE
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
     const bizId = params.get('id');
@@ -84,6 +94,8 @@ function loadProfile(data) {
 
     const tier = (biz.tier || 'basic').toLowerCase();
     const container = document.getElementById('profile-wrap');
+    if (!container) return;
+    
     container.className = `profile-container ${tier}`;
 
     const mapUrl = biz.address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.address)}&output=embed` : '';
@@ -119,6 +131,7 @@ function loadProfile(data) {
     `;
 }
 
+// 5. FILTER LOGIC
 function applyFilters() {
     const townVal = document.getElementById('town-select').value;
     const catVal = document.getElementById('cat-select').value;

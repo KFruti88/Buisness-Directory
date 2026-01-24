@@ -1,7 +1,7 @@
-/* script.js */
 let masterData = [];
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
+const couponImgUrl = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
 document.addEventListener("DOMContentLoaded", () => {
     loadDirectory();
@@ -37,6 +37,7 @@ async function loadDirectory() {
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
+                // Filters out empty rows from the Google Sheet
                 masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
                 console.log("Data successfully synced. Count:", masterData.length);
                 
@@ -55,31 +56,27 @@ async function loadDirectory() {
     }
 }
 
-// 3. RENDER MAIN DIRECTORY
+// 3. RENDER MAIN DIRECTORY (Updated with Coupon Image)
 function renderCards(data) {
-    const counter = document.getElementById('counter-display');
-    if (counter) { counter.innerText = `${data.length} Businesses Listed`; }
-
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
+    // Sorting by Town Name
     grid.innerHTML = data.sort((a,b) => (a.Town || "").localeCompare(b.Town || "")).map(biz => {
-        // MAPPING TO YOUR SHEET HEADERS
         const name = biz.Name || "Unnamed Business";
         const town = biz.Town || "Unknown";
         const tier = (biz.Teir || 'basic').toLowerCase(); 
         const category = biz.Category || "";
         const imageID = biz["Image ID"] || "";
         
-        // --- COUPON COLUMN LOGIC ---
-        // This looks for a column named "Coupon" in your Google Sheet
-        const couponText = biz.Coupon || ""; 
-
+        // Logical check: Show if coupon column has any text other than N/A
+        const hasCoupon = biz.Coupon && biz.Coupon.toUpperCase() !== "N/A" && biz.Coupon.trim() !== "";
         const townClass = town.toLowerCase().replace(/\s+/g, '-');
 
         return `
         <div class="card ${tier}" ${tier === 'premium' ? `onclick="window.location.href='profile.html?id=${imageID}'"` : ''}>
-            ${couponText && couponText !== "N/A" ? `<div class="coupon-badge">${couponText}</div>` : ''}
+            
+            ${hasCoupon ? `<img src="${couponImgUrl}" class="coupon-corner-image" alt="Coupon Available">` : ''}
             
             <div class="tier-badge">${tier}</div>
 
@@ -109,9 +106,12 @@ function loadProfile(data) {
     
     container.className = `profile-container ${tier}`;
 
+    // Fixed Map URL syntax
     const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` : '';
+    
     const facebookHtml = (biz.Facebook && biz.Facebook !== "N/A" && biz.Facebook !== "") 
         ? `<div class="info-item"><strong>Facebook:</strong> <a href="${biz.Facebook}" target="_blank">View Page</a></div>` : '';
+    
     const websiteBtn = (tier === 'premium' && biz.Website && biz.Website !== "N/A" && biz.Website !== "")
         ? `<a href="${biz.Website}" target="_blank" class="action-btn">Visit Website</a>` : '';
 
@@ -153,14 +153,4 @@ function applyFilters() {
         return catMatch && townMatch;
     });
     renderCards(filtered);
-}
-
-// 6. NAVIGATION FILTER HELPER
-function filterByTown(townName) {
-    if (townName === 'All') {
-        renderCards(masterData);
-    } else {
-        const filtered = masterData.filter(biz => biz.Town === townName);
-        renderCards(filtered);
-    }
 }

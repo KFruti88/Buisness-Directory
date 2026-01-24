@@ -38,6 +38,19 @@
     "bio": "Save time, let us deliver it for you! Serving the Flora area."
   },
   {
+    "id": "ed-lewis-trucking",
+    "name": "Ed Lewis Trucking, Inc.",
+    "town": "Louisville",
+    "tier": "premium",
+    "category": "Shipping & Trucking",
+    "phone": "618-665-3306",
+    "address": "949 US-45, Louisville, IL 62858",
+    "website": "https://edlewistrucking.com",
+    "facebook_url": "https://www.facebook.com/EdLewisTrucking",
+    "logo": "https://via.placeholder.com/150?text=Ed+Lewis+Trucking",
+    "bio": "Providing safe and dependable food-grade transportation solutions since 2004."
+  },
+  {
     "id": "north-american-lighting",
     "name": "North American Lighting",
     "town": "Flora",
@@ -81,5 +94,17 @@
     "phone": "618-508-3688",
     "logo": "https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/logos/daves-auto.png",
     "bio": "Expert auto repair services serving the Flora community."
+  },
+  {
+    "id": "clay-county-republican",
+    "name": "Clay County Republican",
+    "town": "Louisville",
+    "tier": "basic",
+    "category": "Media",
+    "phone": "618-665-3121",
+    "address": "148 S Church St, Louisville, IL 62858",
+    "website": "https://www.claycountyrepublican.com",
+    "logo": "https://via.placeholder.com/150?text=CC+Republican",
+    "bio": "Your local news source for Louisville and the surrounding Clay County area."
   }
 ]

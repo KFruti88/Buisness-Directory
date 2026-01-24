@@ -1,148 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Profile | Clay County Directory</title>
-    
-    <link rel="stylesheet" href="https://KFruti88.github.io/master.html/town-colors.css">
-    
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #d1d5db;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .nav-header {
-            width: 100%;
-            background-color: #38b6ff;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
-        .nav-header a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-        }
-
-        /* Profile Card Styling */
-        .profile-container {
-            max-width: 800px;
-            width: 90%;
-            background-color: #fffaf0;
-            border: 2px solid #000;
-            box-shadow: 10px 10px 5px rgba(0,0,0,0.2);
-            margin: 50px 0;
-            padding: 40px;
-        }
-
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            border-bottom: 2px solid #000;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-
-        #biz-logo {
-            max-width: 250px;
-            max-height: 200px;
-            object-fit: contain;
-        }
-
-        .header-text h1 {
-            font-family: 'Times New Roman', serif;
-            font-size: 2.5rem;
-            margin: 0;
-        }
-
-        /* Matches your .flora-bar etc. for the profile view */
-        .town-indicator {
-            display: inline-block;
-            color: white;
-            padding: 5px 15px;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-top: 10px;
-        }
-
-        .profile-content {
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        .info-row {
-            margin: 10px 0;
-            font-weight: bold;
-        }
-
-        .bio-section {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(0,0,0,0.05);
-            border-radius: 5px;
-        }
-
-        .back-btn {
-            display: inline-block;
-            margin-top: 30px;
-            padding: 10px 20px;
-            background: #000;
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="nav-header">
-        <a href="index.html">Back to Full Directory</a>
-        <a href="#">Clay City</a>
-        <a href="#">Flora</a>
-        <a href="#">Louisville</a>
-        <a href="#">Xenia</a>
-    </div>
-
-    <div class="profile-container" id="profile-content-area">
-        <div class="profile-header">
-            <img id="biz-logo" src="" alt="Logo Loading...">
-            <div class="header-text">
-                <h1 id="biz-title">Loading Business...</h1>
-                <div id="town-tag" class="town-indicator"></div>
-            </div>
-        </div>
-
-        <div class="profile-content">
-            <div class="info-row">Phone: <span id="biz-phone"></span></div>
-            <div class="info-row">Category: <span id="biz-category"></span></div>
-            
-            <div class="bio-section">
-                <h3>About this Business</h3>
-                <p id="biz-bio">Information coming soon...</p>
-            </div>
-
-            <a href="index.html" class="back-btn">← RETURN TO DIRECTORY</a>
-        </div>
-    </div>
-
-    <script src="https://KFruti88.github.io/master.html/data.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/KFruti88/Buisness-Directory@main/data.js"></script>
 
     <script>
         function loadProfile() {
             // Get the ID from the URL bar (e.g. profile.html?id=wabash-networks)
             const urlParams = new URLSearchParams(window.location.search);
             const bizId = urlParams.get('id');
+
+            // Safety check: Make sure the data file loaded
+            if (typeof clayCountyData === 'undefined') {
+                document.getElementById('profile-content-area').innerHTML = "<h1>Error: Data file not found.</h1>";
+                return;
+            }
 
             // Find the business in your clayCountyData list
             const business = clayCountyData.find(b => b.id === bizId);
@@ -172,8 +40,6 @@
             }
         }
 
-        // Run when page opens
+        // Run the script on page load
         window.onload = loadProfile;
     </script>
-</body>
-</html>

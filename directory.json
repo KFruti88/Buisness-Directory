@@ -106,5 +106,113 @@
     "website": "https://www.claycountyrepublican.com",
     "logo": "https://via.placeholder.com/150?text=CC+Republican",
     "bio": "Your local news source for Louisville and the surrounding Clay County area."
+  },
+  {
+    "id": "clay-county-hospital",
+    "name": "Clay County Hospital",
+    "town": "Flora",
+    "category": "Healthcare",
+    "phone": "618-662-2131",
+    "address": "911 W Delaware Ave, Flora, IL 62839",
+    "website": "https://www.claycountyhospital.org/",
+    "facebook": "https://www.facebook.com/ClayCountyHospital/",
+    "logo": "https://via.placeholder.com/150?text=CC+Hospital",
+    "bio": "Providing comprehensive healthcare services and emergency care to the Clay County region."
+  },
+  {
+    "id": "flora-bank-trust",
+    "name": "Flora Bank & Trust",
+    "town": "Flora",
+    "category": "Finance",
+    "phone": "618-662-4444",
+    "address": "100 West 2nd St, Flora, IL 62839",
+    "website": "https://www.florabank.net/",
+    "facebook": "https://www.facebook.com/FloraBankTrust/",
+    "logo": "https://via.placeholder.com/150?text=Flora+Bank",
+    "bio": "A locally owned community bank serving Flora and the surrounding areas since 1971."
+  },
+  {
+    "id": "bibles-grocery",
+    "name": "Bible's Grocery",
+    "town": "Louisville",
+    "category": "Shopping",
+    "phone": "618-665-3511",
+    "address": "145 S Main St, Louisville, IL 62858",
+    "website": "N/A",
+    "facebook": "https://www.facebook.com/people/Bibles-Grocery/100057116480351/",
+    "logo": "https://via.placeholder.com/150?text=Bibles+Grocery",
+    "bio": "Louisville's hometown grocery store providing fresh meats, produce, and friendly service."
+  },
+  {
+    "id": "clay-county-sheriff",
+    "name": "Clay County Sheriff's Office",
+    "town": "Louisville",
+    "category": "Government",
+    "phone": "618-665-3316",
+    "address": "144 S Main St, Louisville, IL 62858",
+    "website": "http://www.claycountysheriffillinois.org/",
+    "facebook": "https://www.facebook.com/ClayCountySheriffIL/",
+    "logo": "https://via.placeholder.com/150?text=CC+Sheriff",
+    "bio": "Dedicated to the safety and protection of the citizens of Clay County."
+  },
+  {
+    "id": "mikes-classic-autos",
+    "name": "Mike's Classic Autos",
+    "town": "Flora",
+    "category": "Automotive",
+    "phone": "618-662-4611",
+    "address": "1100 W North Ave, Flora, IL 62839",
+    "website": "http://www.mikesclassicautos.com/",
+    "facebook": "N/A",
+    "logo": "https://via.placeholder.com/150?text=Mikes+Autos",
+    "bio": "Specializing in classic car sales and restoration services in the heart of Flora."
+  },
+  {
+    "id": "north-clay-schools",
+    "name": "North Clay Unit #25",
+    "town": "Louisville",
+    "category": "Education",
+    "phone": "618-665-3353",
+    "address": "420 N US Hwy 45, Louisville, IL 62858",
+    "website": "https://www.northclayschools.com/",
+    "facebook": "https://www.facebook.com/North-Clay-CUSD-25-108269227546411/",
+    "logo": "https://via.placeholder.com/150?text=North+Clay+Schools",
+    "bio": "Empowering students in Louisville and the surrounding communities through excellence in education."
+  },
+  {
+    "id": "flora-cusd-35",
+    "name": "Flora CUSD #35",
+    "town": "Flora",
+    "category": "Education",
+    "phone": "618-662-2412",
+    "address": "607 S Main St, Flora, IL 62839",
+    "website": "https://www.floraschools.com/",
+    "facebook": "https://www.facebook.com/floraschools/",
+    "logo": "https://via.placeholder.com/150?text=Flora+Schools",
+    "bio": "Serving the educational needs of students in the Flora school district."
+  },
+  {
+    "id": "hoosier-township-fire",
+    "name": "Hoosier Township Fire Department",
+    "town": "Louisville",
+    "category": "Government",
+    "phone": "618-665-3220",
+    "address": "Louisville, IL 62858",
+    "website": "N/A",
+    "facebook": "https://www.facebook.com/HoosierTownshipFire/",
+    "logo": "https://via.placeholder.com/150?text=Hoosier+Fire",
+    "bio": "Volunteer fire department serving the Louisville area."
+  },
+  {
+    "id": "clay-city-schools",
+    "name": "Clay City CUSD #10",
+    "town": "Clay City",
+    "category": "Education",
+    "phone": "618-676-1444",
+    "address": "707 S Walnut St, Clay City, IL 62824",
+    "website": "https://www.claycityschools.org/",
+    "facebook": "https://www.facebook.com/ClayCitySchools/",
+    "logo": "https://via.placeholder.com/150?text=Clay+City+Schools",
+    "bio": "Dedicated to providing a high-quality education to the students of Clay City."
   }
-]
+[

@@ -103,7 +103,7 @@ select {
     position: absolute;
     top: 5px;
     left: 5px;
-    width: 40px; /* Small print size */
+    width: 40px; 
     height: auto;
     z-index: 20;
     filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.5));
@@ -123,6 +123,49 @@ select {
     z-index: 10; 
 }
 
-/* --- 7. INTERACTIVITY --- */
-.card.premium { cursor: pointer; }
-.card.premium:hover { transform: translateY(-3px); box-shadow: 10px 10px 0px rgba(0,0,0,0.3); }
+/* --- 7. INTERACTIVITY & INFINITE SHINE --- */
+
+/* Hover Lift (Plus & Premium Only) */
+.card.plus:hover, .card.premium:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 10px 10px 0px rgba(0,0,0,0.3); 
+}
+
+/* Premium Card Shine Setup */
+.card.premium {
+    cursor: pointer;
+}
+
+.card.premium::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -100%; 
+    width: 30%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: rotate(30deg);
+    pointer-events: none;
+    /* Infinite Loop: 3s total duration */
+    animation: infiniteShine 3s infinite linear;
+}
+
+@keyframes infiniteShine {
+    0% { left: -100%; }
+    30% { left: 150%; } 
+    100% { left: 150%; } 
+}
+
+/* Plus Reveal logic */
+.plus-reveal {
+    display: none;
+    font-weight: bold;
+    color: #000;
+    margin-top: 10px;
+    border-top: 1px dashed #000;
+    padding-top: 5px;
+}
+
+.card.plus.expanded .plus-reveal {
+    display: block;
+}

@@ -1,7 +1,6 @@
 let masterData = [];
 
 // 1. PROJECT CONFIGURATION
-// Updated to pull from your general images repository
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 const couponImgUrl = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
@@ -56,12 +55,26 @@ async function loadDirectory() {
     });
 }
 
-// 4. RENDER MAIN DIRECTORY
+// 4. RENDER MAIN DIRECTORY (WITH TIERED SORTING)
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    grid.innerHTML = data.sort((a,b) => (a.Town || "").localeCompare(b.Town || "")).map(biz => {
+    // TIER PRIORITY MAPPING (Premium at the top)
+    const tierOrder = { "premium": 1, "plus": 2, "basic": 3 };
+
+    grid.innerHTML = data.sort((a, b) => {
+        const tierA = (a.Teir || 'basic').toLowerCase();
+        const tierB = (b.Teir || 'basic').toLowerCase();
+        
+        // First, sort by Tier Priority
+        if (tierOrder[tierA] !== tierOrder[tierB]) {
+            return tierOrder[tierA] - tierOrder[tierB];
+        }
+        
+        // Second, sort by Town alphabetically within tiers
+        return (a.Town || "").localeCompare(b.Town || "");
+    }).map(biz => {
         const tier = (biz.Teir || 'basic').toLowerCase();
         const imageID = (biz["Image ID"] || "").trim(); 
         const category = (biz.Category || "Industry").trim(); 
@@ -89,7 +102,7 @@ function renderCards(data) {
     if (counter) counter.innerText = `${data.length} Businesses Listed`;
 }
 
-// 5. LOAD INDIVIDUAL PROFILE (FIXED)
+// 5. LOAD INDIVIDUAL PROFILE (FIXED MAP & TEMPLATE)
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
     const bizId = params.get('id');
@@ -101,7 +114,7 @@ function loadProfile(data) {
         return;
     }
 
-    // FIXED: Corrected Map URL template literal syntax
+    // Corrected Template Literal: Changed '1{' to '${'
     const simpleMap = biz.Address && biz.Address !== "N/A" 
         ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` 
         : '';

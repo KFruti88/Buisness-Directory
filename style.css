@@ -38,7 +38,7 @@ select {
     cursor: pointer;
 }
 
-/* --- 3. DIRECTORY GRID & CARDS (Restored) --- */
+/* --- 3. DIRECTORY GRID & CARDS --- */
 .site-wrapper { 
     width: 95%; 
     max-width: 1800px; 
@@ -98,12 +98,33 @@ select {
 .xenia-bar { background-color: #38b6ff !important; }
 .sailor-springs-bar { background-color: #6b7280 !important; }
 
-/* --- 6. BADGES & INTERACTIVITY --- */
+/* --- 6. BADGES & COUPON STYLING --- */
 .tier-badge { 
     position: absolute; top: 5px; right: 5px; font-size: 0.5rem; 
     padding: 1px 5px; font-weight: bold; text-transform: uppercase; 
     border: 1px solid #000; background: #eee; z-index: 10; 
 }
 
+.coupon-icon {
+    font-size: 1.2rem;
+    color: #22c55e;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 8px;
+    filter: drop-shadow(1px 1px 0px #000);
+}
+
+.coupon-tag {
+    background: #22c55e;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border: 1px solid #000;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+/* --- 7. INTERACTIVITY --- */
 .card.premium { cursor: pointer; }
 .card.premium:hover { transform: translateY(-3px); box-shadow: 10px 10px 0px rgba(0,0,0,0.3); }

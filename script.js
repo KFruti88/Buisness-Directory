@@ -71,10 +71,10 @@ function renderCards(data) {
         const tier = (biz.Teir || 'basic').toLowerCase();
         const imageID = biz["Image ID"] || "";
         const townClass = (biz.Town || "unknown").toLowerCase().replace(/\s+/g, '-');
-        const category = biz.Category || "";
+        const category = biz.Category || "Industry"; 
         const hasCoupon = biz.Coupon && biz.Coupon.toUpperCase() !== "N/A" && biz.Coupon.trim() !== "";
         
-        // Emoji Logic
+        // Emoji Logic - Unified for all tiers
         const emoji = catEmojis[category] || "📁";
 
         let clickAction = "";
@@ -95,7 +95,7 @@ function renderCards(data) {
             ${tier === 'plus' ? `<div class="plus-reveal">📞 ${biz.Phone || 'Contact for info'}</div>` : ''}
             
             <div class="cat-text">
-                ${tier === 'basic' ? '' : `${emoji} ${category}`}
+                ${emoji} ${category}
             </div>
         </div>`;
     }).join('');

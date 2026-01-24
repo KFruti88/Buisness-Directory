@@ -102,11 +102,11 @@ select {
 }
 
 /* --- 5. TOWN BAR COLORS --- */
-.flora-bar { background-color: #ff5500 !important; }
-.louisville-bar { background-color: #e60000 !important; }
-.clay-city-bar { background-color: #008000 !important; }
-.xenia-bar { background-color: #38b6ff !important; }
-.sailor-springs-bar { background-color: #6b7280 !important; }
+.flora-bar { background-color: #fe4f00 !important; }
+.louisville-bar { background-color: #eb1c24 !important; }
+.clay-city-bar { background-color: #0c30f0 !important; }
+.xenia-bar { background-color: #000000 !important; }
+.sailor-springs-bar { background-color: #a020f0 !important; }
 
 /* --- 6. BADGES --- */
 .coupon-corner-image {

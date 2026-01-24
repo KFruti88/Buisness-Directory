@@ -1,39 +1,41 @@
 let masterData = [];
-// Sync with your Fuel Repo images for the billboard
+// 1. PROJECT CONFIGURATION
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/Clay-County-Fuel/main/images/";
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 const couponImgUrl = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
-// 1. LOCKED EMOJI MAPPING
+// Shared brands that use one logo for multiple towns
+const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "mach 1"];
+
 const catEmojis = {
-    "Bars": "🍺", 
-    "Emergency": "🚨", 
-    "Church": "⛪", 
-    "Post Office": "📬", 
-    "Restaurants": "🍴", 
-    "Retail": "🛒", 
-    "Shopping": "🛍️", 
-    "Manufacturing": "🏗️", 
-    "Industry": "🏭", 
-    "Financial Services": "💰", 
-    "Healthcare": "🏥", 
-    "Gas Station": "⛽", 
-    "Internet": "🌐", 
-    "Support Services": "🛠️", 
-    "Professional Services": "💼"
+    "Bars": "🍺", "Emergency": "🚨", "Church": "⛪", "Post Office": "📬", 
+    "Restaurants": "🍴", "Retail": "🛒", "Shopping": "🛍️", "Manufacturing": "🏗️", 
+    "Industry": "🏭", "Financial Services": "💰", "Healthcare": "🏥", 
+    "Gas Station": "⛽", "Internet": "🌐", "Support Services": "🛠️", 
+    "Professional Services": "💼", "Agriculture": "🚜"
 };
 
 document.addEventListener("DOMContentLoaded", () => { loadDirectory(); });
 
-// 2. SMART IMAGE HELPER
-function getSmartImage(id, isProfile = false) {
-    if(!id) return '';
-    const cleanID = id.trim();
+// 2. SMART IMAGE HELPER (With Brand Logic)
+function getSmartImage(id, bizName, isProfile = false) {
+    if(!id && !bizName) return '';
+    
+    let fileName = id.trim().toLowerCase();
+    const nameLower = bizName.toLowerCase();
+
+    // Check for shared brands (e.g., Flora Casey's and Clay City Casey's use caseys.png)
+    const brandMatch = sharedBrands.find(brand => nameLower.includes(brand));
+    if (brandMatch) {
+        fileName = brandMatch.replace(/['\s]/g, ""); 
+    }
+
     const placeholder = `https://via.placeholder.com/${isProfile ? '200' : '150'}?text=Logo+Pending`;
-    const firstUrl = `${imageRepo}${cleanID}.jpg`;
+    const firstUrl = `${imageRepo}${fileName}.jpg`;
     
     return `<img src="${firstUrl}" class="${isProfile ? 'profile-logo' : ''}" 
-            onerror="this.onerror=null; this.src='${imageRepo}${cleanID}.png'; 
+            onerror="this.onerror=null; 
+            this.src='${imageRepo}${fileName}.png'; 
             this.onerror=function(){this.src='${placeholder}'};">`;
 }
 
@@ -73,7 +75,7 @@ function renderCards(data) {
         return `
         <div class="card ${tier}" ${clickAttr} style="cursor: ${tier === 'premium' ? 'pointer' : 'default'};">
             <div class="tier-badge">${tier}</div>
-            <div class="logo-box">${getSmartImage(imageID)}</div>
+            <div class="logo-box">${getSmartImage(imageID, biz.Name)}</div>
             <div class="town-bar ${townClass}-bar">${biz.Town || 'Unknown'}</div>
             <div class="biz-name">${biz.Name || 'Unnamed Business'}</div>
             ${tier === 'plus' ? `<div class="plus-reveal">📞 ${biz.Phone || 'Contact for Info'}</div>` : ''}
@@ -97,14 +99,13 @@ function loadProfile(data) {
         return;
     }
 
-    // Fixed template literal syntax
-    const mapUrl = biz.Address ? `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(biz.Address)}` : '';
+    const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` : '';
 
     container.innerHTML = `
         <div class="profile-container premium">
             <a href="index.html" class="back-link">← Back to Directory</a>
             <div class="profile-header">
-                <div class="profile-logo-box">${getSmartImage(biz["Image ID"], true)}</div>
+                <div class="profile-logo-box">${getSmartImage(biz["Image ID"], biz.Name, true)}</div>
                 <div class="profile-titles">
                     <h1 class="biz-title">${biz.Name}</h1>
                     <p class="biz-meta">${catEmojis[biz.Category] || "📁"} ${biz.Town} — ${biz.Category}</p>

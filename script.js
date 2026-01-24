@@ -62,7 +62,7 @@ async function loadDirectory() {
     } catch (err) { console.error("Script Error:", err); }
 }
 
-// 4. RENDER MAIN DIRECTORY
+// 4. RENDER MAIN DIRECTORY (Emojis Default for All)
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
@@ -74,9 +74,10 @@ function renderCards(data) {
         const category = biz.Category || "Industry"; 
         const hasCoupon = biz.Coupon && biz.Coupon.toUpperCase() !== "N/A" && biz.Coupon.trim() !== "";
         
+        // Emoji logic applied to all tiers by default
         const emoji = catEmojis[category] || "📁";
 
-        // URL ENCODING ADDED HERE
+        // URL ENCODING for Premium Redirects
         let clickAction = "";
         if (tier === 'premium') {
             clickAction = `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID)}'"` ;
@@ -115,7 +116,7 @@ function loadProfile(data) {
     const container = document.getElementById('profile-wrap');
     if (!container) return;
     
-    // FIXED MAP URL SYNTAX
+    // Fixed Map URL Logic
     const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&output=embed` : '';
     const emoji = catEmojis[biz.Category] || "📁";
 

@@ -12,40 +12,39 @@
 <body>
 
     <div class="nav-header">
-        <a href="https://supportmylocalcommunity.com/" class="town-nav-link home-link">Home</a>
-        <a href="https://supportmylocalcommunity.com/clay-city/" class="town-nav-link clay-city-link">Clay City</a>
-        <a href="https://ourflora.com/" class="town-nav-link flora-link">Flora</a>
-        <a href="https://supportmylocalcommunity.com/louisville/" class="town-nav-link louisville-link">Louisville</a>
-        <a href="https://supportmylocalcommunity.com/sailor-springs/" class="town-nav-link sailor-springs-link">Sailor Springs</a>
-        <a href="https://supportmylocalcommunity.com/xenia/" class="town-nav-link xenia-link">Xenia</a>
+        <a href="https://supportmylocalcommunity.com/">Home</a>
+        <a href="https://supportmylocalcommunity.com/clay-city/">Clay City</a>
+        <a href="https://ourflora.com/">Flora</a>
+        <a href="https://supportmylocalcommunity.com/louisville/">Louisville</a>
+        <a href="https://supportmylocalcommunity.com/sailor-springs/">Sailor Springs</a>
+        <a href="https://supportmylocalcommunity.com/xenia/">Xenia</a>
     </div>
 
-    <div class="menu-bar">
-        <div class="menu-container">
-            <select id="town-select" class="styled-select" onchange="applyFilters()">
-                <option value="All">All Towns</option>
-                <option value="Flora">Flora</option>
-                <option value="Louisville">Louisville</option>
-                <option value="Clay City">Clay City</option>
-                <option value="Xenia">Xenia</option>
-                <option value="Sailor Springs">Sailor Springs</option>
-            </select>
-            
-            <div class="biz-count" id="counter-display">0 Businesses Listed</div>
+    <div id="filter-controls">
+        <select id="town-select" onchange="applyFilters()">
+            <option value="All">All Towns</option>
+            <option value="Flora">Flora</option>
+            <option value="Louisville">Louisville</option>
+            <option value="Clay City">Clay City</option>
+            <option value="Xenia">Xenia</option>
+            <option value="Sailor Springs">Sailor Springs</option>
+        </select>
+        
+        <div id="counter-display" style="font-weight: bold; align-self: center; font-family: 'Times New Roman';">0 Businesses Listed</div>
 
-            <select id="cat-select" class="styled-select" onchange="applyFilters()">
-                <option value="All">All Industries</option>
-                <option value="Services">Services</option>
-                <option value="Shopping">Shopping</option>
-                <option value="Restaurants">Restaurants</option>
-                <option value="Church">Church</option>
-                <option value="Post Office">Post Office</option>
-            </select>
-        </div>
+        <select id="cat-select" onchange="applyFilters()">
+            <option value="All">All Industries</option>
+            <option value="Services">Services</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Restaurants">Restaurants</option>
+            <option value="Church">Church</option>
+            <option value="Post Office">Post Office</option>
+        </select>
     </div>
 
     <div class="site-wrapper">
-        <div id="directory-grid"></div>
+        <div id="directory-grid">
+            </div>
     </div>
 
     <script src="script.js"></script>

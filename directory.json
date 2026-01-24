@@ -21,7 +21,6 @@
     "logo": "https://raw.githubusercontent.com/KFruti88/Clay-County-Business-Directory/main/logos/wabash.png",
     "bio": "High-speed fiber internet and local phone services connecting the Clay County community."
   },
-  [
   {
     "id": "daves-auto-repair",
     "name": "Dave’s Auto Repair",
@@ -43,28 +42,6 @@
     "bio": "Reliable auto maintenance and repairs located in Flora."
   },
   {
-    "id": "angela-florist",
-    "name": "Angela’s Village Florist",
-    "town": "Flora",
-    "tier": "premium",
-    "category": "Shopping",
-    "phone": "618-555-0123",
-    "address": "123 E North Ave, Flora, IL 62839",
-    "logo": "https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/logos/florist.png",
-    "bio": "Premium floral arrangements and custom gifts for all occasions."
-  },
-  {
-    "id": "wabash-networks",
-    "name": "Wabash Independent Networks",
-    "town": "Louisville",
-    "tier": "premium",
-    "category": "Services",
-    "phone": "618-665-3311",
-    "address": "111 E Main St, Louisville, IL 62858",
-    "logo": "https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/logos/wabash.png",
-    "bio": "Fiber-fast internet and local phone service for Louisville and beyond."
-  },
-  {
     "id": "we-deliver",
     "name": "WE DELIVER",
     "town": "Flora",
@@ -84,5 +61,4 @@
     "logo": "https://via.placeholder.com/150?text=DiMaggios",
     "bio": "Family-owned pizzeria serving Flora for generations."
   }
-]
 ]

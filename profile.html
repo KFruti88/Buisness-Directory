@@ -1,45 +1,40 @@
-<script src="https://cdn.jsdelivr.net/gh/KFruti88/Buisness-Directory@main/data.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Business Profile</title>
+    <link rel="stylesheet" href="https://KFruti88.github.io/master.html/town-colors.css">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #d1d5db; display: flex; flex-direction: column; align-items: center; margin: 0; }
+        .profile-container { max-width: 800px; width: 90%; background-color: #fffaf0; border: 2px solid #000; box-shadow: 10px 10px 5px rgba(0,0,0,0.2); margin: 50px 0; padding: 40px; }
+        .town-indicator { color: white; padding: 5px 15px; font-weight: bold; text-transform: uppercase; margin-top: 10px; display: inline-block; }
+        #biz-logo { max-width: 250px; }
+        .back-btn { display: inline-block; margin-top: 30px; padding: 10px 20px; background: #000; color: #fff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="profile-container" id="content">
+        <img id="logo" src=""><br>
+        <h1 id="title"></h1>
+        <div id="tag" class="town-indicator"></div>
+        <p><strong>Phone:</strong> <span id="phone"></span></p>
+        <p id="bio"></p>
+        <a href="index.html" class="back-btn">← BACK</a>
+    </div>
 
     <script>
-        function loadProfile() {
-            // Get the ID from the URL bar (e.g. profile.html?id=wabash-networks)
-            const urlParams = new URLSearchParams(window.location.search);
-            const bizId = urlParams.get('id');
-
-            // Safety check: Make sure the data file loaded
-            if (typeof clayCountyData === 'undefined') {
-                document.getElementById('profile-content-area').innerHTML = "<h1>Error: Data file not found.</h1>";
-                return;
+        const id = new URLSearchParams(window.location.search).get('id');
+        fetch('./directory.json').then(res => res.json()).then(data => {
+            const biz = data.find(b => b.id === id);
+            if(biz) {
+                document.getElementById('title').innerText = biz.name;
+                document.getElementById('phone').innerText = biz.phone;
+                document.getElementById('bio').innerText = biz.bio;
+                document.getElementById('logo').src = biz.logo;
+                document.getElementById('tag').innerText = biz.town;
+                document.getElementById('tag').className = `town-indicator ${biz.town.toLowerCase()}-bar`;
             }
-
-            // Find the business in your clayCountyData list
-            const business = clayCountyData.find(b => b.id === bizId);
-
-            if (business) {
-                // Set the text and images
-                document.getElementById('biz-title').innerText = business.name;
-                document.getElementById('biz-phone').innerText = business.phone || 'Contact for details';
-                document.getElementById('biz-category').innerText = business.category || 'General';
-                document.getElementById('biz-bio').innerText = business.bio || 'This business is a proud member of the Clay County community.';
-                document.getElementById('biz-logo').src = business.logo;
-                
-                // Set the town tag and color bar
-                const townTag = document.getElementById('town-tag');
-                townTag.innerText = business.town;
-                // Applies your GitHub class (e.g. .flora-bar)
-                townTag.className = `town-indicator ${business.town.toLowerCase()}-bar`;
-                
-                // Update the Browser Tab Title
-                document.title = `${business.name} | Clay County Directory`;
-            } else {
-                document.getElementById('profile-content-area').innerHTML = `
-                    <h1>Business Not Found</h1>
-                    <p>We couldn't find a listing for that ID. It may have been removed or moved.</p>
-                    <a href="index.html" class="back-btn">Back to Directory</a>
-                `;
-            }
-        }
-
-        // Run the script on page load
-        window.onload = loadProfile;
+        });
     </script>
+</body>
+</html>

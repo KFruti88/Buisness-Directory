@@ -3,17 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clay County Business Directory | Filterable</title>
+    <title>Clay County Business Directory | SMLC</title>
     <link rel="stylesheet" href="https://KFruti88.github.io/master.html/town-colors.css">
     <style>
         body { background-color: #d1d5db; font-family: Arial, sans-serif; margin: 0; padding: 0; }
         
-        /* Navigation Header */
-        .nav-header { background-color: #38b6ff; color: white; padding: 12px 0; text-align: center; font-size: 0.95rem; font-weight: bold; }
+        /* Navigation Header - Full Width */
+        .nav-header { background-color: #38b6ff; color: white; padding: 12px 0; text-align: center; font-size: 0.95rem; font-weight: bold; width: 100%; }
         .nav-header a { color: white; text-decoration: none; margin: 0 15px; }
 
-        /* Filter Controls Styling */
-        #filter-controls { background: #fff; padding: 20px; border-bottom: 2px solid #000; text-align: center; margin-bottom: 30px; }
+        /* site-wrapper centers content at 95% width */
+        .site-wrapper {
+            width: 95%;
+            max-width: 1800px; 
+            margin: 0 auto;
+        }
+
+        /* Filter Controls Section */
+        #filter-controls { 
+            background: #fff; 
+            padding: 20px; 
+            border: 2px solid #000; 
+            border-top: none;
+            text-align: center; 
+            margin-bottom: 30px; 
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.1);
+        }
         .filter-group { margin: 10px 0; }
         .filter-btn { 
             background: #fff; border: 2px solid #38b6ff; color: #38b6ff; padding: 8px 15px; 
@@ -21,21 +36,26 @@
         }
         .filter-btn:hover, .filter-btn.active { background: #38b6ff; color: #fff; }
 
-        /* Grid and Card Layout */
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; }
+        /* Grid Layout */
+        #directory-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+            gap: 30px; 
+            padding-bottom: 50px;
+        }
         
+        /* Card Styling */
         .card { 
             background-color: #fffaf0; border: 2px solid #000; box-shadow: 10px 10px 5px rgba(0,0,0,0.2); 
             padding: 25px; text-align: center; cursor: pointer; display: flex; flex-direction: column; min-height: 480px; transition: transform 0.2s;
         }
         .card:hover { transform: scale(1.02); }
 
-        /* Category Tag and Logo */
         .category-tag { font-size: 0.8rem; background: #eee; padding: 4px 12px; border-radius: 12px; margin-bottom: 10px; display: inline-block; align-self: center; font-weight: bold; text-transform: uppercase; }
         .logo-container { height: 160px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
         .logo-container img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-        /* Town Bars */
+        /* Town Bars with Force-Colors for Divi/WordPress compatibility */
         .town-bar { color: white; font-weight: bold; padding: 12px 0; text-transform: uppercase; letter-spacing: 2px; margin: 15px 0; font-size: 1.1rem; }
         .flora-bar { background-color: #ff5500 !important; }
         .louisville-bar { background-color: #e60000 !important; }
@@ -51,30 +71,31 @@
 
     <div class="nav-header">
         <a href="#">SMLC Home Page</a>
-        <a href="#">Help Center</a>
+        <a href="#">Clay County Bulletin</a>
         <a href="#">Contact Us</a>
     </div>
 
-    <div id="filter-controls">
-        <div class="filter-group">
-            <strong>Towns:</strong>
-            <button class="filter-btn active" onclick="filterData('town', 'All', this)">All Towns</button>
-            <button class="filter-btn" onclick="filterData('town', 'Flora', this)">Flora</button>
-            <button class="filter-btn" onclick="filterData('town', 'Louisville', this)">Louisville</button>
-            <button class="filter-btn" onclick="filterData('town', 'Clay-City', this)">Clay City</button>
+    <div class="site-wrapper">
+        <div id="filter-controls">
+            <div class="filter-group">
+                <strong>Towns:</strong>
+                <button class="filter-btn active" onclick="filterData('town', 'All', this)">All Towns</button>
+                <button class="filter-btn" onclick="filterData('town', 'Flora', this)">Flora</button>
+                <button class="filter-btn" onclick="filterData('town', 'Louisville', this)">Louisville</button>
+                <button class="filter-btn" onclick="filterData('town', 'Clay-City', this)">Clay City</button>
+            </div>
+            <div class="filter-group">
+                <strong>Industries:</strong>
+                <button class="filter-btn active" onclick="filterData('category', 'All', this)">All Types</button>
+                <button class="filter-btn" onclick="filterData('category', 'Restaurant', this)">Restaurants</button>
+                <button class="filter-btn" onclick="filterData('category', 'Industry', this)">Industry</button>
+                <button class="filter-btn" onclick="filterData('category', 'Service', this)">Services</button>
+            </div>
         </div>
-        <div class="filter-group">
-            <strong>Industries:</strong>
-            <button class="filter-btn active" onclick="filterData('category', 'All', this)">All Types</button>
-            <button class="filter-btn" onclick="filterData('category', 'Restaurant', this)">Restaurants</button>
-            <button class="filter-btn" onclick="filterData('category', 'Industry', this)">Industry</button>
-            <button class="filter-btn" onclick="filterData('category', 'Service', this)">Services</button>
-            <button class="filter-btn" onclick="filterData('category', 'Shopping', this)">Retail</button>
-        </div>
-    </div>
 
-    <div class="container" id="directory-grid">
-        </div>
+        <div id="directory-grid">
+            </div>
+    </div>
 
     <script>
         let masterData = [];
@@ -100,12 +121,12 @@
         }
 
         function filterData(type, value, btn) {
-            // Update Active Button UI
+            // UI: Highlight active button
             const parent = btn.parentElement;
             parent.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // Apply Filtering logic
+            // Logic: Filter based on masterData
             if (value === 'All') {
                 renderCards(masterData);
             } else {
@@ -114,9 +135,12 @@
             }
         }
 
-        // Auto-Updating Fetch from GitHub
+        // Live fetch from GitHub ensures content is always current
         fetch('https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/directory.json')
-            .then(res => res.json())
+            .then(res => {
+                if(!res.ok) throw new Error('Data source not reachable');
+                return res.json();
+            })
             .then(data => {
                 masterData = data;
                 renderCards(data);

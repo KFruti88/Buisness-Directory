@@ -3,7 +3,7 @@ const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 const couponImgUrl = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
-// --- 1. PERMANENT EMOJI LOCK ---
+// 1. LOCKED EMOJI MAPPING
 const catEmojis = {
     "Church": "⛪", "Post Office": "📬", "Restaurants": "🍴", "Retail": "🛒", 
     "Shopping": "🛍️", "Manufacturing": "🏗️", "Industry": "🏭", 
@@ -30,19 +30,23 @@ function getSmartImage(id, isProfile = false) {
     return `<img src="${firstUrl}" class="${isProfile ? 'profile-logo' : ''}" onerror="${errorChain.replace(/else$/, '')}">`;
 }
 
-// 3. DATA LOADING
+// 3. DATA LOADING ENGINE
 async function loadDirectory() {
     Papa.parse(csvUrl, {
         download: true, header: true, skipEmptyLines: true,
         complete: function(results) {
             masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
-            if (document.getElementById('directory-grid')) renderCards(masterData);
-            else if (document.getElementById('profile-wrap')) loadProfile(masterData);
+            // Check which page we are on
+            if (document.getElementById('directory-grid')) {
+                renderCards(masterData);
+            } else if (document.getElementById('profile-wrap')) {
+                loadProfile(masterData);
+            }
         }
     });
 }
 
-// --- 4. RENDER MAIN DIRECTORY (CLEAN CARDS) ---
+// 4. RENDER MAIN DIRECTORY (CLEAN TEASER CARDS)
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
@@ -57,10 +61,10 @@ function renderCards(data) {
 
         let clickAttr = "";
         if (tier === 'premium') {
-            // THE REDIRECT: Sends user to profile.html with the business ID
+            // REDIRECT TO PROFILE
             clickAttr = `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID)}'"` ;
         } else if (tier === 'plus') {
-            // THE REVEAL: Keeps user on page to see phone
+            // REVEAL PHONE ON CARD
             clickAttr = `onclick="this.classList.toggle('expanded')"`;
         }
 
@@ -77,29 +81,39 @@ function renderCards(data) {
             <div class="cat-text">${emoji} ${category}</div>
         </div>`;
     }).join('');
+    
+    // Update counter
+    const counter = document.getElementById('counter-display');
+    if (counter) counter.innerText = `${data.length} Businesses Listed`;
 }
 
-// --- 5. LOAD INDIVIDUAL PROFILE (THE DEEP DIVE) ---
+// 5. LOAD INDIVIDUAL PROFILE (THE "DEEP DIVE" CONTENT)
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
-    const bizId = params.get('id');
+    const bizId = params.get('id'); 
+    
     const biz = data.find(b => (b["Image ID"] || "").trim() === bizId);
     
-    // Redirect if no data found or not Premium
-    if (!biz || (biz.Teir || "").toLowerCase() !== 'premium') {
-        window.location.href = 'index.html'; 
+    if (!biz) {
+        console.error("Could not find business with ID:", bizId);
+        document.getElementById('profile-wrap').innerHTML = `
+            <div class="profile-container">
+                <a href="index.html" class="back-link">← Return to Directory</a>
+                <h2>Business Not Found</h2>
+                <p>We couldn't find a business with the ID: <strong>${bizId}</strong></p>
+                <p>Please check your Google Sheet "Image ID" column.</p>
+            </div>`;
         return;
     }
 
     const emoji = catEmojis[biz.Category] || "📁";
     const profileUrl = window.location.href; 
-    // QR Code API: Automatically generates code for this specific business
     const qrCodeUrl = `https://chart.googleapis.com/chart?cht=qr&chs=150x150&chl=${encodeURIComponent(profileUrl)}`;
     const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` : '';
 
     document.getElementById('profile-wrap').innerHTML = `
         <div class="profile-container premium">
-            <a class="back-link" href="index.html">← Back to Directory</a>
+            <a href="index.html" class="back-link">← Return to Directory</a>
             
             <div class="profile-header">
                 <div class="profile-logo-box">${getSmartImage(biz["Image ID"], true)}</div>
@@ -116,7 +130,8 @@ function loadProfile(data) {
                     <div class="info-item">📞 <strong>Phone:</strong> ${biz.Phone || 'N/A'}</div>
                     ${biz.Facebook && biz.Facebook !== "N/A" ? `<div class="info-item">📱 <strong>Facebook:</strong> <a href="${biz.Facebook}" target="_blank">View Page</a></div>` : ''}
                     <div class="info-item">📍 <strong>Location:</strong> ${biz.Address || 'N/A'}</div>
-                    <div class="qr-wrap">
+                    
+                    <div class="qr-wrap" style="margin-top:20px; text-align:center;">
                         <p><strong>Scan to Save:</strong></p>
                         <img src="${qrCodeUrl}" class="profile-qr" alt="Scan to save">
                     </div>
@@ -132,9 +147,15 @@ function loadProfile(data) {
     `;
 }
 
+// 6. FILTER LOGIC
 function applyFilters() {
     const catVal = document.getElementById('cat-select').value;
     const townVal = document.getElementById('town-select').value;
-    const filtered = masterData.filter(biz => (catVal === 'All' || biz.Category === catVal) && (townVal === 'All' || biz.Town === townVal));
+    
+    const filtered = masterData.filter(biz => {
+        const catMatch = (catVal === 'All' || biz.Category === catVal);
+        const townMatch = (townVal === 'All' || biz.Town === townVal);
+        return catMatch && townMatch;
+    });
     renderCards(filtered);
 }

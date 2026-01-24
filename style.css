@@ -1,9 +1,23 @@
 /* style.css */
 :root {
-    --flora-color: #ff5500;
-    --louisville-color: #e60000;
-    --clay-city-color: #008000;
-    --paper-bg: #ffffdf; /* Your specific cream color */
+    /* TOWN COLOR LOCKS - (Text/Accent Color and Background Color) */
+    --flora-color: #fe4f00;
+    --flora-bg: #0c0b82;
+    
+    --louisville-color: #eb1c24;
+    --louisville-bg: #010101;
+    
+    --clay-city-color: #8a8a88;
+    --clay-city-bg: #0c30f0;
+    
+    --xenia-color: #fdb813;
+    --xenia-bg: #000000;
+    
+    --sailor-springs-color: #a020f0;
+    --sailor-springs-bg: #000000;
+
+    /* General Theme Colors */
+    --paper-bg: #ffffdf; 
     --smlc-blue: #38b6ff;
     --premium-gold: #fef9c3;
     --plus-blue: #e0f2fe;
@@ -16,21 +30,55 @@ body {
     padding: 0; 
 }
 
-/* HEADER & MENU */
+/* --- THE TOWN NAVIGATION HEADER --- */
 .nav-header { 
-    background-color: var(--smlc-blue); 
-    color: white; 
+    background-color: #f8fafc; 
     padding: 15px 0; 
     text-align: center; 
-    font-weight: bold; 
-    width: 100%; 
-}
-.nav-header a { 
-    color: white; 
-    text-decoration: none; 
-    margin: 0 15px; 
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    width: 100%;
+    border-bottom: 2px solid #000;
 }
 
+/* Base style for town links */
+.town-nav-link {
+    text-decoration: none;
+    font-weight: 800;
+    padding: 10px 20px;
+    border: 2px solid;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    background-color: #fff; /* Start with white background */
+}
+
+/* REVERSE HOVER LOGIC: 
+   Normal: Border & Text = Town Color. BG = White.
+   Hover:  BG = Town Color. Text = White.
+*/
+.home-link { color: var(--smlc-blue); border-color: var(--smlc-blue); }
+.home-link:hover { background-color: var(--smlc-blue); color: #fff; }
+
+.clay-city-link { color: var(--clay-city-bg); border-color: var(--clay-city-bg); }
+.clay-city-link:hover { background-color: var(--clay-city-bg); color: #fff; }
+
+.flora-link { color: var(--flora-color); border-color: var(--flora-color); }
+.flora-link:hover { background-color: var(--flora-color); color: #fff; }
+
+.louisville-link { color: var(--louisville-color); border-color: var(--louisville-color); }
+.louisville-link:hover { background-color: var(--louisville-color); color: #fff; }
+
+.sailor-springs-link { color: var(--sailor-springs-color); border-color: var(--sailor-springs-color); }
+.sailor-springs-link:hover { background-color: var(--sailor-springs-color); color: #fff; }
+
+.xenia-link { color: var(--xenia-color); border-color: var(--xenia-color); }
+.xenia-link:hover { background-color: var(--xenia-color); color: #fff; }
+
+/* MENU BAR */
 .menu-bar { 
     background: #fff; 
     border-bottom: 2px solid #000; 
@@ -53,8 +101,17 @@ body {
     border: 2px solid var(--smlc-blue); 
     cursor: pointer; 
 }
+.biz-count { 
+    align-self: center; 
+    font-weight: bold; 
+    background: var(--smlc-blue); 
+    color: white; 
+    padding: 5px 12px; 
+    border-radius: 20px; 
+    font-size: 0.9rem; 
+}
 
-/* GRID & CONTAINERS */
+/* GRID & CARDS */
 .site-wrapper { 
     width: 95%; 
     max-width: 1600px; 
@@ -66,22 +123,15 @@ body {
     gap: 25px; 
 }
 
-/* BUSINESS CARD & PROFILE CONTAINER - Shared Styles */
 .card, .profile-container { 
     border: 2px solid #000; 
     box-shadow: 10px 10px 0px rgba(0,0,0,0.2); 
     position: relative;
     box-sizing: border-box;
     transition: transform 0.2s;
-    background-color: #ffffdf; /* All boxes now use this background */
+    background-color: var(--paper-bg);
 }
 
-/* TIER BORDER CONTRAST - Differentiation through border color instead of background */
-.basic { border-color: #000; }
-.plus { border-color: #0369a1; }
-.premium { border-color: #a16207; }
-
-/* CARD SPECIFIC LAYOUT */
 .card { 
     padding: 20px; 
     text-align: center; 
@@ -90,134 +140,30 @@ body {
     height: 380px; 
     overflow: hidden; 
 }
-.card.premium { cursor: pointer; }
 .card.premium:hover { 
     transform: translateY(-5px); 
     box-shadow: 15px 15px 0px rgba(0,0,0,0.3); 
 }
 
 /* BADGES */
-.plan-badge, .tier-indicator { 
-    position: absolute; 
-    top: 10px; 
-    right: 10px; 
-    font-size: 0.6rem; 
-    font-weight: bold; 
-    border: 1px solid #000; 
-    padding: 2px 6px; 
-    background: #fff; 
-    text-transform: uppercase; 
-    z-index: 10; 
-}
-.coupon-badge { 
-    position: absolute; 
-    top: 10px; 
-    left: 10px; 
-    font-size: 0.6rem; 
-    font-weight: bold; 
-    border: 1px solid #000; 
-    padding: 2px 6px; 
-    background: #22c55e; 
-    color: #fff; 
-    z-index: 10; 
+.plan-badge { 
+    position: absolute; top: 10px; right: 10px; 
+    font-size: 0.6rem; font-weight: bold; border: 1px solid #000; 
+    padding: 2px 6px; background: #fff; text-transform: uppercase; 
 }
 
-/* LOGO SECTION */
-.logo-box, .profile-logo { 
-    height: 120px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    margin-bottom: 10px; 
-    border-bottom: 1px solid #000; 
-    padding-bottom: 10px; 
-}
-/* Hide logos on lower tiers to encourage upgrades */
-.card.basic .logo-box, .card.plus .logo-box { 
-    visibility: hidden; 
-    border-bottom: none; 
-}
-.logo-box img, .profile-logo img { 
-    max-height: 100%; 
-    max-width: 100%; 
-    object-fit: contain; 
-}
-
-/* TOWN BAR (COLOR CODED) */
+/* TOWN BARS (COLOR CODED) */
 .town-bar { 
-    color: white; 
-    font-weight: bold; 
-    padding: 8px 0; 
-    text-transform: uppercase; 
-    letter-spacing: 2px; 
-    margin: 15px 0; 
-    font-size: 1rem; 
-    border: 1.5px solid #000; 
-    text-align: center;
+    color: white; font-weight: bold; padding: 8px 0; 
+    text-transform: uppercase; letter-spacing: 2px; 
+    margin: 15px 0; font-size: 1rem; border: 1.5px solid #000; 
 }
-.flora-bar { background-color: var(--flora-color); }
-.louisville-bar { background-color: var(--louisville-color); }
-.clay-city-bar { background-color: var(--clay-city-color); }
+.flora-bar { background-color: var(--flora-bg); color: var(--flora-color); }
+.louisville-bar { background-color: var(--louisville-bg); color: var(--louisville-color); }
+.clay-city-bar { background-color: var(--clay-city-bg); color: var(--clay-city-color); }
+.xenia-bar { background-color: var(--xenia-bg); color: var(--xenia-color); }
+.sailor-springs-bar { background-color: var(--sailor-springs-bg); color: var(--sailor-springs-color); }
 
 /* TEXT CONTENT */
-.biz-name { 
-    font-size: 1.6rem; 
-    font-weight: bold; 
-    color: #000; 
-    margin-bottom: 5px; 
-}
-.cat-text, .biz-meta { 
-    font-size: 0.85rem; 
-    font-style: italic; 
-    color: #444; 
-    margin-top: auto; 
-}
-
-/* PROFILE PAGE SPECIFIC */
-.profile-container { 
-    width: 90%; 
-    max-width: 900px; 
-    margin: 40px auto; 
-    padding: 40px; 
-}
-.details-grid { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 30px; 
-    margin-top: 20px; 
-}
-.info-section h3 { 
-    border-bottom: 1.5px solid #000; 
-    padding-bottom: 5px; 
-    text-transform: uppercase; 
-    text-align: left; 
-}
-.bio-box { 
-    margin-top: 20px; 
-    line-height: 1.6; 
-    font-size: 1.1rem; 
-    padding: 15px; 
-    border-left: 5px solid #000; 
-    background: rgba(255,255,255,0.5); 
-    text-align: left; 
-}
-.map-box { 
-    width: 100%; 
-    height: 350px; 
-    border: 2px solid #000; 
-    margin-top: 20px; 
-}
-.action-btn { 
-    display: inline-block; 
-    margin-top: 20px; 
-    padding: 12px 25px; 
-    background: #000; 
-    color: #fff; 
-    text-decoration: none; 
-    font-weight: bold; 
-    border: 2px solid #000; 
-}
-.action-btn:hover {
-    background-color: #fff;
-    color: #000;
-}
+.biz-name { font-size: 1.6rem; font-weight: bold; color: #000; }
+.cat-text { font-size: 0.85rem; font-style: italic; color: #444; margin-top: auto; }

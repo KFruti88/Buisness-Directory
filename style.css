@@ -18,7 +18,7 @@ body {
 
 .nav-header a { color: white; text-decoration: none; margin: 0 15px; }
 
-/* --- 2. DROPDOWN CONTROLS (Floating/No Bar) --- */
+/* --- 2. DROPDOWN CONTROLS --- */
 #filter-controls { 
     padding: 20px; 
     text-align: center; 
@@ -98,31 +98,29 @@ select {
 .xenia-bar { background-color: #38b6ff !important; }
 .sailor-springs-bar { background-color: #6b7280 !important; }
 
-/* --- 6. BADGES & COUPON STYLING --- */
-.tier-badge { 
-    position: absolute; top: 5px; right: 5px; font-size: 0.5rem; 
-    padding: 1px 5px; font-weight: bold; text-transform: uppercase; 
-    border: 1px solid #000; background: #eee; z-index: 10; 
+/* --- 6. BADGES & IMAGE PLACEMENT --- */
+.coupon-corner-image {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 40px; /* Small print size */
+    height: auto;
+    z-index: 20;
+    filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.5));
+    pointer-events: none; 
 }
 
-.coupon-icon {
-    font-size: 1.2rem;
-    color: #22c55e;
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 8px;
-    filter: drop-shadow(1px 1px 0px #000);
-}
-
-.coupon-tag {
-    background: #22c55e;
-    color: white;
-    font-size: 0.7rem;
-    padding: 2px 8px;
-    border: 1px solid #000;
-    font-weight: bold;
-    display: inline-block;
-    margin-top: 5px;
+.tier-badge {
+    position: absolute; 
+    top: 5px; 
+    right: 5px; 
+    font-size: 0.5rem; 
+    padding: 1px 5px; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    border: 1px solid #000; 
+    background: #eee; 
+    z-index: 10; 
 }
 
 /* --- 7. INTERACTIVITY --- */

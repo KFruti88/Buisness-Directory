@@ -1,5 +1,6 @@
 let masterData = [];
-const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
+// Sync with your Fuel Repo images for the billboard
+const imageRepo = "https://raw.githubusercontent.com/KFruti88/Clay-County-Fuel/main/images/";
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 const couponImgUrl = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
@@ -96,8 +97,8 @@ function loadProfile(data) {
         return;
     }
 
-    // FIXED: Correct template literal syntax for Map URL
-    const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` : '';
+    // Fixed template literal syntax
+    const mapUrl = biz.Address ? `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(biz.Address)}` : '';
 
     container.innerHTML = `
         <div class="profile-container premium">

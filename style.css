@@ -38,7 +38,7 @@ select {
     cursor: pointer;
 }
 
-/* --- 3. DIRECTORY GRID & CARDS --- */
+/* --- 3. DIRECTORY GRID & CLEAN TEASER CARDS --- */
 .site-wrapper { 
     width: 95%; 
     max-width: 1800px; 
@@ -49,7 +49,7 @@ select {
 #directory-grid { 
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-    gap: 20px; 
+    gap: 25px; 
     padding-bottom: 50px; 
 }
 
@@ -64,14 +64,14 @@ select {
     justify-content: space-between;
     transition: all 0.3s ease; 
     overflow: hidden; 
-    height: 480px; /* Increased slightly to fit QR code comfortably */
+    height: 400px; /* Reduced height: Clean teaser cards don't need the extra space */
     position: relative;
     box-sizing: border-box;
 }
 
 /* --- 4. CARD CONTENT ALIGNMENT --- */
 .logo-box { 
-    height: 100px; 
+    height: 120px; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
@@ -88,7 +88,7 @@ select {
     margin: 10px 0;
 }
 
-.biz-name { font-size: 1.5rem; font-weight: bold; color: #000; margin: 5px 0; }
+.biz-name { font-size: 1.6rem; font-weight: bold; color: #000; margin: 5px 0; }
 
 .cat-text { 
     font-size: 1rem; 
@@ -108,15 +108,13 @@ select {
 .xenia-bar { background-color: #38b6ff !important; }
 .sailor-springs-bar { background-color: #6b7280 !important; }
 
-/* --- 6. BADGES & IMAGE PLACEMENT --- */
+/* --- 6. BADGES --- */
 .coupon-corner-image {
     position: absolute;
     top: 5px;
     left: 5px;
     width: 40px; 
-    height: auto;
     z-index: 20;
-    filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.5));
     pointer-events: none; 
 }
 
@@ -124,71 +122,34 @@ select {
     position: absolute; 
     top: 5px; 
     right: 5px; 
-    font-size: 0.5rem; 
-    padding: 1px 5px; 
+    font-size: 0.6rem; 
+    padding: 2px 8px; 
     font-weight: bold; 
     text-transform: uppercase; 
     border: 1px solid #000; 
-    background: #eee; 
+    background: #fff; 
     z-index: 10; 
 }
 
-/* --- 7. INTERACTIVITY & QR CODES --- */
+/* --- 7. PREMIUM CLICK FIX & PROFILE LAYOUT --- */
 
-/* Hover Lift */
-.card.plus:hover, .card.premium:hover { 
-    transform: translateY(-3px); 
-    box-shadow: 10px 10px 0px rgba(0,0,0,0.3); 
-}
+.card.premium { cursor: pointer; }
+.card.premium * { pointer-events: none; } /* Forces the click to hit the card, not the image */
 
-/* THE CLICK FIX: Prevents images/text from stealing the click from the card */
-.card.premium * {
-    pointer-events: none;
-}
-
-.card.premium {
-    cursor: pointer;
-}
-
-/* QR Code styling */
-.qr-code {
-    width: 80px;      
-    height: 80px;
-    border: 2px solid #000;
-    background: #fff;
-    padding: 5px;
-    margin: 10px auto;
-    display: block;   
-    pointer-events: none; /* Critical so it doesn't block the card click */
-}
-
-.premium-info {
-    text-align: center;
-    padding: 5px;
-}
-
-.premium-phone {
-    font-weight: bold;
-    color: #000;
-}
-
-/* Premium Infinite Shine */
+/* Premium Card Infinite Shine */
 .card.premium::after {
     content: "";
     position: absolute;
-    top: -50%;
-    left: -100%; 
-    width: 30%;
-    height: 200%;
-    background: rgba(255, 255, 255, 0.5);
+    top: -50%; left: -100%; width: 30%; height: 200%;
+    background: rgba(255, 255, 255, 0.4);
     transform: rotate(30deg);
     pointer-events: none;
-    animation: infiniteShine 3s infinite linear;
+    animation: infiniteShine 4s infinite linear;
 }
 
 @keyframes infiniteShine {
     0% { left: -100%; }
-    30% { left: 150%; } 
+    20% { left: 150%; } 
     100% { left: 150%; } 
 }
 
@@ -201,7 +162,66 @@ select {
     border-top: 1px dashed #000;
     padding-top: 5px;
 }
+.card.plus.expanded .plus-reveal { display: block; }
 
-.card.plus.expanded .plus-reveal {
-    display: block;
+/* --- 8. THE FULL PROFILE PAGE (All the details go here) --- */
+#profile-wrap {
+    width: 90%;
+    max-width: 900px;
+    margin: 40px auto;
+    background: #ffffdf;
+    border: 3px solid #000;
+    box-shadow: 15px 15px 0px rgba(0,0,0,0.2);
+    padding: 40px;
+}
+
+.profile-container { display: flex; flex-direction: column; gap: 20px; }
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    border-bottom: 2px solid #000;
+    padding-bottom: 25px;
+}
+
+.profile-logo-box {
+    width: 220px;
+    height: 220px;
+    border: 2px solid #000;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.profile-qr {
+    width: 130px;
+    height: 130px;
+    border: 2px solid #000;
+    margin-top: 15px;
+    background: #fff;
+    padding: 5px;
+}
+
+.map-box {
+    margin-top: 25px;
+    border: 3px solid #000;
+}
+
+.back-link {
+    display: inline-block;
+    padding: 8px 15px;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 20px;
 }

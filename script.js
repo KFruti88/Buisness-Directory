@@ -37,7 +37,6 @@ async function loadDirectory() {
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                // Filters out empty rows from the Google Sheet
                 masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
                 console.log("Data successfully synced. Count:", masterData.length);
                 
@@ -56,39 +55,41 @@ async function loadDirectory() {
     }
 }
 
-// 3. RENDER MAIN DIRECTORY (Updated with Coupon Image)
+// 3. RENDER MAIN DIRECTORY
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    // Sorting by Town Name
     grid.innerHTML = data.sort((a,b) => (a.Town || "").localeCompare(b.Town || "")).map(biz => {
-        const name = biz.Name || "Unnamed Business";
-        const town = biz.Town || "Unknown";
-        const tier = (biz.Teir || 'basic').toLowerCase(); 
-        const category = biz.Category || "";
+        const tier = (biz.Teir || 'basic').toLowerCase();
         const imageID = biz["Image ID"] || "";
-        
-        // Logical check: Show if coupon column has any text other than N/A
+        const townClass = (biz.Town || "unknown").toLowerCase().replace(/\s+/g, '-');
         const hasCoupon = biz.Coupon && biz.Coupon.toUpperCase() !== "N/A" && biz.Coupon.trim() !== "";
-        const townClass = town.toLowerCase().replace(/\s+/g, '-');
+
+        // --- DETERMINING THE CLICK ACTION ---
+        let clickAction = "";
+        if (tier === 'premium') {
+            clickAction = `onclick="window.location.href='profile.html?id=${imageID}'"`;
+        } else if (tier === 'plus') {
+            clickAction = `onclick="this.classList.toggle('expanded')"`;
+        }
 
         return `
-        <div class="card ${tier}" ${tier === 'premium' ? `onclick="window.location.href='profile.html?id=${imageID}'"` : ''}>
-            
+        <div class="card ${tier}" ${clickAction}>
             ${hasCoupon ? `<img src="${couponImgUrl}" class="coupon-corner-image" alt="Coupon Available">` : ''}
-            
             <div class="tier-badge">${tier}</div>
 
             <div class="logo-box">
                 ${getSmartImage(imageID)}
             </div>
 
-            <div class="town-bar ${townClass}-bar">${town}</div>
+            <div class="town-bar ${townClass}-bar">${biz.Town || 'Unknown'}</div>
 
-            <div class="biz-name">${name}</div>
+            <div class="biz-name">${biz.Name || 'Unnamed Business'}</div>
 
-            <div class="cat-text">${category}</div>
+            ${tier === 'plus' ? `<div class="plus-reveal">📞 ${biz.Phone || 'Contact for info'}</div>` : ''}
+            
+            <div class="cat-text">${tier === 'basic' ? '' : (biz.Category || '')}</div>
         </div>`;
     }).join('');
 }
@@ -106,7 +107,6 @@ function loadProfile(data) {
     
     container.className = `profile-container ${tier}`;
 
-    // Fixed Map URL syntax
     const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` : '';
     
     const facebookHtml = (biz.Facebook && biz.Facebook !== "N/A" && biz.Facebook !== "") 

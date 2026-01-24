@@ -1,0 +1,105 @@
+<style>
+    /* CSS specifically for the Divi Code Module */
+    #directory-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+        padding: 20px 0;
+    }
+
+    .card {
+        background-color: #fffaf0;
+        border: 2px solid #000;
+        box-shadow: 10px 10px 5px rgba(0,0,0,0.2);
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        min-height: 420px;
+        transition: transform 0.2s ease;
+    }
+
+    .card:hover { transform: scale(1.02); }
+
+    .logo-container {
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .logo-container img {
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+    }
+
+    .town-bar {
+        color: white;
+        font-weight: bold;
+        padding: 10px 0;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin: 10px 0;
+    }
+
+    /* Town Color Bars - These match your Flora/Louisville setups */
+    .flora-bar { background-color: #ff5500 !important; }
+    .louisville-bar { background-color: #e60000 !important; }
+    .clay-city-bar { background-color: #008000 !important; }
+
+    .biz-name {
+        font-family: 'Times New Roman', serif;
+        font-size: 1.4rem;
+        font-weight: bold;
+        margin: 10px 0;
+        color: #000 !important;
+    }
+
+    .phone-row {
+        text-align: left;
+        font-size: 0.9rem;
+        font-weight: bold;
+        border-top: 1px solid #000;
+        padding-top: 10px;
+        margin-top: auto;
+        color: #000;
+    }
+</style>
+
+<div id="directory-grid">
+    </div>
+
+<script>
+    (function() {
+        // Fetch from your GitHub repo
+        fetch('https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/directory.json')
+            .then(res => {
+                if(!res.ok) throw new Error('Could not find directory.json');
+                return res.json();
+            })
+            .then(data => {
+                const grid = document.getElementById('directory-grid');
+                grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => `
+                    <div class="card" onclick="window.location.href='/profile?id=${biz.id}'">
+                        <div class="logo-container">
+                            <img src="${biz.logo}" onerror="this.src='https://via.placeholder.com/150?text=No+Logo'">
+                        </div>
+                        <div class="town-bar ${biz.town.toLowerCase().replace(' ', '-')}-bar">
+                            ${biz.town}
+                        </div>
+                        <div class="biz-name">${biz.name}</div>
+                        <div class="phone-row">
+                            Phone : ${biz.phone || 'N/A'}
+                        </div>
+                    </div>
+                `).join('');
+            })
+            .catch(err => {
+                console.error('Divi Directory Error:', err);
+                document.getElementById('directory-grid').innerHTML = "<h3>Error loading directory. Check Console.</h3>";
+            });
+    })();
+</script>

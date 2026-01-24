@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDirectory();
 });
 
-// 1. SMART IMAGE HELPER: The "Fallback Ladder"
+// 1. SMART IMAGE HELPER
 function getSmartImage(id, isProfile = false) {
     const extensions = ['jpg', 'png', 'jpeg', 'gif', 'webp'];
     const placeholder = isProfile ? '200' : '150';
@@ -29,7 +29,7 @@ function getSmartImage(id, isProfile = false) {
     return `<img src="${firstUrl}" class="${isProfile ? 'profile-logo' : ''}" onerror="${errorChain}">`;
 }
 
-// 2. LOAD DATA: Uses PapaParse with 'download: true' matched to your specific Sheet Headers
+// 2. LOAD DATA
 async function loadDirectory() {
     try {
          Papa.parse(csvUrl, {
@@ -37,7 +37,7 @@ async function loadDirectory() {
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                // Filter out empty rows; matching capitalized 'Name' from your sheet
+                // Matches capitalized 'Name' from your sheet
                 masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
                 console.log("Data successfully synced. Count:", masterData.length);
                 
@@ -56,7 +56,7 @@ async function loadDirectory() {
     }
 }
 
-// 3. RENDER MAIN DIRECTORY
+// 3. RENDER MAIN DIRECTORY - UPDATED LAYOUT ORDER
 function renderCards(data) {
     const counter = document.getElementById('counter-display');
     if (counter) { counter.innerText = `${data.length} Businesses Listed`; }
@@ -64,27 +64,31 @@ function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    // Sorts by 'Town' (Capitalized) and builds HTML cards
     grid.innerHTML = data.sort((a,b) => (a.Town || "").localeCompare(b.Town || "")).map(biz => {
         // MAPPING TO YOUR SHEET HEADERS
         const name = biz.Name || "Unnamed Business";
         const town = biz.Town || "Unknown";
-        const tier = (biz.Teir || 'basic').toLowerCase(); // Matching your 'Teir' spelling
+        const tier = (biz.Teir || 'basic').toLowerCase(); 
         const category = biz.Category || "";
-        const imageID = biz["Image ID"] || ""; // Matching 'Image ID' with space
-        const hasCoupon = biz.coupon && biz.coupon !== "N/A" && biz.coupon !== "";
+        const imageID = biz["Image ID"] || "";
+        // Only show coupon if text exists in the 'Coupon' column
+        const couponText = biz.Coupon || "";
 
         const townClass = town.toLowerCase().replace(/\s+/g, '-');
 
         return `
         <div class="card ${tier}" ${tier === 'premium' ? `onclick="window.location.href='profile.html?id=${imageID}'"` : ''}>
-            <div class="plan-badge">${tier}</div>
-            ${hasCoupon ? '<div class="coupon-badge">COUPON</div>' : ''}
+            ${couponText && couponText !== "N/A" ? `<div class="coupon-badge">${couponText}</div>` : ''}
+            <div class="tier-badge">${tier}</div>
+
             <div class="logo-box">
                 ${getSmartImage(imageID)}
             </div>
+
             <div class="town-bar ${townClass}-bar">${town}</div>
+
             <div class="biz-name">${name}</div>
+
             <div class="cat-text">${category}</div>
         </div>`;
     }).join('');
@@ -103,7 +107,7 @@ function loadProfile(data) {
     
     container.className = `profile-container ${tier}`;
 
-    const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&output=embed` : '';
+    const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` : '';
     const facebookHtml = (biz.Facebook && biz.Facebook !== "N/A" && biz.Facebook !== "") 
         ? `<div class="info-item"><strong>Facebook:</strong> <a href="${biz.Facebook}" target="_blank">View Page</a></div>` : '';
     const websiteBtn = (tier === 'premium' && biz.Website && biz.Website !== "N/A" && biz.Website !== "")

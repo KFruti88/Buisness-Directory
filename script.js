@@ -37,7 +37,6 @@ async function loadDirectory() {
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                // Matches capitalized 'Name' from your sheet
                 masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
                 console.log("Data successfully synced. Count:", masterData.length);
                 
@@ -56,7 +55,7 @@ async function loadDirectory() {
     }
 }
 
-// 3. RENDER MAIN DIRECTORY - UPDATED LAYOUT ORDER
+// 3. RENDER MAIN DIRECTORY
 function renderCards(data) {
     const counter = document.getElementById('counter-display');
     if (counter) { counter.innerText = `${data.length} Businesses Listed`; }
@@ -71,14 +70,17 @@ function renderCards(data) {
         const tier = (biz.Teir || 'basic').toLowerCase(); 
         const category = biz.Category || "";
         const imageID = biz["Image ID"] || "";
-        // Only show coupon if text exists in the 'Coupon' column
-        const couponText = biz.Coupon || "";
+        
+        // --- COUPON COLUMN LOGIC ---
+        // This looks for a column named "Coupon" in your Google Sheet
+        const couponText = biz.Coupon || ""; 
 
         const townClass = town.toLowerCase().replace(/\s+/g, '-');
 
         return `
         <div class="card ${tier}" ${tier === 'premium' ? `onclick="window.location.href='profile.html?id=${imageID}'"` : ''}>
             ${couponText && couponText !== "N/A" ? `<div class="coupon-badge">${couponText}</div>` : ''}
+            
             <div class="tier-badge">${tier}</div>
 
             <div class="logo-box">

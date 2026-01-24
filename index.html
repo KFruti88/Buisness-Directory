@@ -10,20 +10,27 @@
             --louisville-color: #e60000;
             --clay-city-color: #008000;
             --paper-bg: #ffffdf;
+            --smlc-blue: #38b6ff;
         }
 
         body { background-color: #d1d5db; font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; }
-        .nav-header { background-color: #38b6ff; color: white; padding: 12px 0; text-align: center; font-weight: bold; width: 100%; }
+        
+        .nav-header { background-color: var(--smlc-blue); color: white; padding: 12px 0; text-align: center; font-weight: bold; width: 100%; }
         .nav-header a { color: white; text-decoration: none; margin: 0 15px; }
-        .site-wrapper { width: 95%; max-width: 1600px; margin: 20px auto; }
 
-        #directory-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-            gap: 25px; 
+        .menu-bar { 
+            background: #fff; border-bottom: 2px solid #000; padding: 10px 0; 
+            position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+        .menu-container { width: 95%; max-width: 1600px; margin: 0 auto; display: flex; justify-content: center; gap: 40px; }
+        .drop-group { display: flex; align-items: center; gap: 10px; }
+        .drop-group label { font-size: 0.9rem; font-weight: bold; text-transform: uppercase; }
+        .styled-select { padding: 8px 15px; font-family: 'Times New Roman', serif; font-weight: bold; border: 2px solid var(--smlc-blue); cursor: pointer; }
 
-        /* 1. THE UNIFIED BOX - Fixed height like your screenshot */
+        .site-wrapper { width: 95%; max-width: 1600px; margin: 30px auto; }
+        #directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+
+        /* THE BUSINESS CARD LAYOUT - UNIFIED SIZE */
         .card { 
             background-color: var(--paper-bg); 
             border: 2px solid #000; 
@@ -32,42 +39,42 @@
             text-align: center; 
             display: flex; 
             flex-direction: column; 
-            height: 400px; /* Standardized height for all */
-            transition: all 0.3s ease;
+            height: 380px; /* Fixed "Business Card" height */
             position: relative;
             box-sizing: border-box;
             overflow: hidden;
+            transition: transform 0.2s;
         }
 
-        /* 2. TOP LEFT COUPON & TOP RIGHT PLAN */
-        .coupon-badge { position: absolute; top: 10px; left: 10px; font-size: 0.6rem; font-weight: bold; border: 1px solid #000; padding: 2px 6px; background: #22c55e; color: #fff; z-index: 10; }
-        .plan-badge { position: absolute; top: 10px; right: 10px; font-size: 0.6rem; font-weight: bold; border: 1px solid #000; padding: 2px 6px; background: #fff; text-transform: uppercase; z-index: 10; }
+        /* Tiers top right, Coupon top left */
+        .plan-badge { position: absolute; top: 10px; right: 10px; font-size: 0.6rem; font-weight: bold; border: 1px solid #000; padding: 2px 6px; background: #fff; text-transform: uppercase; }
+        .coupon-badge { position: absolute; top: 10px; left: 10px; font-size: 0.6rem; font-weight: bold; border: 1px solid #000; padding: 2px 6px; background: #22c55e; color: #fff; }
 
-        /* 3. IMAGE SECTION AT TOP (Uniform for all) */
-        .logo-box { height: 120px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; border-bottom: 1px solid #ccc; }
+        /* 1. IMAGE AT THE TOP (Showing for Premium) */
+        .logo-box { height: 120px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; border-bottom: 1px solid #000; padding-bottom: 10px; }
+        /* If not Premium, we just show a blank space or placeholder to keep size uniform */
+        .card.basic .logo-box, .card.plus .logo-box { visibility: hidden; border-bottom: none; }
         .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-        /* 4. TOWN BAR IN THE MIDDLE */
+        /* 2. TOWN BAR IN THE MIDDLE */
         .town-bar { color: white; font-weight: bold; padding: 8px 0; text-transform: uppercase; letter-spacing: 2px; margin: 15px 0; font-size: 1rem; border: 1.5px solid #000; }
         .flora-bar { background-color: var(--flora-color); }
         .louisville-bar { background-color: var(--louisville-color); }
         .clay-city-bar { background-color: var(--clay-city-color); }
 
-        /* 5. NAME & CATEGORY UNDER TOWN */
-        .biz-name { font-size: 1.5rem; font-weight: bold; color: #000; margin-top: 5px; line-height: 1.2; }
-        .cat-text { font-size: 0.85rem; font-style: italic; color: #444; margin-top: 5px; }
+        /* 3. BIZ NAME UNDER TOWN */
+        .biz-name { font-size: 1.6rem; font-weight: bold; color: #000; margin-bottom: 5px; line-height: 1.1; }
 
-        /* 6. EXPANSION LOGIC (Only Premium/Plus are interactive) */
-        .card.premium, .card.plus { cursor: pointer; }
-        .card.basic { cursor: default; }
-        .card.expanded { height: auto; min-height: 580px; z-index: 20; }
+        /* 4. CATEGORY AT THE BOTTOM (Removed "Category:" prefix) */
+        .cat-text { font-size: 0.85rem; font-style: italic; color: #444; margin-top: auto; }
 
-        .hidden-info { 
-            display: none; text-align: left; background: rgba(0,0,0,0.05); 
-            border: 1px solid #000; margin-top: 15px; padding: 15px; font-size: 0.9rem;
-        }
-        .card.expanded .hidden-info { display: block; }
-        .map-frame { width: 100%; height: 180px; border: 1px solid #000; margin-top: 10px; }
+        /* Click Logic */
+        .card.premium { cursor: pointer; }
+        .card.premium:hover { transform: translateY(-5px); box-shadow: 15px 15px 0px rgba(0,0,0,0.3); }
+        .card.basic, .card.plus { cursor: default; }
+
+        /* Plus gets phone visible on the card immediately */
+        .plus-phone { font-weight: bold; margin-top: 10px; font-size: 1rem; }
     </style>
 </head>
 <body>
@@ -76,6 +83,30 @@
         <a href="#">SMLC Home Page</a>
         <a href="#">Clay County Bulletin</a>
         <a href="#">Contact Us</a>
+    </div>
+
+    <div class="menu-bar">
+        <div class="menu-container">
+            <div class="drop-group">
+                <label>Town:</label>
+                <select id="town-select" class="styled-select" onchange="applyFilters()">
+                    <option value="All">All Towns</option>
+                    <option value="Flora">Flora</option>
+                    <option value="Louisville">Louisville</option>
+                    <option value="Clay City">Clay City</option>
+                </select>
+            </div>
+            <div class="drop-group">
+                <label>Industry:</label>
+                <select id="cat-select" class="styled-select" onchange="applyFilters()">
+                    <option value="All">All Industries</option>
+                    <option value="Services">Services</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Restaurants">Restaurants</option>
+                    <option value="Industry">Industry</option>
+                </select>
+            </div>
+        </div>
     </div>
 
     <div class="site-wrapper">
@@ -91,7 +122,7 @@
                 masterData = await res.json();
                 renderCards(masterData);
             } catch (err) {
-                document.getElementById('directory-grid').innerHTML = "<h2>Error Loading Directory Data</h2>";
+                document.getElementById('directory-grid').innerHTML = "<h2>Error Loading Directory</h2>";
             }
         }
 
@@ -100,12 +131,10 @@
             grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => {
                 const tier = (biz.tier || 'basic').toLowerCase();
                 const hasCoupon = biz.coupon && biz.coupon !== "N/A";
-                const mapUrl = biz.address ? `http://googleusercontent.com/maps.google.com/5{encodeURIComponent(biz.address)}&output=embed` : '';
-
+                
                 return `
-                <div class="card ${tier}" onclick="${tier !== 'basic' ? 'this.classList.toggle(\'expanded\')' : ''}">
+                <div class="card ${tier}" ${tier === 'premium' ? `onclick="window.location.href='profile.html?id=${biz.id}'"` : ''}>
                     <div class="plan-badge">${tier}</div>
-                    
                     ${hasCoupon ? '<div class="coupon-badge">COUPON</div>' : ''}
 
                     <div class="logo-box">
@@ -118,23 +147,22 @@
 
                     <div class="biz-name">${biz.name}</div>
 
+                    ${tier === 'plus' ? `<div class="plus-phone">PH: ${biz.phone}</div>` : ''}
+                    
                     <div class="cat-text">${biz.category || ''}</div>
-
-                    ${tier !== 'basic' ? '<div style="font-size: 0.7rem; margin-top: auto; color: #666;">Click to reveal info</div>' : ''}
-
-                    <div class="hidden-info" onclick="event.stopPropagation();">
-                        ${tier === 'plus' || tier === 'premium' ? `<div><strong>Phone:</strong> ${biz.phone}</div>` : ''}
-                        ${tier === 'premium' ? `
-                            <div><strong>Website:</strong> <a href="${biz.website}" target="_blank">Visit Site</a></div>
-                            <div><strong>Facebook:</strong> <a href="${biz.facebook_url}" target="_blank">View Page</a></div>
-                            <div style="margin-top:5px;"><strong>Address:</strong> ${biz.address}</div>
-                            <iframe class="map-frame" src="${mapUrl}"></iframe>
-                        ` : ''}
-                        <a href="profile.html?id=${biz.id}" style="display:block; margin-top:10px; text-align:center; font-weight:bold; color:#000;">Full Profile</a>
-                    </div>
-                </div>
-                `;
+                </div>`;
             }).join('');
+        }
+
+        function applyFilters() {
+            const townVal = document.getElementById('town-select').value;
+            const catVal = document.getElementById('cat-select').value;
+            const filtered = masterData.filter(biz => {
+                const townMatch = (townVal === 'All' || biz.town === townVal);
+                const catMatch = (catVal === 'All' || biz.category === catVal);
+                return townMatch && catMatch;
+            });
+            renderCards(filtered);
         }
 
         loadDirectory();

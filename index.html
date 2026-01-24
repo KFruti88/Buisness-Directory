@@ -1,36 +1,46 @@
-<script src="https://cdn.jsdelivr.net/gh/KFruti88/Buisness-Directory@main/data.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clay County Business Directory</title>
+    <link rel="stylesheet" href="https://KFruti88.github.io/master.html/town-colors.css">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #d1d5db; margin: 0; padding: 0; }
+        .nav-header { background-color: #38b6ff; color: white; padding: 10px 0; text-align: center; }
+        .nav-header a { color: white; text-decoration: none; margin: 0 15px; font-size: 0.9rem; }
+        .container { max-width: 1400px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; }
+        .card { background-color: #fffaf0; border: 2px solid #000; box-shadow: 10px 10px 5px rgba(0,0,0,0.2); padding: 20px; text-align: center; cursor: pointer; display: flex; flex-direction: column; min-height: 400px; }
+        .logo-container { height: 180px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+        .logo-container img { max-height: 100%; max-width: 100%; object-fit: contain; }
+        .town-bar { color: white; font-weight: bold; padding: 12px 0; text-transform: uppercase; letter-spacing: 2px; margin: 10px 0; }
+        .biz-name { font-family: 'Times New Roman', serif; font-size: 1.6rem; font-weight: bold; margin: 15px 0; }
+        .phone-row { text-align: left; font-size: 0.95rem; font-weight: bold; border-top: 1px solid #000; padding-top: 10px; margin-top: auto; }
+    </style>
+</head>
+<body>
+    <div class="nav-header">
+        <a href="#">SMLC Home Page</a>
+        <a href="#">Flora</a> <a href="#">Louisville</a> <a href="#">Clay City</a> <a href="#">Xenia</a>
+    </div>
+
+    <div class="container" id="directory-grid"></div>
 
     <script>
-        function buildDirectory() {
-            const grid = document.getElementById('directory-grid');
-            
-            // Check if data loaded correctly
-            if (typeof clayCountyData === 'undefined') {
-                grid.innerHTML = "<h2>Error: Business data could not be loaded.</h2>";
-                return;
-            }
-
-            // Sort businesses by town name A-Z
-            const sortedData = clayCountyData.sort((a, b) => a.town.localeCompare(b.town));
-
-            grid.innerHTML = sortedData.map(biz => `
-                <div class="card" onclick="window.location.href='profile.html?id=${biz.id}'">
-                    <div class="logo-container">
-                        <img src="${biz.logo}" alt="${biz.name} Logo">
+        fetch('./directory.json')
+            .then(res => { if(!res.ok) throw new Error('Check if directory.json exists'); return res.json(); })
+            .then(data => {
+                const grid = document.getElementById('directory-grid');
+                grid.innerHTML = data.sort((a,b) => a.town.localeCompare(b.town)).map(biz => `
+                    <div class="card" onclick="window.location.href='profile.html?id=${biz.id}'">
+                        <div class="logo-container"><img src="${biz.logo}" onerror="this.src='https://via.placeholder.com/150?text=No+Logo'"></div>
+                        <div class="town-bar ${biz.town.toLowerCase()}-bar">${biz.town}</div>
+                        <div class="biz-name">${biz.name}</div>
+                        <div class="phone-row">Phone : ${biz.phone || 'N/A'}</div>
                     </div>
-                    <div class="town-bar ${biz.town.toLowerCase()}-bar">
-                        ${biz.town}
-                    </div>
-                    <div class="biz-name">${biz.name}</div>
-                    <div class="phone-row">
-                        Phone : ${biz.phone || 'N/A'}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Initialize the directory on page load
-        window.onload = buildDirectory;
+                `).join('');
+            })
+            .catch(err => document.getElementById('directory-grid').innerHTML = `<h2>Error: ${err.message}</h2>`);
     </script>
 </body>
 </html>

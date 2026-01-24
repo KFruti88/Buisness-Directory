@@ -52,7 +52,8 @@ body { background-color: #d1d5db; font-family: 'Times New Roman', Times, serif; 
     text-align: center; 
     display: flex; 
     flex-direction: column; 
-    justify-content: center; /* Forces primary text content to the center */
+    /* This ensures content can be spaced out vertically */
+    justify-content: space-between; 
     height: 440px; 
     overflow: hidden; 
 }
@@ -74,21 +75,24 @@ body { background-color: #d1d5db; font-family: 'Times New Roman', Times, serif; 
 .coupon-badge { position: absolute; top: 10px; left: 10px; background: #22c55e; color: #fff; padding: 4px 8px; font-weight: bold; font-size: 0.7rem; border-radius: 3px; border: 1px solid #000; z-index: 5; }
 .tier-badge { position: absolute; top: 10px; right: 10px; background: #fff; color: #000; padding: 2px 6px; font-weight: bold; font-size: 0.7rem; border: 1px solid #000; text-transform: uppercase; z-index: 5; }
 
-/* 1. IMAGE SECTION */
+/* 1. IMAGE SECTION (TOP) */
 .logo-box { 
-    height: 120px; 
+    height: 100px; /* Reduced to provide more centering room */
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    margin-bottom: auto; /* Stays at top while pushing content below to the center */
+    /* Pushes everything below it toward the center */
+    margin-bottom: auto; 
 }
 .logo-box img { max-height: 100%; max-width: 90%; object-fit: contain; }
 
-/* 2. TOWN BAR (LOCKED IN THE MIDDLE) */
+/* 2. TOWN BAR (LOCKED IN THE DEAD CENTER) */
 .town-bar { 
     color: white; font-weight: bold; padding: 8px 0; 
     text-transform: uppercase; letter-spacing: 2px; 
-    margin: 10px 0; font-size: 1rem; border: 1.5px solid #000; 
+    /* Centering logic using auto margins */
+    margin: auto 0; 
+    font-size: 1rem; border: 1.5px solid #000; 
 }
 .flora-bar { background-color: var(--flora-bg); color: var(--flora-color); }
 .louisville-bar { background-color: var(--louisville-bg); color: var(--louisville-color); }
@@ -96,6 +100,18 @@ body { background-color: #d1d5db; font-family: 'Times New Roman', Times, serif; 
 .xenia-bar { background-color: var(--xenia-bg); color: var(--xenia-color); }
 .sailor-springs-bar { background-color: var(--sailor-springs-bg); color: var(--sailor-springs-color); }
 
-/* 3. BUSINESS NAME & 4. CATEGORY */
-.biz-name { font-size: 1.7rem; font-weight: bold; color: #000; margin-bottom: 5px; }
-.cat-text { font-size: 1rem; font-style: italic; color: #444; margin-top: 0; padding-bottom: 5px; }
+/* 3. BUSINESS NAME & 4. CATEGORY (BELOW TOWN BAR) */
+.biz-name { 
+    font-size: 1.7rem; 
+    font-weight: bold; 
+    color: #000; 
+    margin-top: 5px;
+}
+
+.cat-text { 
+    font-size: 1rem; font-style: italic; color: #444; 
+    /* Pushes the category up from the bottom edge */
+    margin-top: 0;
+    margin-bottom: auto; 
+    padding-bottom: 10px; 
+}

@@ -12,10 +12,11 @@
             --flora-color: #ff5500;
             --louisville-color: #e60000;
             --clay-city-color: #008000;
+            --xenia-color: #7c3aed;
+            --sailor-springs-color: #0891b2;
             --paper-bg: #ffffdf;
             --smlc-blue: #38b6ff;
             --premium-gold: #fef9c3;
-            --plus-blue: #e0f2fe;
         }
 
         body { background-color: #d1d5db; font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; }
@@ -26,21 +27,11 @@
         .menu-container { width: 95%; max-width: 1600px; margin: 0 auto; display: flex; justify-content: center; gap: 40px; }
         .styled-select { padding: 8px 15px; font-weight: bold; border: 2px solid var(--smlc-blue); cursor: pointer; }
 
-        /* THE COUNTER STYLING */
-        .biz-count {
-            align-self: center;
-            font-weight: bold;
-            background: var(--smlc-blue);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
+        .biz-count { align-self: center; font-weight: bold; background: var(--smlc-blue); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; }
 
         .site-wrapper { width: 95%; max-width: 1600px; margin: 30px auto; }
         #directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
 
-        /* THE BUSINESS CARD - UNIFIED LAYOUT */
         .card { 
             border: 2px solid #000; 
             box-shadow: 10px 10px 0px rgba(0,0,0,0.2); 
@@ -51,28 +42,23 @@
             height: 380px; 
             position: relative;
             box-sizing: border-box;
-            transition: transform 0.2s;
-            background-color: #ffffdf; /* Matching your standardized theme */
+            background-color: var(--paper-bg);
         }
 
-        .card.plus { border: 2px solid #0369a1; }
         .card.premium { border: 2px solid #a16207; cursor: pointer; }
-        .card.premium:hover { transform: translateY(-5px); box-shadow: 15px 15px 0px rgba(0,0,0,0.3); }
-
         .plan-badge { position: absolute; top: 10px; right: 10px; font-size: 0.6rem; font-weight: bold; border: 1px solid #000; padding: 2px 6px; background: #fff; text-transform: uppercase; }
-        .coupon-badge { position: absolute; top: 10px; left: 10px; font-size: 0.6rem; font-weight: bold; border: 1px solid #000; padding: 2px 6px; background: #22c55e; color: #fff; }
-
+        
         .logo-box { height: 120px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; border-bottom: 1px solid #000; padding-bottom: 10px; }
-        .card.basic .logo-box, .card.plus .logo-box { visibility: hidden; border-bottom: none; }
         .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
         .town-bar { color: white; font-weight: bold; padding: 8px 0; text-transform: uppercase; letter-spacing: 2px; margin: 15px 0; font-size: 1rem; border: 1.5px solid #000; }
         .flora-bar { background-color: var(--flora-color); }
         .louisville-bar { background-color: var(--louisville-color); }
         .clay-city-bar { background-color: var(--clay-city-color); }
+        .xenia-bar { background-color: var(--xenia-color); }
+        .sailor-springs-bar { background-color: var(--sailor-springs-color); }
 
-        .biz-name { font-size: 1.6rem; font-weight: bold; color: #000; margin-bottom: 5px; }
-        .plus-phone { font-weight: bold; margin-top: 10px; font-size: 1rem; }
+        .biz-name { font-size: 1.6rem; font-weight: bold; color: #000; }
         .cat-text { font-size: 0.85rem; font-style: italic; color: #444; margin-top: auto; }
     </style>
 </head>
@@ -91,6 +77,8 @@
                 <option value="Flora">Flora</option>
                 <option value="Louisville">Louisville</option>
                 <option value="Clay City">Clay City</option>
+                <option value="Xenia">Xenia</option>
+                <option value="Sailor Springs">Sailor Springs</option>
             </select>
             
             <div class="biz-count" id="counter-display">0 Businesses Listed</div>
@@ -100,6 +88,8 @@
                 <option value="Services">Services</option>
                 <option value="Shopping">Shopping</option>
                 <option value="Restaurants">Restaurants</option>
+                <option value="Church">Church</option>
+                <option value="Post Office">Post Office</option>
             </select>
         </div>
     </div>
@@ -109,6 +99,5 @@
     </div>
 
     <script src="script.js"></script>
-
 </body>
 </html>

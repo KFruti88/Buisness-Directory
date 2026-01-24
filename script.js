@@ -1,7 +1,6 @@
 /* script.js */
 let masterData = [];
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
-// Ensure this URL is the "Published as CSV" link from Google Sheets
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -30,18 +29,18 @@ function getSmartImage(id, isProfile = false) {
     return `<img src="${firstUrl}" class="${isProfile ? 'profile-logo' : ''}" onerror="${errorChain}">`;
 }
 
-// 2. LOAD DATA: Uses PapaParse with 'download: true' for Google Sheets sync
+// 2. LOAD DATA: Uses PapaParse with 'download: true' matched to your specific Sheet Headers
 async function loadDirectory() {
     try {
-        Papa.parse(csvUrl, {
+         Papa.parse(csvUrl, {
             download: true,
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                masterData = results.data;
+                // Filter out empty rows; matching capitalized 'Name' from your sheet
+                masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
                 console.log("Data successfully synced. Count:", masterData.length);
                 
-                // Determine which page we are on and render appropriately
                 if (document.getElementById('directory-grid')) {
                     renderCards(masterData);
                 } else if (document.getElementById('profile-wrap')) {
@@ -65,22 +64,28 @@ function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    // Sorts by town name and builds the HTML cards
-    grid.innerHTML = data.sort((a,b) => (a.town || "").localeCompare(b.town || "")).map(biz => {
-        const tier = (biz.tier || 'basic').toLowerCase();
+    // Sorts by 'Town' (Capitalized) and builds HTML cards
+    grid.innerHTML = data.sort((a,b) => (a.Town || "").localeCompare(b.Town || "")).map(biz => {
+        // MAPPING TO YOUR SHEET HEADERS
+        const name = biz.Name || "Unnamed Business";
+        const town = biz.Town || "Unknown";
+        const tier = (biz.Teir || 'basic').toLowerCase(); // Matching your 'Teir' spelling
+        const category = biz.Category || "";
+        const imageID = biz["Image ID"] || ""; // Matching 'Image ID' with space
         const hasCoupon = biz.coupon && biz.coupon !== "N/A" && biz.coupon !== "";
 
+        const townClass = town.toLowerCase().replace(/\s+/g, '-');
+
         return `
-        <div class="card ${tier}" ${tier === 'premium' ? `onclick="window.location.href='profile.html?id=${biz.id}'"` : ''}>
+        <div class="card ${tier}" ${tier === 'premium' ? `onclick="window.location.href='profile.html?id=${imageID}'"` : ''}>
             <div class="plan-badge">${tier}</div>
             ${hasCoupon ? '<div class="coupon-badge">COUPON</div>' : ''}
             <div class="logo-box">
-                ${getSmartImage(biz.id)}
+                ${getSmartImage(imageID)}
             </div>
-            <div class="town-bar ${(biz.town || "unknown").toLowerCase().replace(' ', '-')}-bar">${biz.town}</div>
-            <div class="biz-name">${biz.name}</div>
-            ${tier === 'plus' && biz.phone ? `<div class="plus-phone">PH: ${biz.phone}</div>` : ''}
-            <div class="cat-text">${biz.category || ''}</div>
+            <div class="town-bar ${townClass}-bar">${town}</div>
+            <div class="biz-name">${name}</div>
+            <div class="cat-text">${category}</div>
         </div>`;
     }).join('');
 }
@@ -89,42 +94,42 @@ function renderCards(data) {
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
     const bizId = params.get('id');
-    const biz = data.find(b => b.id === bizId);
+    const biz = data.find(b => b["Image ID"] === bizId);
     if (!biz) return;
 
-    const tier = (biz.tier || 'basic').toLowerCase();
+    const tier = (biz.Teir || 'basic').toLowerCase();
     const container = document.getElementById('profile-wrap');
     if (!container) return;
     
     container.className = `profile-container ${tier}`;
 
-    const mapUrl = biz.address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.address)}&output=embed` : '';
-    const facebookHtml = (biz.facebook_url && biz.facebook_url !== "N/A" && biz.facebook_url !== "") 
-        ? `<div class="info-item"><strong>Facebook:</strong> <a href="${biz.facebook_url}" target="_blank">View Page</a></div>` : '';
-    const websiteBtn = (tier === 'premium' && biz.website && biz.website !== "N/A" && biz.website !== "")
-        ? `<a href="${biz.website}" target="_blank" class="action-btn">Visit Website</a>` : '';
+    const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&output=embed` : '';
+    const facebookHtml = (biz.Facebook && biz.Facebook !== "N/A" && biz.Facebook !== "") 
+        ? `<div class="info-item"><strong>Facebook:</strong> <a href="${biz.Facebook}" target="_blank">View Page</a></div>` : '';
+    const websiteBtn = (tier === 'premium' && biz.Website && biz.Website !== "N/A" && biz.Website !== "")
+        ? `<a href="${biz.Website}" target="_blank" class="action-btn">Visit Website</a>` : '';
 
     document.getElementById('profile-details').innerHTML = `
         <div class="tier-indicator">${tier} Member</div>
         <a class="back-link" onclick="history.back()">← Back to Directory</a>
         <div class="profile-header">
-            ${getSmartImage(biz.id, true)}
+            ${getSmartImage(biz["Image ID"], true)}
             <div>
-                <h1 class="biz-title">${biz.name}</h1>
-                <p class="biz-meta">${biz.town} — ${biz.category}</p>
+                <h1 class="biz-title">${biz.Name}</h1>
+                <p class="biz-meta">${biz.Town} — ${biz.Category}</p>
                 ${websiteBtn}
             </div>
         </div>
         <div class="details-grid">
             <div class="info-section">
                 <h3>Contact Information</h3>
-                <div class="info-item"><strong>Phone:</strong> ${biz.phone}</div>
+                <div class="info-item"><strong>Phone:</strong> ${biz.Phone || 'N/A'}</div>
                 ${facebookHtml}
-                <div class="info-item"><strong>Location:</strong> ${biz.address}</div>
+                <div class="info-item"><strong>Location:</strong> ${biz.Address || 'N/A'}</div>
             </div>
             <div class="info-section">
                 <h3>About Us</h3>
-                <div class="bio-box">${biz.bio || "No description provided."}</div>
+                <div class="bio-box">${biz.Bio || "No description provided."}</div>
             </div>
         </div>
         ${tier === 'premium' && mapUrl ? `<iframe class="map-box" src="${mapUrl}"></iframe>` : ''}
@@ -133,12 +138,23 @@ function loadProfile(data) {
 
 // 5. FILTER LOGIC
 function applyFilters() {
-    const townVal = document.getElementById('town-select').value;
     const catVal = document.getElementById('cat-select').value;
+    const townVal = document.getElementById('town-select') ? document.getElementById('town-select').value : 'All';
+    
     const filtered = masterData.filter(biz => {
-        const townMatch = (townVal === 'All' || biz.town === townVal);
-        const catMatch = (catVal === 'All' || biz.category === catVal);
-        return townMatch && catMatch;
+        const catMatch = (catVal === 'All' || biz.Category === catVal);
+        const townMatch = (townVal === 'All' || biz.Town === townVal);
+        return catMatch && townMatch;
     });
     renderCards(filtered);
+}
+
+// 6. NAVIGATION FILTER HELPER
+function filterByTown(townName) {
+    if (townName === 'All') {
+        renderCards(masterData);
+    } else {
+        const filtered = masterData.filter(biz => biz.Town === townName);
+        renderCards(filtered);
+    }
 }

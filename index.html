@@ -2,7 +2,12 @@
     </div>
 
 <script>
-// This function builds the cards you wanted
+// This is your data list (later you can move this to a separate file)
+const clayCountyData = [
+    { id: 'angela-florist', name: "Angela's Village Florist", town: 'Flora', phone: '618-662-4411', logo: 'logo1.png', bio: 'Beautiful flowers for all occasions.' },
+    { id: 'wabash-networks', name: 'Wabash Independent Networks', town: 'Louisville', phone: '618-665-3311', logo: 'logo2.png', bio: 'Local fiber and phone services.' }
+];
+
 function renderDirectory(data) {
     const grid = document.getElementById('directory-grid');
     grid.innerHTML = data.map(biz => `
@@ -16,4 +21,7 @@ function renderDirectory(data) {
         </div>
     `).join('');
 }
+
+// Run the function when the page loads
+renderDirectory(clayCountyData);
 </script>

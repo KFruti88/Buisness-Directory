@@ -89,7 +89,18 @@ select {
 }
 
 .biz-name { font-size: 1.5rem; font-weight: bold; color: #000; margin: 5px 0; }
-.cat-text { font-size: 1rem; font-style: italic; color: #444; margin-bottom: 10px; }
+
+/* Updated Category Styling with Emoji Alignment */
+.cat-text { 
+    font-size: 1rem; 
+    color: #444; 
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Space between emoji and text */
+    font-style: normal; /* Category text is now straight to match emojis */
+}
 
 /* --- 5. TOWN BAR COLORS --- */
 .flora-bar { background-color: #ff5500 !important; }
@@ -146,7 +157,6 @@ select {
     background: rgba(255, 255, 255, 0.5);
     transform: rotate(30deg);
     pointer-events: none;
-    /* Infinite Loop: 3s total duration */
     animation: infiniteShine 3s infinite linear;
 }
 

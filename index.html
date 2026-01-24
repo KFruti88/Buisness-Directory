@@ -1,126 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clay County Business Directory | Support My Local Community</title>
-    
-    <link rel="stylesheet" href="https://KFruti88.github.io/master.html/town-colors.css">
-    
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #d1d5db; /* Grey background from your screenshot */
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Top Navigation Bar style from your image */
-        .nav-header {
-            background-color: #38b6ff; /* Blue bar from screenshot */
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
-        .nav-header a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-        }
-
-        /* Boxed Card Style from your screenshot */
-        .card {
-            background-color: #fffaf0;
-            border: 2px solid #000;
-            box-shadow: 10px 10px 5px rgba(0,0,0,0.2);
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 400px;
-        }
-
-        .card:hover {
-            transform: scale(1.02);
-        }
-
-        .logo-container {
-            height: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-
-        .logo-container img {
-            max-height: 100%;
-            max-width: 100%;
-            object-fit: contain;
-        }
-
-        /* Town Bar - Uses your GitHub classes like .flora-bar */
-        .town-bar {
-            color: white;
-            font-weight: bold;
-            padding: 12px 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 10px 0;
-            font-size: 1.1rem;
-        }
-
-        .biz-name {
-            font-family: 'Times New Roman', serif;
-            font-size: 1.6rem;
-            font-weight: bold;
-            margin: 15px 0;
-            color: #000;
-        }
-
-        .phone-row {
-            text-align: left;
-            font-size: 0.95rem;
-            font-weight: bold;
-            border-top: 1px solid #000;
-            padding-top: 10px;
-            margin-top: auto;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="nav-header">
-        <a href="#">SMLC Home Page</a>
-        <a href="#">Clay City</a>
-        <a href="#">Flora</a>
-        <a href="#">Louisville</a>
-        <a href="#">Sailor Springs</a>
-        <a href="#">Xenia</a>
-    </div>
-
-    <div class="container" id="directory-grid">
-        </div>
-
-    <script src="https://KFruti88.github.io/master.html/data.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/KFruti88/Buisness-Directory@main/data.js"></script>
 
     <script>
         function buildDirectory() {
             const grid = document.getElementById('directory-grid');
             
+            // Check if data loaded correctly
+            if (typeof clayCountyData === 'undefined') {
+                grid.innerHTML = "<h2>Error: Business data could not be loaded.</h2>";
+                return;
+            }
+
             // Sort businesses by town name A-Z
             const sortedData = clayCountyData.sort((a, b) => a.town.localeCompare(b.town));
 
@@ -140,9 +29,8 @@
             `).join('');
         }
 
-        // Initialize on load
+        // Initialize the directory on page load
         window.onload = buildDirectory;
     </script>
-
 </body>
 </html>

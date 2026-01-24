@@ -2,113 +2,130 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Profile | Clay County Directory</title>
-    <link rel="stylesheet" href="https://KFruti88.github.io/master.html/town-colors.css">
     <style>
-        body { font-family: Arial, sans-serif; background-color: #d1d5db; display: flex; flex-direction: column; align-items: center; margin: 0; }
+        :root {
+            --paper-bg: #ffffdf;
+            --smlc-blue: #38b6ff;
+        }
+
+        body { background-color: #d1d5db; font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; }
         
+        .nav-header { background-color: var(--smlc-blue); color: white; padding: 15px 0; text-align: center; font-weight: bold; }
+        .nav-header a { color: white; text-decoration: none; margin: 0 15px; }
+
         .profile-container { 
-            max-width: 800px; width: 90%; background-color: #fffaf0; 
-            border: 2px solid #000; box-shadow: 10px 10px 5px rgba(0,0,0,0.2); 
-            margin: 50px 0; padding: 40px; position: relative; overflow: hidden; 
+            width: 90%; max-width: 900px; margin: 40px auto; 
+            background: var(--paper-bg); border: 3px solid #000; 
+            box-shadow: 15px 15px 0px rgba(0,0,0,0.2); padding: 40px; 
         }
 
-        /* PREMIUM STYLES */
-        .premium-border { border: 4px solid #ffd700 !important; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5) !important; }
-        
-        #gloss { 
-            position: absolute; top: 0; left: -100%; width: 50%; height: 100%; 
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); 
-            transform: skewX(-20deg); transition: none; pointer-events: none;
-        }
-        .gloss-animate { animation: shine 3s infinite; }
-        @keyframes shine { 100% { left: 200%; } }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #000; font-weight: bold; text-decoration: underline; cursor: pointer; }
 
-        .town-indicator { color: white; padding: 5px 15px; font-weight: bold; text-transform: uppercase; margin-top: 10px; display: inline-block; }
-        #logo { max-width: 250px; margin-bottom: 20px; }
-        .back-btn { display: inline-block; margin-top: 30px; padding: 10px 20px; background: #000; color: #fff; text-decoration: none; font-weight: bold; }
+        .profile-header { display: flex; align-items: center; gap: 30px; border-bottom: 2px solid #000; padding-bottom: 20px; margin-bottom: 20px; }
+        .profile-logo { max-width: 200px; max-height: 200px; border: 1px solid #000; padding: 10px; background: #fff; }
+
+        .biz-title { font-size: 2.5rem; margin: 0; }
+        .biz-meta { font-style: italic; color: #444; margin: 5px 0; font-size: 1.1rem; }
+
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
         
-        .map-container { margin-top: 20px; border: 1px solid #000; height: 300px; width: 100%; background: #eee; }
-        .hidden { display: none; }
-        .upgrade-text { background: #fff3cd; padding: 15px; border: 1px solid #ffeeba; border-radius: 4px; margin-top: 20px; font-weight: bold; }
-        .upgrade-text a { color: #856404; text-decoration: underline; }
+        .info-section h3 { border-bottom: 1.5px solid #000; padding-bottom: 5px; text-transform: uppercase; }
+        .info-item { margin: 10px 0; font-size: 1.1rem; }
+        .info-item strong { display: inline-block; width: 100px; }
+
+        .bio-box { margin-top: 20px; line-height: 1.6; font-size: 1.1rem; padding: 15px; border-left: 5px solid #000; background: rgba(0,0,0,0.03); }
+
+        .map-box { width: 100%; height: 350px; border: 2px solid #000; margin-top: 20px; }
+        .action-btn { 
+            display: inline-block; margin-top: 20px; padding: 12px 25px; 
+            background: #000; color: #fff; text-decoration: none; font-weight: bold; 
+            border: 2px solid #000; transition: 0.2s;
+        }
+        .action-btn:hover { background: #fff; color: #000; }
     </style>
 </head>
 <body>
 
-    <div class="profile-container" id="card-frame">
-        <div id="gloss" class="hidden"></div>
-        <img id="logo" src="" alt="Business Logo"><br>
-        <h1 id="title"></h1>
-        <div id="tag" class="town-indicator"></div>
-        
-        <p><strong>Phone:</strong> <span id="phone"></span></p>
-        
-        <div id="premium-info" class="hidden">
-            <p><strong>Address:</strong> <span id="address"></span></p>
-            <div class="map-container" id="map-box">
-                <iframe id="map-frame" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
-            </div>
-        </div>
+    <div class="nav-header">
+        <a href="index.html">SMLC Home</a>
+        <a href="index.html">Directory</a>
+        <a href="#">Contact Support</a>
+    </div>
 
-        <p id="bio"></p>
-        
-        <a href="index.html" class="back-btn">← BACK TO DIRECTORY</a>
+    <div class="profile-container" id="profile-content">
+        <a class="back-link" onclick="history.back()">← Back to Directory</a>
+        <div id="profile-details">Loading business details...</div>
     </div>
 
     <script>
-        const id = new URLSearchParams(window.location.search).get('id');
+        async function loadProfile() {
+            // 1. Get the ID from the URL
+            const params = new URLSearchParams(window.location.search);
+            const bizId = params.get('id');
 
-        fetch('./directory.json')
-            .then(res => res.json())
-            .then(data => {
-                const biz = data.find(b => b.id === id);
-                if(biz) {
-                    // Basic Information (Available to all)
-                    document.getElementById('title').innerText = biz.name;
-                    document.getElementById('phone').innerText = biz.phone || 'N/A';
-                    document.getElementById('bio').innerText = biz.bio || 'Information coming soon.';
-                    document.getElementById('logo').src = biz.logo;
-                    document.getElementById('tag').innerText = biz.town;
-                    document.getElementById('tag').className = `town-indicator ${biz.town.toLowerCase()}-bar`;
+            if (!bizId) {
+                document.getElementById('profile-details').innerHTML = "<h2>Error: No business selected.</h2>";
+                return;
+            }
 
-                    // Gatekeeper Logic for Premium Features
-                    const cardFrame = document.getElementById('card-frame');
-                    const premiumSection = document.getElementById('premium-info');
-                    const glossEffect = document.getElementById('gloss');
+            try {
+                // 2. Fetch the synced JSON
+                const res = await fetch('https://raw.githubusercontent.com/KFruti88/Buisness-Directory/main/directory.json');
+                const data = await res.json();
+                
+                // 3. Find the specific business
+                const biz = data.find(b => b.id === bizId);
 
-                    if (biz.tier === "premium") {
-                        // UNLOCK PREMIUM VISUALS
-                        cardFrame.classList.add('premium-border'); 
-                        glossEffect.classList.remove('hidden');    
-                        glossEffect.classList.add('gloss-animate');
-                        
-                        // UNLOCK PREMIUM DATA
-                        premiumSection.classList.remove('hidden'); 
-                        document.getElementById('address').innerText = biz.address || 'Address not listed';
-                        
-                        // GENERATE MAP
-                        if (biz.address) {
-                            const mapUrl = `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY_HERE&q=${encodeURIComponent(biz.address)}`;
-                            // Note: For a quick free version without an API key, use this alternative:
-                            const freeMap = `https://maps.google.com/maps?q=${encodeURIComponent(biz.address)}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
-                            document.getElementById('map-frame').src = freeMap;
-                        }
-                    } else {
-                        // SHOW UPGRADE PROMPT FOR BASIC USERS
-                        premiumSection.innerHTML = `
-                            <div class="upgrade-text">
-                                📍 Map and Address hidden. Own this business? 
-                                <a href="mailto:your@email.com?subject=Upgrade%20Listing:%20${biz.name}">Upgrade to Premium</a> 
-                                for glossy effects and a live map!
-                            </div>`;
-                        premiumSection.classList.remove('hidden');
-                    }
-                } else {
-                    document.body.innerHTML = "<h1>Business Not Found</h1><a href='index.html'>Back</a>";
+                if (!biz) {
+                    document.getElementById('profile-details').innerHTML = "<h2>Business not found.</h2>";
+                    return;
                 }
-            })
-            .catch(err => console.error("Error loading directory:", err));
+
+                // 4. Update Page Title
+                document.title = `${biz.name} | Clay County Directory`;
+
+                // 5. Build the UI
+                const mapUrl = biz.address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.address)}&t=&z=15&ie=UTF8&iwloc=&output=embed` : '';
+
+                document.getElementById('profile-details').innerHTML = `
+                    <div class="profile-header">
+                        <img src="${biz.logo}" class="profile-logo" onerror="this.src='https://via.placeholder.com/200?text=Logo+Pending'">
+                        <div>
+                            <h1 class="biz-title">${biz.name}</h1>
+                            <p class="biz-meta">${biz.town} — ${biz.category}</p>
+                            ${biz.website !== "N/A" ? `<a href="${biz.website}" target="_blank" class="action-btn">Visit Website</a>` : ''}
+                        </div>
+                    </div>
+
+                    <div class="details-grid">
+                        <div class="info-section">
+                            <h3>Contact Information</h3>
+                            <div class="info-item"><strong>Phone:</strong> ${biz.phone}</div>
+                            ${biz.facebook_url !== "N/A" ? `<div class="info-item"><strong>Facebook:</strong> <a href="${biz.facebook_url}" target="_blank">View Page</a></div>` : ''}
+                            <div class="info-item"><strong>Location:</strong> ${biz.address}</div>
+                        </div>
+                        <div class="info-section">
+                            <h3>About Us</h3>
+                            <div class="bio-box">${biz.bio || "No description provided."}</div>
+                        </div>
+                    </div>
+
+                    ${mapUrl ? `
+                        <div class="info-section" style="margin-top:30px;">
+                            <h3>Our Location</h3>
+                            <iframe class="map-box" src="${mapUrl}" frameborder="0"></iframe>
+                        </div>
+                    ` : ''}
+                `;
+
+            } catch (err) {
+                document.getElementById('profile-details').innerHTML = "<h2>Error connecting to data source.</h2>";
+            }
+        }
+
+        loadProfile();
     </script>
 </body>
 </html>

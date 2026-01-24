@@ -5,19 +5,10 @@ const couponImgUrl = "https://raw.githubusercontent.com/KFruti88/images/main/Cou
 
 // --- 1. PERMANENT EMOJI LOCK ---
 const catEmojis = {
-    "Church": "⛪",
-    "Post Office": "📬",
-    "Restaurants": "🍴",
-    "Retail": "🛒",
-    "Shopping": "🛍️",
-    "Manufacturing": "🏗️",
-    "Industry": "🏭",
-    "Financial Services": "💰",
-    "Healthcare": "🏥",
-    "Gas Station": "⛽",
-    "Internet": "🌐",
-    "Services": "🛠️",
-    "Professional Services": "💼"
+    "Church": "⛪", "Post Office": "📬", "Restaurants": "🍴", "Retail": "🛒", 
+    "Shopping": "🛍️", "Manufacturing": "🏗️", "Industry": "🏭", 
+    "Financial Services": "💰", "Healthcare": "🏥", "Gas Station": "⛽", 
+    "Internet": "🌐", "Services": "🛠️", "Professional Services": "💼"
 };
 
 document.addEventListener("DOMContentLoaded", () => { loadDirectory(); });
@@ -51,7 +42,7 @@ async function loadDirectory() {
     });
 }
 
-// 4. RENDER MAIN DIRECTORY (Click Fix + Emojis Locked)
+// 4. RENDER MAIN DIRECTORY (QR Codes added for Premium)
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
@@ -63,6 +54,12 @@ function renderCards(data) {
         const category = (biz.Category || "Industry").trim(); 
         const emoji = catEmojis[category] || "📁";
         const hasCoupon = biz.Coupon && biz.Coupon.toUpperCase() !== "N/A" && biz.Coupon.trim() !== "";
+
+        // --- QR CODE LOGIC ---
+        // This creates a link to the profile page
+        const profileUrl = `https://kfruti88.github.io/Buisness-Directory/profile.html?id=${encodeURIComponent(imageID)}`;
+        // This sends that link to Google's API to get back a QR image
+        const qrCodeUrl = `https://chart.googleapis.com/chart?cht=qr&chs=100x100&chl=${encodeURIComponent(profileUrl)}`;
 
         let clickAttr = "";
         if (tier === 'premium') {
@@ -79,13 +76,22 @@ function renderCards(data) {
             <div class="logo-box">${getSmartImage(imageID)}</div>
             <div class="town-bar ${townClass}-bar">${biz.Town || 'Unknown'}</div>
             <div class="biz-name">${biz.Name || 'Unnamed Business'}</div>
+
             ${tier === 'plus' ? `<div class="plus-reveal">📞 ${biz.Phone || 'Contact for info'}</div>` : ''}
+            
+            ${tier === 'premium' ? `
+                <div class="premium-info">
+                    <div class="premium-phone">📞 ${biz.Phone || 'N/A'}</div>
+                    <img src="${qrCodeUrl}" class="qr-code" alt="Scan for info">
+                </div>
+            ` : ''}
+
             <div class="cat-text">${emoji} ${category}</div>
         </div>`;
     }).join('');
 }
 
-// 5. LOAD PROFILE (Premium Only - Emoji Locked)
+// 5. LOAD PROFILE
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
     const bizId = params.get('id');

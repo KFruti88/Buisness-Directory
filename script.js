@@ -6,11 +6,13 @@ const couponImgUrl = "https://raw.githubusercontent.com/KFruti88/images/main/Cou
 // 1. LOCKED EMOJI MAPPING
 // Add this to your catEmojis object
 const catEmojis = {
-    "Emergency": "🚨", // New Emergency Category
+    "Bars": "🍺", // New Category
+    "Emergency": "🚨", 
     "Church": "⛪", "Post Office": "📬", "Restaurants": "🍴", "Retail": "🛒", 
     "Shopping": "🛍️", "Manufacturing": "🏗️", "Industry": "🏭", 
     "Financial Services": "💰", "Healthcare": "🏥", "Gas Station": "⛽", 
     "Internet": "🌐", "Services": "🛠️", "Professional Services": "💼"
+};
 };
 
 document.addEventListener("DOMContentLoaded", () => { loadDirectory(); });

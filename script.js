@@ -3,15 +3,26 @@ const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 const couponImgUrl = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
+// --- 1. PERMANENT EMOJI LOCK ---
 const catEmojis = {
-    "Church": "⛪", "Post Office": "📬", "Restaurants": "🍴", "Retail": "🛒", 
-    "Shopping": "🛍️", "Manufacturing": "🏗️", "Industry": "🏭", 
-    "Financial Services": "💰", "Healthcare": "🏥", "Gas Station": "⛽", 
-    "Internet": "🌐", "Services": "🛠️", "Professional Services": "💼"
+    "Church": "⛪",
+    "Post Office": "📬",
+    "Restaurants": "🍴",
+    "Retail": "🛒",
+    "Shopping": "🛍️",
+    "Manufacturing": "🏗️",
+    "Industry": "🏭",
+    "Financial Services": "💰",
+    "Healthcare": "🏥",
+    "Gas Station": "⛽",
+    "Internet": "🌐",
+    "Services": "🛠️",
+    "Professional Services": "💼"
 };
 
 document.addEventListener("DOMContentLoaded", () => { loadDirectory(); });
 
+// 2. SMART IMAGE HELPER
 function getSmartImage(id, isProfile = false) {
     const extensions = ['jpg', 'png', 'jpeg', 'gif', 'webp'];
     const placeholder = isProfile ? '200' : '150';
@@ -28,6 +39,7 @@ function getSmartImage(id, isProfile = false) {
     return `<img src="${firstUrl}" class="${isProfile ? 'profile-logo' : ''}" onerror="${errorChain.replace(/else$/, '')}">`;
 }
 
+// 3. DATA LOADING
 async function loadDirectory() {
     Papa.parse(csvUrl, {
         download: true, header: true, skipEmptyLines: true,
@@ -39,7 +51,7 @@ async function loadDirectory() {
     });
 }
 
-// --- RENDER MAIN DIRECTORY (THE REDIRECT FIX) ---
+// 4. RENDER MAIN DIRECTORY (Click Fix + Emojis Locked)
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
@@ -48,15 +60,14 @@ function renderCards(data) {
         const tier = (biz.Teir || 'basic').toLowerCase();
         const imageID = (biz["Image ID"] || "").trim(); 
         const townClass = (biz.Town || "unknown").toLowerCase().replace(/\s+/g, '-');
-        const category = biz.Category || "Industry"; 
+        const category = (biz.Category || "Industry").trim(); 
         const emoji = catEmojis[category] || "📁";
         const hasCoupon = biz.Coupon && biz.Coupon.toUpperCase() !== "N/A" && biz.Coupon.trim() !== "";
 
         let clickAttr = "";
         if (tier === 'premium') {
-            // FORCE REDIRECT: Uses template literal and URL encoding
             const targetUrl = `profile.html?id=${encodeURIComponent(imageID)}`;
-            clickAttr = `onclick="console.log('Redirecting to: ${targetUrl}'); window.location.href='${targetUrl}';"`;
+            clickAttr = `onclick="window.location.href='${targetUrl}';"`;
         } else if (tier === 'plus') {
             clickAttr = `onclick="this.classList.toggle('expanded')"`;
         }
@@ -74,7 +85,7 @@ function renderCards(data) {
     }).join('');
 }
 
-// --- LOAD PROFILE (THE DATA FIX) ---
+// 5. LOAD PROFILE (Premium Only - Emoji Locked)
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
     const bizId = params.get('id');
@@ -85,6 +96,7 @@ function loadProfile(data) {
         return;
     }
 
+    const emoji = catEmojis[biz.Category] || "📁";
     const mapUrl = biz.Address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&output=embed` : '';
     
     document.getElementById('profile-details').innerHTML = `
@@ -94,7 +106,7 @@ function loadProfile(data) {
             ${getSmartImage(biz["Image ID"], true)}
             <div>
                 <h1 class="biz-title">${biz.Name}</h1>
-                <p class="biz-meta">${catEmojis[biz.Category] || '📁'} ${biz.Town} — ${biz.Category}</p>
+                <p class="biz-meta">${emoji} ${biz.Town} — ${biz.Category}</p>
                 ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" class="action-btn">🌐 Visit Website</a>` : ''}
             </div>
         </div>

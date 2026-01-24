@@ -14,14 +14,12 @@ async function loadDirectory() {
         const res = await fetch(csvUrl);
         const csvText = await res.text();
         
-        // Use PapaParse to turn the spreadsheet into usable data
         Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
                 masterData = results.data;
                 
-                // Detect which page we are on and render accordingly
                 if (document.getElementById('directory-grid')) {
                     renderCards(masterData);
                 } else if (document.getElementById('profile-wrap')) {
@@ -37,6 +35,12 @@ async function loadDirectory() {
 }
 
 function renderCards(data) {
+    // UPDATE THE COUNTER: Shows total based on current filtered list
+    const counter = document.getElementById('counter-display');
+    if (counter) {
+        counter.innerText = `${data.length} Businesses Listed`;
+    }
+
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
@@ -76,7 +80,6 @@ function loadProfile(data) {
     container.className = `profile-container ${tier}`;
 
     const autoLogo = `${imageRepo}${biz.id}.jpg`;
-    // Encodes the address for a valid Google Maps embed
     const mapUrl = biz.address ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.address)}&t=&z=15&ie=UTF8&iwloc=&output=embed` : '';
 
     const facebookHtml = (biz.facebook_url && biz.facebook_url !== "N/A") 
@@ -114,7 +117,6 @@ function loadProfile(data) {
     `;
 }
 
-// Handles the dropdown menus for Town and Category
 function applyFilters() {
     const townVal = document.getElementById('town-select').value;
     const catVal = document.getElementById('cat-select').value;

@@ -9,7 +9,7 @@ const masterData = [
     "address": "123 E North Ave, Flora, IL 62839",
     "website": "https://www.villagefloristflora.com",
     "facebook_url": "https://www.facebook.com/AngelasVillageFlorist",
-    "logo": "https://github.com/KFruti88/images/blob/main/unnamed%20(1).jpg?raw=true",
+    "logo": "https://github.com/KFruti88/images/blob/main/angelasvillageflorist.jpg?raw=true",
     "bio": "Premium arrangements and custom gifts for the Flora community."
   },
   {

@@ -5,7 +5,7 @@ const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 
 // Shared brands that use one logo for multiple towns
-const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "wabash", "police", "fire", "mach 1"];
+const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "mach 1"];
 
 const catEmojis = {
     "Bars": "🍺", "Emergency": "🚨", "Church": "⛪", "Post Office": "📬", 
@@ -17,40 +17,20 @@ const catEmojis = {
 
 // 2. INITIALIZATION
 document.addEventListener("DOMContentLoaded", () => { 
-    updateNewspaperHeader(); // Set header date/weather
-    loadDirectory();         // Load CSV data
+    updateNewspaperHeader(); // Sets Vol, No, and Date automatically
+    loadDirectory();         // Loads business data
 });
 
-// 3. NEWSPAPER HEADER LOGIC (Date & Keyless Weather)
-async function updateNewspaperHeader() {
+// 3. NEWSPAPER HEADER LOGIC
+function updateNewspaperHeader() {
     const now = new Date();
-    
-    // 1. Set Date and Dynamic Issue Number (January=1, February=2, etc.)
     const dateOptions = { month: 'long', day: 'numeric', year: 'numeric' };
     const dateString = now.toLocaleDateString('en-US', dateOptions);
-    const issueNum = now.getMonth() + 1;
+    const issueNum = now.getMonth() + 1; // January = 1
     
     const headerInfo = document.getElementById('header-info');
     if (headerInfo) {
-        headerInfo.innerText = `VOL. 1 — NO. ${issueNum} | ${dateString}`;
-    }
-
-    // 2. Keyless Weather Fetch for Flora (62839)
-    const weatherElem = document.getElementById('weather-display');
-
-    try {
-        // wttr.in provides a JSON format that doesn't require a key
-        const response = await fetch(`https://wttr.in/62839?format=j1`);
-        const data = await response.json();
-        
-        if (data && data.current_condition) {
-            const temp = data.current_condition[0].temp_F;
-            const condition = data.current_condition[0].weatherDesc[0].value;
-            weatherElem.innerHTML = `${temp}°F <small>${condition}</small>`;
-        }
-    } catch (error) {
-        console.error("Keyless weather fetch failed:", error);
-        if (weatherElem) weatherElem.innerText = "Weather N/A";
+        headerInfo.innerText = `VOL. 1 — NO. ${issueNum} | ${dateString}`; //
     }
 }
 
@@ -72,7 +52,7 @@ function getSmartImage(id, bizName, isProfile = false) {
     return `<img src="${firstUrl}" class="${isProfile ? 'profile-logo' : ''}" 
             onerror="this.onerror=null; 
             this.src='${imageRepo}${fileName}.png'; 
-            this.onerror=function(){this.src='${placeholder}'};">`;
+            this.onerror=function(){this.src='${placeholder}'};">`; //
 }
 
 // 5. DATA LOADING ENGINE
@@ -87,7 +67,7 @@ async function loadDirectory() {
                 loadProfile(masterData);
             }
         }
-    });
+    }); //
 }
 
 // 6. RENDER MAIN DIRECTORY
@@ -127,58 +107,13 @@ function renderCards(data) {
             ${tier === 'plus' ? `<div class="plus-reveal">📞 ${biz.Phone || 'Contact for Info'}</div>` : ''}
             <div class="cat-text">${catEmojis[category] || "📁"} ${category}</div>
         </div>`;
-    }).join('');
-    
-    const counter = document.getElementById('counter-display');
-    if (counter) counter.innerText = `${data.length} Businesses Listed`;
+    }).join(''); //
 }
 
-// 7. LOAD INDIVIDUAL PROFILE
-function loadProfile(data) {
-    const params = new URLSearchParams(window.location.search);
-    const bizId = params.get('id');
-    const biz = data.find(b => (b["Image ID"] || "").trim().toLowerCase() === (bizId || "").toLowerCase());
-    
-    const container = document.getElementById('profile-wrap');
-    if (!biz) {
-        container.innerHTML = `<div style="text-align:center; padding:50px;"><h2>Business Not Found</h2></div>`;
-        return;
-    }
-
-    const simpleMap = biz.Address && biz.Address !== "N/A" 
-        ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` 
-        : '';
-
-    container.innerHTML = `
-        <div class="profile-container premium">
-            <a href="index.html" class="back-link">← Back to Directory</a>
-            <div class="profile-header">
-                <div class="profile-logo-box">${getSmartImage(biz["Image ID"], biz.Name, true)}</div>
-                <div class="profile-titles">
-                    <h1 class="biz-title">${biz.Name}</h1>
-                    <p class="biz-meta">${catEmojis[biz.Category] || "📁"} ${biz.Town} — ${biz.Category}</p>
-                    ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" class="action-btn">🌐 Visit Website</a>` : ''}
-                </div>
-            </div>
-            <div class="details-grid">
-                <div class="info-section">
-                    <h3>Contact Information</h3>
-                    <div class="info-item">📞 <strong>Phone:</strong> ${biz.Phone || 'N/A'}</div>
-                    <div class="info-item">📍 <strong>Location:</strong> ${biz.Address || 'N/A'}</div>
-                </div>
-                <div class="info-section">
-                    <h3>About Us</h3>
-                    <div class="bio-box">${biz.Bio || "No description provided."}</div>
-                </div>
-            </div>
-            ${simpleMap ? `<iframe class="map-box" src="${simpleMap}" width="100%" height="350" style="border:0;" allowfullscreen></iframe>` : ''}
-        </div>`;
-}
-
-// 8. FILTER LOGIC
+// 7. FILTER LOGIC
 function applyFilters() {
     const catVal = document.getElementById('cat-select').value;
     const townVal = document.getElementById('town-select').value;
     const filtered = masterData.filter(biz => (catVal === 'All' || biz.Category === catVal) && (townVal === 'All' || biz.Town === townVal));
-    renderCards(filtered);
+    renderCards(filtered); //
 }

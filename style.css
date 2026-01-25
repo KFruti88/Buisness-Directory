@@ -1,6 +1,6 @@
-/* --- 1. BASE STYLES --- */
+/* --- 1. BASE STYLES & NAV --- */
 body { 
-    background-color: #e5e5e5; /* Light gray background behind the boxes */
+    background-color: #e5e5e5; /* Consistent light gray background */
     font-family: 'Times New Roman', Times, serif; 
     margin: 0; 
     padding: 0; 
@@ -23,7 +23,7 @@ body {
 .main-title {
     text-align: center; 
     padding: 20px 20px;
-    background-color: #e5e5e5; /* Boss's requested color */
+    background-color: #e5e5e5; 
     border-bottom: 2px solid #000;
 }
 .main-title h1 { 
@@ -68,21 +68,24 @@ body {
     cursor: pointer;
 }
 
-/* --- 3. DIRECTORY GRID & CARDS --- */
+/* --- 3. RESPONSIVE GRID SYSTEM --- */
 .site-wrapper { 
     width: 95%; 
-    max-width: 1800px; 
+    max-width: 2500px; /* Locked for Ultra-Wide support */
     margin: 0 auto; 
     padding: 20px 0; 
 }
+
 #directory-grid { 
     display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-    gap: 25px; 
+    /* Core Responsiveness: creates as many columns as will fit at min 300px */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 20px; 
 }
 
+/* --- 4. CARD STYLES & TIERED LOGIC --- */
 .card { 
-    background-color: #fffdf5 !important; /* Inside box color */
+    background-color: #fffdf5 !important; /* Newspaper page color */
     border: 2px solid #000; 
     box-shadow: 6px 6px 0px rgba(0,0,0,0.1); 
     padding: 20px; 
@@ -93,18 +96,16 @@ body {
     height: 380px; 
     position: relative; 
     box-sizing: border-box; 
-    overflow: hidden; /* Shine/Bounce containment */
+    overflow: hidden; 
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, height 0.4s ease;
 }
 
-/* --- 4. HOVER BOUNCE EFFECT --- */
 .card:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 10px 10px 20px rgba(0,0,0,0.2);
     z-index: 20; 
 }
 
-/* --- 5. TIERED LOGIC (PLUS & PREMIUM) --- */
 .coupon-badge { 
     position: absolute; 
     top: 10px; 
@@ -133,7 +134,7 @@ body {
 .card.plus.expanded { height: auto; min-height: 430px; }
 .card.plus.expanded .plus-reveal { max-height: 200px; padding: 15px; border-top: 1px solid #000; }
 
-/* --- 6. ASSETS & TOWN BARS --- */
+/* --- 5. ASSETS & TOWN BARS --- */
 .logo-box { height: 120px; display: flex; align-items: center; justify-content: center; }
 .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
@@ -148,4 +149,43 @@ body {
     position: absolute; top: 5px; right: 5px; font-size: 0.6rem; 
     padding: 2px 8px; font-weight: bold; border: 1px solid #000; 
     background: #fff; z-index: 10;
+}
+
+/* --- 6. SCREEN-SPECIFIC TWEAKS (MEDIA QUERIES) --- */
+
+/* TABLETS & LAPTOPS */
+@media (min-width: 768px) {
+    #directory-grid { gap: 25px; }
+    .main-title h1 { font-size: 5rem; }
+}
+
+/* DESKTOPS & TV */
+@media (min-width: 1200px) {
+    #directory-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 30px;
+    }
+}
+
+/* ULTRA-WIDE MONITORS */
+@media (min-width: 2000px) {
+    #directory-grid {
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    }
+}
+
+/* MOBILE FIXES */
+@media (max-width: 600px) {
+    .single-row {
+        flex-direction: column; 
+        height: auto;
+        padding: 15px;
+    }
+    .meta-item {
+        width: 100%;
+        justify-content: center !important;
+        margin-bottom: 10px;
+    }
+    .main-title h1 { font-size: 2.5rem; }
+    .right-meta div { width: 100% !important; }
 }

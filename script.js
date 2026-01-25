@@ -1,42 +1,33 @@
 let masterData = [];
-
-// 1. PROJECT CONFIGURATION
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
+const couponImg = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
 // Shared brands that use one logo for multiple towns
 const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "mach 1"];
 
 const catEmojis = {
-    "Bars": "🍺", "Emergency": "🚨", "Church": "⛪", "Post Office": "📬", 
-    "Restaurants": "🍴", "Retail": "🛒", "Shopping": "🛍️", "Manufacturing": "🏗️", 
-    "Industry": "🏭", "Financial Services": "💰", "Healthcare": "🏥", 
-    "Gas Station": "⛽", "Internet": "🌐", "Support Services": "🛠️", 
-    "Professional Services": "💼", "Agriculture": "🚜"
+    "Emergency": "🚨", "Manufacturing": "🏗️", "Bars": "🍺", "Professional Services": "💼",
+    "Financial Services": "💰", "Retail": "🛒", "Shopping": "🛍️", "Restaurants": "🍴",
+    "Church": "⛪", "Post Office": "📬", "Healthcare": "🏥", "Support Services": "🛠️",
+    "Internet": "🌐", "Gas Station": "⛽", "Industry": "🏭", "Agriculture": "🚜"
 };
 
-// 2. INITIALIZATION
-document.addEventListener("DOMContentLoaded", () => { 
-    updateNewspaperHeader(); // Sets Vol, No, and Date automatically
-    loadDirectory();         // Loads business data
+document.addEventListener("DOMContentLoaded", () => {
+    updateNewspaperHeader();
+    loadDirectory();
 });
 
-// 3. NEWSPAPER HEADER LOGIC
 function updateNewspaperHeader() {
     const now = new Date();
     const dateOptions = { month: 'long', day: 'numeric', year: 'numeric' };
     const dateString = now.toLocaleDateString('en-US', dateOptions);
-    const issueNum = now.getMonth() + 1; // January = 1
-    
-    const headerInfo = document.getElementById('header-info');
-    if (headerInfo) {
-        headerInfo.innerText = `VOL. 1 — NO. ${issueNum} | ${dateString}`; //
-    }
+    document.getElementById('header-info').innerText = `VOL. 1 — NO. ${now.getMonth() + 1} | ${dateString}`;
 }
 
-// 4. SMART IMAGE HELPER
-function getSmartImage(id, bizName, isProfile = false) {
-    if(!id && !bizName) return '';
+// SMART IMAGE HELPER - Integrated to handle extensions and shared brands
+function getSmartImage(id, bizName) {
+    if (!id && !bizName) return `https://via.placeholder.com/150?text=Logo+Pending`;
     
     let fileName = id.trim().toLowerCase();
     const nameLower = bizName ? bizName.toLowerCase() : "";
@@ -46,74 +37,89 @@ function getSmartImage(id, bizName, isProfile = false) {
         fileName = brandMatch.replace(/['\s]/g, ""); 
     }
 
-    const placeholder = `https://via.placeholder.com/${isProfile ? '200' : '150'}?text=Logo+Pending`;
+    const placeholder = `https://via.placeholder.com/150?text=Logo+Pending`;
     const firstUrl = `${imageRepo}${fileName}.jpg`;
     
-    return `<img src="${firstUrl}" class="${isProfile ? 'profile-logo' : ''}" 
+    return `<img src="${firstUrl}" 
             onerror="this.onerror=null; 
             this.src='${imageRepo}${fileName}.png'; 
-            this.onerror=function(){this.src='${placeholder}'};">`; //
+            this.onerror=function(){this.src='${placeholder}'};">`;
 }
 
-// 5. DATA LOADING ENGINE
 async function loadDirectory() {
     Papa.parse(csvUrl, {
         download: true, header: true, skipEmptyLines: true,
-        complete: function(results) {
+        complete: (results) => {
             masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
-            if (document.getElementById('directory-grid')) {
-                renderCards(masterData);
-            } else if (document.getElementById('profile-wrap')) {
-                loadProfile(masterData);
-            }
+            renderCards(masterData);
         }
-    }); //
+    });
 }
 
-// 6. RENDER MAIN DIRECTORY
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
+    // Maintain Tier Sorting: Premium -> Plus -> Basic
     const tierOrder = { "premium": 1, "plus": 2, "basic": 3 };
 
     grid.innerHTML = data.sort((a, b) => {
         const tierA = (a.Teir || 'basic').toLowerCase();
         const tierB = (b.Teir || 'basic').toLowerCase();
-        
         if (tierOrder[tierA] !== tierOrder[tierB]) {
             return tierOrder[tierA] - tierOrder[tierB];
         }
         return (a.Town || "").localeCompare(b.Town || "");
     }).map(biz => {
         const tier = (biz.Teir || 'basic').toLowerCase();
-        const imageID = (biz["Image ID"] || "").trim(); 
-        const category = (biz.Category || "Industry").trim(); 
+        const hasCoupon = biz.Coupon && biz.Coupon !== "N/A" && biz.Coupon.trim() !== "";
         const townClass = (biz.Town || "unknown").toLowerCase().replace(/\s+/g, '-');
+        const imageID = (biz['Image ID'] || "").trim();
+        const category = (biz.Category || "Industry").trim();
 
         let clickAttr = "";
         if (tier === 'premium') {
-            clickAttr = `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID)}'"` ;
+            clickAttr = `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID.toLowerCase())}'"`;
         } else if (tier === 'plus') {
             clickAttr = `onclick="this.classList.toggle('expanded')"`;
         }
 
         return `
-        <div class="card ${tier}" ${clickAttr} style="cursor: ${tier === 'premium' ? 'pointer' : 'default'};">
-            <div class="tier-badge">${tier}</div>
-            <div class="logo-box">${getSmartImage(imageID, biz.Name)}</div>
-            <div class="town-bar ${townClass}-bar">${biz.Town || 'Unknown'}</div>
-            <div class="biz-name">${biz.Name || 'Unnamed Business'}</div>
-            ${tier === 'plus' ? `<div class="plus-reveal">📞 ${biz.Phone || 'Contact for Info'}</div>` : ''}
-            <div class="cat-text">${catEmojis[category] || "📁"} ${category}</div>
-        </div>`;
-    }).join(''); //
+            <div class="card ${tier}" ${clickAttr} style="cursor: ${tier === 'premium' ? 'pointer' : (tier === 'plus' ? 'pointer' : 'default')};">
+                <div class="tier-badge">${tier}</div>
+                ${hasCoupon ? `<img src="${couponImg}" class="coupon-badge" alt="Discount Available">` : ''}
+                
+                <div class="logo-box">
+                    ${getSmartImage(imageID, biz.Name)}
+                </div>
+
+                <div class="town-bar ${townClass}-bar">${biz.Town || 'Unknown'}</div>
+                <h2 style="font-size: 1.4rem; margin: 5px 0; line-height: 1.1;">${biz.Name}</h2>
+
+                ${tier === 'plus' ? `
+                    <div class="plus-reveal">
+                        <p style="margin: 5px 0;"><strong>Phone:</strong> ${biz.Phone || 'N/A'}</p>
+                        <p style="margin: 5px 0;"><strong>Est:</strong> ${biz['Date Started'] || 'N/A'}</p>
+                    </div>
+                ` : ''}
+
+                <div style="margin-top: auto; font-style: italic; font-size: 0.85rem; color: #444;">
+                    ${catEmojis[category] || "🏭"} ${category}
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
-// 7. FILTER LOGIC
 function applyFilters() {
-    const catVal = document.getElementById('cat-select').value;
-    const townVal = document.getElementById('town-select').value;
-    const filtered = masterData.filter(biz => (catVal === 'All' || biz.Category === catVal) && (townVal === 'All' || biz.Town === townVal));
-    renderCards(filtered); //
+    const t = document.getElementById('town-select').value;
+    const c = document.getElementById('cat-select').value;
+    const filtered = masterData.filter(b => (t === 'All' || b.Town === t) && (c === 'All' || b.Category === c));
+    renderCards(filtered);
+}
+
+function resetFilters() {
+    document.getElementById('town-select').value = 'All';
+    document.getElementById('cat-select').value = 'All';
+    renderCards(masterData);
 }

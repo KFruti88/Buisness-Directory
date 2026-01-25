@@ -17,14 +17,19 @@ body {
     position: relative; 
     z-index: 100;
 }
-.nav-header a { color: #222222; text-decoration: none; margin: 0 15px; }
+.nav-header a { 
+    color: #222222; 
+    text-decoration: none;
+    margin: 0 15px; 
+    border-bottom: 2px solid #222222;
+              }
 
 /* --- 2. NEWSPAPER HEADER --- */
 .main-title {
     text-align: center; 
     padding: 20px 20px;
     background-color: #e5e5e5; 
-    border-bottom: 2px solid #000;
+    border-bottom: 2px solid #222222;
 }
 .main-title h1 { 
     font-size: 4rem; 

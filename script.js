@@ -5,7 +5,7 @@ const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 
 // Shared brands that use one logo for multiple towns
-const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "mach 1"];
+const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "wabash", "mach 1"];
 
 const catEmojis = {
     "Bars": "🍺", "Emergency": "🚨", "Church": "⛪", "Post Office": "📬", 
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDirectory();         // Load CSV data
 });
 
-// 3. NEWSPAPER HEADER LOGIC (Date & Weather)
+// 3. NEWSPAPER HEADER LOGIC (Date & Keyless Weather)
 async function updateNewspaperHeader() {
     const now = new Date();
     
@@ -35,24 +35,22 @@ async function updateNewspaperHeader() {
         headerInfo.innerText = `VOL. 1 — NO. ${issueNum} | ${dateString}`;
     }
 
-    // 2. Fetch Accurate Weather for Flora (62839)
-    // IMPORTANT: Replace 'YOUR_FREE_OPENWEATHER_API_KEY' with your actual key
-    const apiKey = 'YOUR_FREE_OPENWEATHER_API_KEY'; 
-    const zip = '62839';
+    // 2. Keyless Weather Fetch for Flora (62839)
     const weatherElem = document.getElementById('weather-display');
 
     try {
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${zip},us&units=imperial&appid=${apiKey}`);
+        // wttr.in provides a JSON format that doesn't require a key
+        const response = await fetch(`https://wttr.in/62839?format=j1`);
         const data = await response.json();
         
-        if (data.main) {
-            const temp = Math.round(data.main.temp);
-            const condition = data.weather[0].main;
+        if (data && data.current_condition) {
+            const temp = data.current_condition[0].temp_F;
+            const condition = data.current_condition[0].weatherDesc[0].value;
             weatherElem.innerHTML = `${temp}°F <small>${condition}</small>`;
         }
     } catch (error) {
+        console.error("Keyless weather fetch failed:", error);
         if (weatherElem) weatherElem.innerText = "Weather N/A";
-        console.error("Weather Error:", error);
     }
 }
 
@@ -147,7 +145,6 @@ function loadProfile(data) {
         return;
     }
 
-    // Fixed Google Maps encoding syntax
     const simpleMap = biz.Address && biz.Address !== "N/A" 
         ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` 
         : '';

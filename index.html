@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,12 +20,8 @@
 
     <header class="main-title">
         <h1>Clay County Directory</h1>
-        
         <div class="newspaper-meta single-row">
-            <div class="meta-item left-meta" id="header-info">
-                VOL. 1 — NO. 1 | January 24, 2026
-            </div>
-
+            <div class="meta-item left-meta" id="header-info">VOL. 1 — NO. 1 | January 24, 2026</div>
             <div class="meta-item">
                 <select id="town-select" onchange="applyFilters()">
                     <option value="All">All Towns</option>
@@ -37,11 +32,9 @@
                     <option value="Sailor Springs">Sailor Springs</option>
                 </select>
             </div>
-
             <div class="meta-item center-header">
-                <span class="directory-pages">BUSINESS DIRECTORY PAGES</span>
+                <span class="directory-pages" onclick="resetFilters()" style="cursor: pointer;">BUSINESS DIRECTORY PAGES</span>
             </div>
-
             <div class="meta-item">
                 <select id="cat-select" onchange="applyFilters()">
                     <option value="All">All Industries</option>
@@ -62,21 +55,10 @@
                     <option value="Industry">🏭 Industry</option>
                 </select>
             </div>
-
             <div class="meta-item right-meta">
                 <div style="width: 200px;"> 
-                    <a class="weatherwidget-io" 
-                       href="https://forecast7.com/en/38d67n88d49/flora/" 
-                       data-label_1="Flora" 
-                       data-label_2="Illinois" 
-                       data-font="Times New Roman" 
-                       data-mode="Current" 
-                       data-theme="pure" 
-                       data-basecolor="#fff5ba" 
-                       data-unit="us">Flora Illinois</a>
-                    <script>
-                    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
-                    </script>
+                    <a class="weatherwidget-io" href="https://forecast7.com/en/38d67n88d49/flora/" data-label_1="Flora" data-label_2="Illinois" data-font="Times New Roman" data-mode="Current" data-theme="pure" data-basecolor="#fff5ba" data-unit="us">Flora Illinois</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');</script>
                 </div>
             </div>
         </div>

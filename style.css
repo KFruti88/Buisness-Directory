@@ -1,151 +1,147 @@
-/* --- 1. BASE STYLES --- */
+/* --- 1. BRANDING & ROOT --- */
+:root {
+    --paper-bg: #fff5ba; /* Newspaper yellow */
+    --smlc-blue: #38b6ff;
+}
+
 body { 
-    background-color: #d1d5db; /* Light gray background behind the boxes */
+    background-color: #d1d5db; /* Light gray background */
     font-family: 'Times New Roman', Times, serif; 
     margin: 0; 
     padding: 0; 
 }
 
+/* --- 2. LAYOUT CONTAINERS --- */
 .nav-header { 
-    background-color: #38b6ff; 
+    background-color: var(--smlc-blue); 
     color: white; 
-    padding: 12px 0; 
+    padding: 15px 0; 
     text-align: center; 
-    font-size: 0.9rem; 
     font-weight: bold; 
-    width: 100%; 
-    position: relative; 
-    z-index: 100;
 }
 .nav-header a { color: white; text-decoration: none; margin: 0 15px; }
 
-/* --- 2. NEWSPAPER HEADER --- */
-.main-title {
-    text-align: center; 
-    padding: 20px 20px;
-    background-color: #fff5ba; /* Boss's requested color */
-    border-bottom: 2px solid #000;
-}
-.main-title h1 { 
-    font-size: 4rem; 
-    margin: 0 0 10px 0; 
-    color: #000; 
-}
-
-.single-row {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    border-top: 2px solid #000; 
-    border-bottom: 1px solid #000;
-    padding: 10px 0; 
-    font-family: 'Times New Roman', serif;
-    font-weight: bold; 
-    gap: 10px; 
-    background-color: #fff5ba;
-}
-
-.directory-pages { 
-    text-decoration: underline; 
-    font-size: 1.2rem; 
-    text-transform: uppercase; 
-}
-
-.meta-item { 
-    flex: 1; 
+#profile-wrap { 
+    width: 100%; 
     display: flex; 
     justify-content: center; 
-    align-items: center; 
-    white-space: nowrap; 
-}
-.left-meta { justify-content: flex-start; text-transform: uppercase; font-size: 0.9rem; }
-.right-meta { justify-content: flex-end; }
-
-.single-row select {
-    padding: 5px 10px; 
-    border: 1px solid #000; 
-    background: #fff; 
-    cursor: pointer;
+    padding: 40px 0; 
 }
 
-/* --- 3. DIRECTORY GRID & CARDS --- */
-.site-wrapper { 
-    width: 95%; 
-    max-width: 1800px; 
-    margin: 0 auto; 
-    padding: 20px 0; 
-}
-#directory-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-    gap: 25px; 
+.profile-container { 
+    width: 90%; 
+    max-width: 900px; 
+    border: 3px solid #000; 
+    box-shadow: 15px 15px 0px rgba(0,0,0,0.2); 
+    padding: 40px; 
+    position: relative;
+    background: var(--paper-bg); /* Use the locked branding color */
 }
 
-.card { 
-    background-color: #fff5ba !important; /* Inside box color */
+/* --- 3. LOGO & ASSETS --- */
+.profile-logo-box { 
+    width: 250px; 
+    height: 250px; 
     border: 2px solid #000; 
-    box-shadow: 6px 6px 0px rgba(0,0,0,0.1); 
-    padding: 20px; 
-    text-align: center; 
+    padding: 10px; 
+    background: #fff; 
     display: flex; 
-    flex-direction: column; 
-    justify-content: space-between;
-    height: 380px; 
-    position: relative; 
-    box-sizing: border-box; 
-    overflow: hidden; /* Shine/Bounce containment */
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, height 0.4s ease;
+    align-items: center; 
+    justify-content: center; 
 }
 
-/* --- 4. HOVER BOUNCE EFFECT --- */
-.card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 10px 10px 20px rgba(0,0,0,0.2);
-    z-index: 20; 
+.profile-logo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
-/* --- 5. TIERED LOGIC (PLUS & PREMIUM) --- */
-.coupon-badge { 
-    position: absolute; 
-    top: 10px; 
-    left: 10px; 
-    width: 65px; 
-    z-index: 15; 
+.coupon-badge-profile {
+    width: 100px;
+    display: block;
+    margin: 0 auto 10px;
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
 }
 
-.card.premium { cursor: pointer; }
-.card.premium::after {
-    content: ""; position: absolute; top: -50%; left: -100%; width: 30%; height: 200%;
-    background: rgba(255, 255, 255, 0.4); transform: rotate(30deg);
-    animation: infiniteShine 4s infinite linear; pointer-events: none;
-    z-index: 5;
+/* --- 4. TYPOGRAPHY & DETAILS --- */
+.back-link { 
+    display: inline-block; 
+    margin-bottom: 20px; 
+    color: #000; 
+    font-weight: bold; 
+    text-decoration: none; 
+    border-bottom: 2px solid #000; 
 }
-@keyframes infiniteShine { 0% { left: -100%; } 20% { left: 150%; } 100% { left: 150%; } }
 
-.plus-reveal { 
-    max-height: 0; 
-    overflow: hidden; 
-    transition: max-height 0.4s ease; 
+.profile-header { 
+    display: flex; 
+    align-items: center; 
+    gap: 30px; 
+    border-bottom: 2px solid #000; 
+    padding-bottom: 20px; 
+    margin-bottom: 20px; 
+}
+
+.biz-title { font-size: 2.8rem; margin: 0; text-transform: uppercase; }
+.biz-meta { font-style: italic; color: #333; margin: 5px 0; font-size: 1.2rem; }
+
+.details-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px; 
+    margin-top: 20px; 
+}
+
+.info-section h3 { 
+    border-bottom: 2px solid #000; 
+    padding-bottom: 5px; 
+    text-transform: uppercase; 
+    margin-top: 0; 
+}
+
+.bio-box { 
+    margin-top: 20px; 
+    line-height: 1.6; 
+    font-size: 1.15rem; 
+    padding: 20px; 
+    border: 1px solid #000; 
+    background: rgba(255,255,255,0.4); 
+}
+
+/* --- 5. INTERACTIVE ELEMENTS --- */
+.map-box { 
+    width: 100%; 
+    height: 400px; 
+    border: 2px solid #000; 
+    margin-top: 30px; 
+}
+
+.action-btn { 
+    display: inline-block; 
+    margin-top: 15px; 
+    padding: 12px 25px; 
+    background: #000; 
+    color: #fff; 
+    text-decoration: none; 
+    font-weight: bold; 
+    border: 2px solid #000; 
+}
+.action-btn:hover { background: var(--smlc-blue); color: #000; }
+
+.tier-indicator { 
+    position: absolute; 
+    top: 15px; 
+    right: 15px; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    border: 2px solid #000; 
+    padding: 5px 15px; 
     background: #fff; 
-    margin-top: auto; 
 }
-.card.plus.expanded { height: auto; min-height: 430px; }
-.card.plus.expanded .plus-reveal { max-height: 200px; padding: 15px; border-top: 1px solid #000; }
 
-/* --- 6. ASSETS & TOWN BARS --- */
-.logo-box { height: 120px; display: flex; align-items: center; justify-content: center; }
-.logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
-
-.town-bar { color: white; font-weight: 900; padding: 8px; text-transform: uppercase; border: 2px solid #000; margin: 15px 0; text-align: center; font-size: 0.9rem; }
-.flora-bar { background-color: #fe4f00 !important; }
-.louisville-bar { background-color: #eb1c24 !important; }
-.clay-city-bar { background-color: #0c30f0 !important; }
-.xenia-bar { background-color: #000000 !important; }
-.sailor-springs-bar { background-color: #a020f0 !important; }
-
-.tier-badge { 
-    position: absolute; top: 5px; right: 5px; font-size: 0.6rem; 
-    padding: 2px 8px; font-weight: bold; border: 1px solid #000; 
-    background: #fff; z-index: 10;
+/* --- 6. MOBILE FIX --- */
+@media (max-width: 768px) {
+    .profile-header { flex-direction: column; text-align: center; }
+    .details-grid { grid-template-columns: 1fr; }
+    .biz-title { font-size: 2rem; }
 }

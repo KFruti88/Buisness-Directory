@@ -1,206 +1,25 @@
-/* --- 1. BASE STYLES --- */
-body { 
-    background-color: #d1d5db; 
-    font-family: 'Times New Roman', Times, serif; 
-    margin: 0; 
-    padding: 0; 
-}
-
-.nav-header { 
-    background-color: #38b6ff; 
-    color: white; 
-    padding: 12px 0; 
-    text-align: center; 
-    font-size: 0.9rem; 
-    font-weight: bold; 
-    width: 100%; 
-    position: relative;
-    z-index: 100;
-}
-
-.nav-header a { color: white; text-decoration: none; margin: 0 15px; }
-
-/* --- 2. DROPDOWN CONTROLS --- */
-#filter-controls { 
-    padding: 20px; 
-    text-align: center; 
-    margin-bottom: 30px; 
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-select {
-    padding: 10px 15px;
-    font-size: 1rem;
-    font-weight: bold;
-    border: 2px solid #000;
-    border-radius: 5px;
-    background-color: #fff;
-    cursor: pointer;
-}
-
-/* --- 3. DIRECTORY GRID & CLEAN TEASER CARDS --- */
-.site-wrapper { 
-    width: 95%; 
-    max-width: 1800px; 
-    margin: 0 auto; 
-    padding: 20px 0; 
-}
-
-#directory-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-    gap: 25px; 
-    padding-bottom: 50px; 
-}
-
-.card { 
-    background-color: #ffffdf !important; 
-    border: 2px solid #000; 
-    box-shadow: 6px 6px 0px rgba(0,0,0,0.2); 
-    padding: 20px; 
-    text-align: center; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: space-between;
-    transition: all 0.3s ease; 
-    overflow: hidden; 
-    height: 400px; 
-    position: relative;
-    box-sizing: border-box;
-}
-
-/* --- 4. CARD CONTENT ALIGNMENT --- */
-.logo-box { 
-    height: 120px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-}
-
-.logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
-
-.town-bar { 
-    color: white; 
-    font-weight: 900 !important; 
-    padding: 10px 0; 
-    text-transform: uppercase; 
-    border: 2px solid #000;
-    margin: 10px 0;
-}
-
-.biz-name { font-size: 1.6rem; font-weight: bold; color: #000; margin: 5px 0; }
-
-.cat-text { 
-    font-size: 1rem; 
-    color: #444; 
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px; 
-    font-style: normal; 
-}
-
-/* --- 5. TOWN BAR COLORS --- */
-.flora-bar { background-color: #fe4f00 !important; }
-.louisville-bar { background-color: #eb1c24 !important; }
-.clay-city-bar { background-color: #0c30f0 !important; }
-.xenia-bar { background-color: #000000 !important; }
-.sailor-springs-bar { background-color: #a020f0 !important; }
-
-/* --- 6. BADGES --- */
-.coupon-corner-image {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 40px; 
-    z-index: 20;
-    pointer-events: none; 
-}
-
-.tier-badge {
-    position: absolute; 
-    top: 5px; 
-    right: 5px; 
-    font-size: 0.6rem; 
-    padding: 2px 8px; 
-    font-weight: bold; 
-    text-transform: uppercase; 
-    border: 1px solid #000; 
-    background: #fff; 
-    z-index: 10; 
-}
-
-/* --- 7. PREMIUM CLICK FIX & PROFILE LAYOUT --- */
-.card.premium { cursor: pointer; }
-.card.premium * { pointer-events: none; }
-
-.card.premium::after {
-    content: "";
-    position: absolute;
-    top: -50%; left: -100%; width: 30%; height: 200%;
-    background: rgba(255, 255, 255, 0.4);
-    transform: rotate(30deg);
-    pointer-events: none;
-    animation: infiniteShine 4s infinite linear;
-}
-
-@keyframes infiniteShine {
-    0% { left: -100%; }
-    20% { left: 150%; } 
-    100% { left: 150%; } 
-}
-
-/* --- 8. NEWSPAPER HEADER CUSTOMIZATIONS --- */
 .main-title {
     text-align: center;
-    padding: 20px 40px;
+    padding: 20px;
     font-family: 'Times New Roman', Times, serif;
-    background-color: #fff;
+    background-color: #fff5b8; /* Cream Newspaper Tone */
     border-bottom: 2px solid #000;
 }
 
-.main-title h1 {
-    font-size: 4.5rem; /* Centered Title */
-    margin: 0;
-    color: #000;
-    text-transform: none;
-}
-
-.newspaper-meta {
+.single-row {
     display: flex;
-    justify-content: space-between; /* Pins meta-left and meta-right to edges */
-    align-items: flex-end;
+    justify-content: space-between;
+    align-items: center;
     border-top: 2px solid #000;
-    margin-top: 10px;
+    border-bottom: 1px solid #000;
     padding: 10px 0;
-    font-family: 'Times New Roman', serif;
-    font-weight: bold;
+    background-color: #fff5b8;
 }
 
-.meta-left {
-    text-align: left;
+.directory-pages {
+    text-decoration: underline;
     font-size: 1.1rem;
+    letter-spacing: 1px;
+    font-weight: bold;
     text-transform: uppercase;
-}
-
-.meta-right {
-    text-align: right;
-}
-
-.weather-info {
-    line-height: 1.2;
-}
-
-.weather-info .location {
-    display: block;
-    font-size: 0.8rem;
-    color: #444;
-}
-
-#weather-display {
-    font-size: 1.3rem;
-    color: #000;
 }

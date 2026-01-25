@@ -16,13 +16,13 @@ body {
     width: 100%; 
     position: relative; 
     z-index: 100;
+    border-bottom: 2px solid #222222;
 }
 .nav-header a { 
     color: #222222; 
     text-decoration: none;
     margin: 0 15px; 
-    border-bottom: 2px solid #222222;
-              }
+}
 
 /* --- 2. NEWSPAPER HEADER --- */
 .main-title {

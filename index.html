@@ -21,16 +21,13 @@
     <header class="main-title">
         <h1>Clay County Directory</h1>
         <div class="newspaper-meta">
-            <div class="meta-left" id="vol-issue">
-                VOL. 1 — NO. 1 | January 25, 2026
-            </div>
-            <div class="meta-center">
-                FLORA • LOUISVILLE • CLAY CITY • SAILOR SPRINGS • XENIA
+            <div class="meta-left" id="header-info">
+                Loading header...
             </div>
             <div class="meta-right">
                 <div class="weather-info">
-                    <span class="location">Flora, Illinois</span>
-                    <span class="temp">9°F <small>light snow</small></span>
+                    <span class="location">Flora, IL</span>
+                    <span id="weather-display">Fetching weather...</span>
                 </div>
             </div>
         </div>
@@ -38,7 +35,7 @@
 
     <div id="filter-controls">
         <select id="town-select" onchange="applyFilters()">
-            <option value="All">📍 All Towns</option>
+            <option value="All">All Towns</option>
             <option value="Flora">Flora</option>
             <option value="Louisville">Louisville</option>
             <option value="Clay City">Clay City</option>

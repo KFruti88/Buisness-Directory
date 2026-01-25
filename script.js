@@ -5,7 +5,7 @@ const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 
 // Shared brands that use one logo for multiple towns
-const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "wabash", "mach 1"];
+const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "wabash", "police", "fire", "mach 1"];
 
 const catEmojis = {
     "Bars": "🍺", "Emergency": "🚨", "Church": "⛪", "Post Office": "📬", 

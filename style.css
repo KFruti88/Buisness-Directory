@@ -1,13 +1,13 @@
 /* --- 1. BASE STYLES --- */
 body { 
-    background-color: #d1d5db; /* Light gray background behind the boxes */
+    background-color: #e5e5e5; /* Light gray background behind the boxes */
     font-family: 'Times New Roman', Times, serif; 
     margin: 0; 
     padding: 0; 
 }
 
 .nav-header { 
-    background-color: #d1d5db; 
+    background-color: #e5e5e5; 
     color: #222222; 
     padding: 12px 0; 
     text-align: center; 

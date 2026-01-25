@@ -23,7 +23,7 @@ body {
 .main-title {
     text-align: center; 
     padding: 20px 20px;
-    background-color: #fff5ba; /* Boss's requested color */
+    background-color: #e5e5e5; /* Boss's requested color */
     border-bottom: 2px solid #000;
 }
 .main-title h1 { 

@@ -3,7 +3,6 @@ let masterData = [];
 // 1. PROJECT CONFIGURATION
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
-const couponImgUrl = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
 // Shared brands that use one logo for multiple towns
 const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "mach 1"];
@@ -16,16 +15,54 @@ const catEmojis = {
     "Professional Services": "💼", "Agriculture": "🚜"
 };
 
-document.addEventListener("DOMContentLoaded", () => { loadDirectory(); });
+// 2. INITIALIZATION
+document.addEventListener("DOMContentLoaded", () => { 
+    updateNewspaperHeader(); // Set header date/weather
+    loadDirectory();         // Load CSV data
+});
 
-// 2. SMART IMAGE HELPER (With Brand Logic)
+// 3. NEWSPAPER HEADER LOGIC (Date & Weather)
+async function updateNewspaperHeader() {
+    const now = new Date();
+    
+    // 1. Set Date and Dynamic Issue Number (January=1, February=2, etc.)
+    const dateOptions = { month: 'long', day: 'numeric', year: 'numeric' };
+    const dateString = now.toLocaleDateString('en-US', dateOptions);
+    const issueNum = now.getMonth() + 1;
+    
+    const headerInfo = document.getElementById('header-info');
+    if (headerInfo) {
+        headerInfo.innerText = `VOL. 1 — NO. ${issueNum} | ${dateString}`;
+    }
+
+    // 2. Fetch Accurate Weather for Flora (62839)
+    // IMPORTANT: Replace 'YOUR_FREE_OPENWEATHER_API_KEY' with your actual key
+    const apiKey = 'YOUR_FREE_OPENWEATHER_API_KEY'; 
+    const zip = '62839';
+    const weatherElem = document.getElementById('weather-display');
+
+    try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${zip},us&units=imperial&appid=${apiKey}`);
+        const data = await response.json();
+        
+        if (data.main) {
+            const temp = Math.round(data.main.temp);
+            const condition = data.weather[0].main;
+            weatherElem.innerHTML = `${temp}°F <small>${condition}</small>`;
+        }
+    } catch (error) {
+        if (weatherElem) weatherElem.innerText = "Weather N/A";
+        console.error("Weather Error:", error);
+    }
+}
+
+// 4. SMART IMAGE HELPER
 function getSmartImage(id, bizName, isProfile = false) {
     if(!id && !bizName) return '';
     
     let fileName = id.trim().toLowerCase();
     const nameLower = bizName ? bizName.toLowerCase() : "";
 
-    // Brand logic: Checks if name contains a brand like "Casey's"
     const brandMatch = sharedBrands.find(brand => nameLower.includes(brand));
     if (brandMatch) {
         fileName = brandMatch.replace(/['\s]/g, ""); 
@@ -40,7 +77,7 @@ function getSmartImage(id, bizName, isProfile = false) {
             this.onerror=function(){this.src='${placeholder}'};">`;
 }
 
-// 3. DATA LOADING ENGINE
+// 5. DATA LOADING ENGINE
 async function loadDirectory() {
     Papa.parse(csvUrl, {
         download: true, header: true, skipEmptyLines: true,
@@ -55,24 +92,20 @@ async function loadDirectory() {
     });
 }
 
-// 4. RENDER MAIN DIRECTORY (WITH TIERED SORTING)
+// 6. RENDER MAIN DIRECTORY
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    // TIER PRIORITY MAPPING (Premium at the top)
     const tierOrder = { "premium": 1, "plus": 2, "basic": 3 };
 
     grid.innerHTML = data.sort((a, b) => {
         const tierA = (a.Teir || 'basic').toLowerCase();
         const tierB = (b.Teir || 'basic').toLowerCase();
         
-        // First, sort by Tier Priority
         if (tierOrder[tierA] !== tierOrder[tierB]) {
             return tierOrder[tierA] - tierOrder[tierB];
         }
-        
-        // Second, sort by Town alphabetically within tiers
         return (a.Town || "").localeCompare(b.Town || "");
     }).map(biz => {
         const tier = (biz.Teir || 'basic').toLowerCase();
@@ -102,7 +135,7 @@ function renderCards(data) {
     if (counter) counter.innerText = `${data.length} Businesses Listed`;
 }
 
-// 5. LOAD INDIVIDUAL PROFILE (FIXED MAP & TEMPLATE)
+// 7. LOAD INDIVIDUAL PROFILE
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
     const bizId = params.get('id');
@@ -110,11 +143,11 @@ function loadProfile(data) {
     
     const container = document.getElementById('profile-wrap');
     if (!biz) {
-        container.innerHTML = `<div style="text-align:center; padding:50px;"><h2>Business Not Found</h2><p>Check the ID: ${bizId}</p></div>`;
+        container.innerHTML = `<div style="text-align:center; padding:50px;"><h2>Business Not Found</h2></div>`;
         return;
     }
 
-    // Corrected Template Literal: Changed '1{' to '${'
+    // Fixed Google Maps encoding syntax
     const simpleMap = biz.Address && biz.Address !== "N/A" 
         ? `https://maps.google.com/maps?q=${encodeURIComponent(biz.Address)}&t=&z=13&ie=UTF8&iwloc=&output=embed` 
         : '';
@@ -145,7 +178,7 @@ function loadProfile(data) {
         </div>`;
 }
 
-// 6. FILTER LOGIC
+// 8. FILTER LOGIC
 function applyFilters() {
     const catVal = document.getElementById('cat-select').value;
     const townVal = document.getElementById('town-select').value;

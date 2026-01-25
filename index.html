@@ -28,7 +28,7 @@
 
             <div class="meta-item">
                 <select id="town-select" onchange="applyFilters()">
-                    <option value="All">All Towns</option>
+                    <option value="All">📍 All Towns</option>
                     <option value="Flora">Flora</option>
                     <option value="Louisville">Louisville</option>
                     <option value="Clay City">Clay City</option>
@@ -63,10 +63,20 @@
             </div>
 
             <div class="meta-item right-meta">
-                <div class="weather-info">
-                    <span class="location">Flora, IL 62839</span>
-                    <span id="weather-display">❄️ 7°F
-light snow</span>
+                <div style="width: 200px;"> 
+                    <a class="weatherwidget-io" 
+                       href="https://forecast7.com/en/38d67n88d49/flora/" 
+                       data-label_1="Flora" 
+                       data-label_2="Illinois" 
+                       data-font="Times New Roman" 
+                       data-mode="Current" 
+                       data-days="3" 
+                       data-theme="pure" 
+                       data-basecolor="#fff5b8"
+                       data-unit="us">Flora Illinois</a>
+                    <script>
+                    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+                    </script>
                 </div>
             </div>
         </div>

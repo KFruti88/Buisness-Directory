@@ -32,26 +32,34 @@ function updateNewspaperHeader() {
     }
 }
 
-// 4. SMART IMAGE HELPER
+// 4. SMART IMAGE HELPER (Universal Extension Support)
+// This logic checks for .jpeg, then .png, then .jpg automatically.
 function getSmartImage(id, bizName, isProfile = false) {
     if (!id && !bizName) return `https://via.placeholder.com/${isProfile ? '250' : '150'}?text=Logo+Pending`;
     
     let fileName = id.trim().toLowerCase();
     const nameLower = bizName ? bizName.toLowerCase() : "";
 
+    // Brand logic for shared logos
     const brandMatch = sharedBrands.find(brand => nameLower.includes(brand));
     if (brandMatch) {
         fileName = brandMatch.replace(/['\s]/g, ""); 
     }
 
     const placeholder = `https://via.placeholder.com/${isProfile ? '250' : '150'}?text=Logo+Pending`;
-    const firstUrl = `${imageRepo}${fileName}.jpg`;
     
-    return `<img src="${firstUrl}" 
+    // Attempt 1: .jpeg (Your most common extension)
+    const primaryUrl = `${imageRepo}${fileName}.jpeg`;
+    
+    return `<img src="${primaryUrl}" 
             class="${isProfile ? 'profile-logo' : ''}" 
             onerror="this.onerror=null; 
             this.src='${imageRepo}${fileName}.png'; 
-            this.onerror=function(){this.src='${placeholder}'};">`;
+            this.onerror=function(){
+                this.onerror=null; 
+                this.src='${imageRepo}${fileName}.jpg';
+                this.onerror=function(){this.src='${placeholder}'};
+            };">`;
 }
 
 // 5. DATA LOADING ENGINE
@@ -59,6 +67,7 @@ async function loadDirectory() {
     Papa.parse(csvUrl, {
         download: true, header: true, skipEmptyLines: true,
         complete: (results) => {
+            // Filter out any completely empty rows
             masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
             
             // Detect which page is active and render accordingly
@@ -162,7 +171,7 @@ function loadProfile(data) {
                 </div>
             </div>
             ${biz.Bio ? `<div class="info-section" style="margin-top:30px;"><h3>About Our Business</h3><div class="bio-box">${biz.Bio}</div></div>` : ''}
-            ${biz.Address ? `<div class="info-section" style="margin-top:30px;"><h3>Location</h3><div class="map-box"><iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://maps.google.com/maps?q=${encodeURIComponent(biz.Address + " " + (biz.Town || "") + " IL")}&output=embed" allowfullscreen></iframe></div></div>` : ''}
+            ${biz.Address ? `<div class="info-section" style="margin-top:30px;"><h3>Location</h3><div class="map-box"><iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://www.google.com/maps?q=${encodeURIComponent(biz.Address + " " + (biz.Town || "") + " IL")}&output=embed" allowfullscreen></iframe></div></div>` : ''}
         </div>`;
 }
 

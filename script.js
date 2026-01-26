@@ -1,13 +1,26 @@
-let masterData = [];
+/**
+ * 1. PROJECT CONFIGURATION
+ * This is where you set up your links. If you change your GitHub repo name 
+ * or your Google Sheet, update these URLs.
+ */
+let masterData = []; // This will hold all the data from your Google Sheet
 
-// 1. PROJECT CONFIGURATION
+// Link to your GitHub image folder (Raw version so the browser can see the files)
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
+
+// The "Published" CSV link from your Google Sheet
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
+
+// The universal coupon image used for all businesses with a discount
 const couponImg = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
-// Shared brands that use one logo for multiple towns
+/**
+ * 2. BRAND & CATEGORY SETTINGS
+ */
+// If a business name includes these words, it will use a single generic logo (e.g., all Caseys use one logo)
 const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "mach 1"];
 
+// Maps your Category names to Emojis for the cards
 const catEmojis = {
     "Emergency": "🚨", "Manufacturing": "🏗️", "Bars": "🍺", "Professional Services": "💼",
     "Financial Services": "💰", "Retail": "🛒", "Shopping": "🛍️", "Restaurants": "🍴",
@@ -15,13 +28,19 @@ const catEmojis = {
     "Internet": "🌐", "Gas Station": "⛽", "Industry": "🏭", "Agriculture": "🚜"
 };
 
-// 2. INITIALIZATION
+/**
+ * 3. INITIALIZATION
+ * These functions run as soon as the website page finishes loading.
+ */
 document.addEventListener("DOMContentLoaded", () => {
-    updateNewspaperHeader();
-    loadDirectory();
+    updateNewspaperHeader(); // Sets the date in the top bar
+    loadDirectory();         // Starts fetching the Google Sheet data
 });
 
-// 3. NEWSPAPER HEADER LOGIC
+/**
+ * 4. NEWSPAPER HEADER LOGIC
+ * Automatically finds the current date and puts it in your "VOL. 1" header.
+ */
 function updateNewspaperHeader() {
     const now = new Date();
     const dateOptions = { month: 'long', day: 'numeric', year: 'numeric' };
@@ -32,13 +51,18 @@ function updateNewspaperHeader() {
     }
 }
 
-// 4. SMART IMAGE HELPER
+/**
+ * 5. SMART IMAGE HELPER
+ * This is the logic that looks for your GitHub images.
+ * It tries .jpeg first, then .png, then .jpg before giving up and using a placeholder.
+ */
 function getSmartImage(id, bizName, isProfile = false) {
     if (!id && !bizName) return `https://via.placeholder.com/${isProfile ? '250' : '150'}?text=Logo+Pending`;
     
-    let fileName = id.trim().toLowerCase();
+    let fileName = id.trim().toLowerCase(); // Converts ID to lowercase to match GitHub files
     const nameLower = bizName ? bizName.toLowerCase() : "";
 
+    // Check if it's a shared brand like Subway
     const brandMatch = sharedBrands.find(brand => nameLower.includes(brand));
     if (brandMatch) {
         fileName = brandMatch.replace(/['\s]/g, ""); 
@@ -47,6 +71,7 @@ function getSmartImage(id, bizName, isProfile = false) {
     const placeholder = `https://via.placeholder.com/${isProfile ? '250' : '150'}?text=Logo+Pending`;
     const primaryUrl = `${imageRepo}${fileName}.jpeg`;
     
+    // The "onerror" chain: If .jpeg fails, try .png. If .png fails, try .jpg.
     return `<img src="${primaryUrl}" 
             class="${isProfile ? 'profile-logo' : ''}" 
             onerror="this.onerror=null; 
@@ -58,14 +83,20 @@ function getSmartImage(id, bizName, isProfile = false) {
             };">`;
 }
 
-// 5. DATA LOADING ENGINE
+/**
+ * 6. DATA LOADING ENGINE
+ * Uses PapaParse to turn your Google Sheet CSV into a list of "Objects" the code can read.
+ */
 async function loadDirectory() {
     Papa.parse(csvUrl, {
-        download: true, header: true, skipEmptyLines: true,
+        download: true, 
+        header: true,      // Tells it the first row is the column names
+        skipEmptyLines: true,
         complete: (results) => {
-            // Filter out empty rows
+            // Cleans the data: ignores rows that don't have a name
             masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
             
+            // Decides whether to build the "Grid" (index.html) or the "Profile" (profile.html)
             if (document.getElementById('directory-grid')) {
                 renderCards(masterData);
             } else if (document.getElementById('profile-wrap')) {
@@ -75,11 +106,15 @@ async function loadDirectory() {
     });
 }
 
-// 6. RENDER MAIN DIRECTORY
+/**
+ * 7. RENDER MAIN DIRECTORY (index.html)
+ * This creates the small cards you see on the main page.
+ */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
+    // Defines the order: Premium always appears at the top
     const tierOrder = { "premium": 1, "plus": 2, "basic": 3 };
 
     grid.innerHTML = data.sort((a, b) => {
@@ -93,8 +128,8 @@ function renderCards(data) {
         const townClass = (biz.Town || "unknown").toLowerCase().replace(/\s+/g, '-');
         const imageID = (biz['Image ID'] || "").trim();
         const category = (biz.Category || "Industry").trim();
-        const hours = biz['Business Hours'] || 'N/A';
 
+        // Premium cards link to profile.html, Plus cards just expand to show phone
         let clickAttr = "";
         if (tier === 'premium') {
             clickAttr = `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID.toLowerCase())}'"`;
@@ -105,16 +140,14 @@ function renderCards(data) {
         return `
             <div class="card ${tier}" ${clickAttr} style="cursor: ${tier !== 'basic' ? 'pointer' : 'default'};">
                 <div class="tier-badge">${tier}</div>
-                ${hasCoupon ? `<img src="${couponImg}" class="coupon-badge" alt="Discount Available">` : ''}
+                ${hasCoupon ? `<img src="${couponImg}" class="coupon-badge" alt="Discount">` : ''}
                 <div class="logo-box">${getSmartImage(imageID, biz.Name)}</div>
                 <div class="town-bar ${townClass}-bar">${biz.Town || 'Unknown'}</div>
-                <h2 style="font-size: 1.4rem; margin: 5px 0; line-height: 1.1;">${biz.Name}</h2>
+                <h2 style="font-size: 1.4rem; margin: 5px 0;">${biz.Name}</h2>
                 
                 ${tier === 'plus' ? `
                     <div class="plus-reveal">
                         <p><strong>Phone:</strong> ${biz.Phone || 'N/A'}</p>
-                        <p><strong>Hours:</strong> ${hours}</p>
-                        <p><strong>Established:</strong> ${biz.Established || 'N/A'}</p>
                     </div>` : ''}
 
                 <div style="margin-top: auto; font-style: italic; font-size: 0.85rem; color: #444;">
@@ -124,22 +157,27 @@ function renderCards(data) {
     }).join('');
 }
 
-// 7. PROFILE PAGE ENGINE
+/**
+ * 8. PROFILE PAGE ENGINE (profile.html)
+ * This builds the big detailed page for Premium members.
+ */
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
-    const bizId = params.get('id');
+    const bizId = params.get('id'); // Gets the ID from the URL (e.g., profile.html?id=wabash)
     const wrap = document.getElementById('profile-wrap');
     if (!bizId || !wrap) return;
 
+    // Finds the specific business in the data that matches the ID
     const biz = data.find(b => b['Image ID'] && b['Image ID'].trim().toLowerCase() === bizId.toLowerCase());
     if (!biz) {
-        wrap.innerHTML = `<div style="text-align:center;"><h2>Business Not Found</h2><a href="index.html">Back to Directory</a></div>`;
+        wrap.innerHTML = `<div style="text-align:center;"><h2>Business Not Found</h2><a href="index.html">Back</a></div>`;
         return;
     }
 
     const hasCoupon = biz.Coupon && biz.Coupon !== "N/A" && biz.Coupon.trim() !== "";
     const category = biz.Category || "Industry";
 
+    // Injects the big Profile Layout
     wrap.innerHTML = `
         <div class="profile-container">
             <div class="tier-indicator">${biz.Teir} Member</div>
@@ -154,24 +192,27 @@ function loadProfile(data) {
             </div>
             <div class="details-grid">
                 <div class="info-section">
-                    <h3>Contact Information</h3>
+                    <h3>Contact & Hours</h3>
                     <div class="info-item"><strong>📞 Phone:</strong> ${biz.Phone}</div>
-                    <div class="info-item"><strong>📍 Address:</strong><br>${biz.Address || 'Contact for location'}</div>
+                    <div class="info-item"><strong>📍 Address:</strong><br>${biz.Address || 'N/A'}</div>
                     <div class="info-item"><strong>⏰ Hours:</strong><br>${biz['Business Hours'] || 'N/A'}</div>
-                    ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" class="action-btn">Visit Website</a>` : ''}
-                    ${biz.Facebook && biz.Facebook !== "N/A" ? `<br><a href="${biz.Facebook}" target="_blank" style="display:inline-block; margin-top:10px; color:#3b5998; font-weight:bold; text-decoration:none;">Find us on Facebook</a>` : ''}
+                    ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" class="action-btn">Website</a>` : ''}
+                    ${biz.Facebook && biz.Facebook !== "N/A" ? `<br><a href="${biz.Facebook}" target="_blank">Facebook</a>` : ''}
                 </div>
                 <div class="info-section">
                     <h3>Member Specials</h3>
-                    ${hasCoupon ? `<div style="background:#fff; border:2px dashed #000; padding:15px; text-align:center;"><img src="${couponImg}" style="width:80px; margin-bottom:10px;"><p style="margin:0; font-weight:bold;">Special Offer Available!</p><small>Mention SMLC to redeem.</small></div>` : '<p>No current coupons available.</p>'}
+                    ${hasCoupon ? `<div style="text-align:center;"><img src="${couponImg}" style="width:80px;"><p>Special Offer!</p></div>` : '<p>No current coupons.</p>'}
                 </div>
             </div>
-            ${biz.Bio && biz.Bio !== "N/A" ? `<div class="info-section" style="margin-top:30px;"><h3>About Our Business</h3><div class="bio-box">${biz.Bio}</div></div>` : ''}
-            ${biz.Address && biz.Address !== "N/A" ? `<div class="info-section" style="margin-top:30px;"><h3>Location</h3><div class="map-box"><iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://maps.google.com/maps?q=${encodeURIComponent(biz.Address + " " + (biz.Town || "") + " IL")}&t=&z=13&ie=UTF8&iwloc=&output=embed" allowfullscreen></iframe></div></div>` : ''}
+            ${biz.Bio && biz.Bio !== "N/A" ? `<div><h3>About Us</h3><div class="bio-box">${biz.Bio}</div></div>` : ''}
+            ${biz.Address && biz.Address !== "N/A" ? `<div><h3>Location</h3><div class="map-box"><iframe width="100%" height="100%" frameborder="0" src="https://maps.google.com/maps?q=${encodeURIComponent(biz.Address + " " + (biz.Town || "") + " IL")}&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe></div></div>` : ''}
         </div>`;
 }
 
-// 8. FILTER LOGIC
+/**
+ * 9. FILTER LOGIC
+ * These functions control the Town and Industry dropdown menus on the main page.
+ */
 function applyFilters() {
     const t = document.getElementById('town-select').value;
     const c = document.getElementById('cat-select').value;

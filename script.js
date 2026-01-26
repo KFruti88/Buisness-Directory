@@ -1,45 +1,43 @@
 /**
  * 1. PROJECT CONFIGURATION
- * This is where you set up your links. If you change your GitHub repo name 
- * or your Google Sheet, update these URLs.
+ * This section connects your code to your external data sources.
  */
-let masterData = []; // This will hold all the data from your Google Sheet
+let masterData = []; // Storage for spreadsheet data
 
-// Link to your GitHub image folder (Raw version so the browser can see the files)
+// Your GitHub image repository path
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 
-// The "Published" CSV link from your Google Sheet
+// The Published CSV link from your Google Sheet
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 
-// The universal coupon image used for all businesses with a discount
+// The badge used for businesses with active coupons
 const couponImg = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
 /**
  * 2. BRAND & CATEGORY SETTINGS
+ * Syncs Category names (Column E) to Emojis and handles shared logos.
  */
-// If a business name includes these words, it will use a single generic logo (e.g., all Caseys use one logo)
 const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "mach 1"];
 
-// Maps your Category names to Emojis for the cards
 const catEmojis = {
     "Emergency": "🚨", "Manufacturing": "🏗️", "Bars": "🍺", "Professional Services": "💼",
     "Financial Services": "💰", "Retail": "🛒", "Shopping": "🛍️", "Restaurants": "🍴",
     "Church": "⛪", "Post Office": "📬", "Healthcare": "🏥", "Support Services": "🛠️",
-    "Internet": "🌐", "Gas Station": "⛽", "Industry": "🏭", "Agriculture": "🚜"
+    "Internet": "🌐", "Gas Station": "⛽", "Industry": "🏭", "Agriculture": "🚜",
+    "Wholesale": "📦", "Education": "🎓"
 };
 
 /**
  * 3. INITIALIZATION
- * These functions run as soon as the website page finishes loading.
  */
 document.addEventListener("DOMContentLoaded", () => {
-    updateNewspaperHeader(); // Sets the date in the top bar
-    loadDirectory();         // Starts fetching the Google Sheet data
+    updateNewspaperHeader();
+    loadDirectory();
 });
 
 /**
  * 4. NEWSPAPER HEADER LOGIC
- * Automatically finds the current date and puts it in your "VOL. 1" header.
+ * Updates the date automatically.
  */
 function updateNewspaperHeader() {
     const now = new Date();
@@ -53,16 +51,14 @@ function updateNewspaperHeader() {
 
 /**
  * 5. SMART IMAGE HELPER
- * This is the logic that looks for your GitHub images.
- * It tries .jpeg first, then .png, then .jpg before giving up and using a placeholder.
+ * Tries .jpeg -> .png -> .jpg for universal image support.
  */
 function getSmartImage(id, bizName, isProfile = false) {
     if (!id && !bizName) return `https://via.placeholder.com/${isProfile ? '250' : '150'}?text=Logo+Pending`;
     
-    let fileName = id.trim().toLowerCase(); // Converts ID to lowercase to match GitHub files
+    let fileName = id.trim().toLowerCase();
     const nameLower = bizName ? bizName.toLowerCase() : "";
 
-    // Check if it's a shared brand like Subway
     const brandMatch = sharedBrands.find(brand => nameLower.includes(brand));
     if (brandMatch) {
         fileName = brandMatch.replace(/['\s]/g, ""); 
@@ -71,7 +67,6 @@ function getSmartImage(id, bizName, isProfile = false) {
     const placeholder = `https://via.placeholder.com/${isProfile ? '250' : '150'}?text=Logo+Pending`;
     const primaryUrl = `${imageRepo}${fileName}.jpeg`;
     
-    // The "onerror" chain: If .jpeg fails, try .png. If .png fails, try .jpg.
     return `<img src="${primaryUrl}" 
             class="${isProfile ? 'profile-logo' : ''}" 
             onerror="this.onerror=null; 
@@ -85,18 +80,15 @@ function getSmartImage(id, bizName, isProfile = false) {
 
 /**
  * 6. DATA LOADING ENGINE
- * Uses PapaParse to turn your Google Sheet CSV into a list of "Objects" the code can read.
  */
 async function loadDirectory() {
     Papa.parse(csvUrl, {
-        download: true, 
-        header: true,      // Tells it the first row is the column names
+        download: true,
+        header: true,
         skipEmptyLines: true,
         complete: (results) => {
-            // Cleans the data: ignores rows that don't have a name
             masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
             
-            // Decides whether to build the "Grid" (index.html) or the "Profile" (profile.html)
             if (document.getElementById('directory-grid')) {
                 renderCards(masterData);
             } else if (document.getElementById('profile-wrap')) {
@@ -108,13 +100,12 @@ async function loadDirectory() {
 
 /**
  * 7. RENDER MAIN DIRECTORY (index.html)
- * This creates the small cards you see on the main page.
+ * Plus cards only show the phone number in the reveal.
  */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    // Defines the order: Premium always appears at the top
     const tierOrder = { "premium": 1, "plus": 2, "basic": 3 };
 
     grid.innerHTML = data.sort((a, b) => {
@@ -129,7 +120,6 @@ function renderCards(data) {
         const imageID = (biz['Image ID'] || "").trim();
         const category = (biz.Category || "Industry").trim();
 
-        // Premium cards link to profile.html, Plus cards just expand to show phone
         let clickAttr = "";
         if (tier === 'premium') {
             clickAttr = `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID.toLowerCase())}'"`;
@@ -159,15 +149,13 @@ function renderCards(data) {
 
 /**
  * 8. PROFILE PAGE ENGINE (profile.html)
- * This builds the big detailed page for Premium members.
  */
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
-    const bizId = params.get('id'); // Gets the ID from the URL (e.g., profile.html?id=wabash)
+    const bizId = params.get('id');
     const wrap = document.getElementById('profile-wrap');
     if (!bizId || !wrap) return;
 
-    // Finds the specific business in the data that matches the ID
     const biz = data.find(b => b['Image ID'] && b['Image ID'].trim().toLowerCase() === bizId.toLowerCase());
     if (!biz) {
         wrap.innerHTML = `<div style="text-align:center;"><h2>Business Not Found</h2><a href="index.html">Back</a></div>`;
@@ -177,7 +165,6 @@ function loadProfile(data) {
     const hasCoupon = biz.Coupon && biz.Coupon !== "N/A" && biz.Coupon.trim() !== "";
     const category = biz.Category || "Industry";
 
-    // Injects the big Profile Layout
     wrap.innerHTML = `
         <div class="profile-container">
             <div class="tier-indicator">${biz.Teir} Member</div>
@@ -210,13 +197,27 @@ function loadProfile(data) {
 }
 
 /**
- * 9. FILTER LOGIC
- * These functions control the Town and Industry dropdown menus on the main page.
+ * 9. BULLETPROOF FILTER LOGIC
+ * Syncs the dropdowns with Column C (Town) and Column E (Category).
  */
 function applyFilters() {
-    const t = document.getElementById('town-select').value;
-    const c = document.getElementById('cat-select').value;
-    const filtered = masterData.filter(b => (t === 'All' || b.Town === t) && (c === 'All' || b.Category === c));
+    const selectedTown = document.getElementById('town-select').value;
+    const selectedCat = document.getElementById('cat-select').value;
+
+    const filtered = masterData.filter(biz => {
+        // Clean spreadsheet data for comparison (lowercase & no extra spaces)
+        const sheetCat = (biz.Category || "").trim().toLowerCase();
+        const sheetTown = (biz.Town || "").trim().toLowerCase();
+        
+        // Match Town (All or exact match)
+        const matchTown = (selectedTown === 'All' || sheetTown === selectedTown.toLowerCase());
+        
+        // Match Category (All or exact match)
+        const matchCat = (selectedCat === 'All' || sheetCat === selectedCat.toLowerCase());
+
+        return matchTown && matchCat;
+    });
+
     renderCards(filtered);
 }
 

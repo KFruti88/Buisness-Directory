@@ -1,6 +1,5 @@
 /**
  * 1. PROJECT CONFIGURATION
- * Connects to your GitHub images and Google Sheet CSV.
  */
 let masterData = []; 
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
@@ -9,7 +8,7 @@ const couponImg = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon
 
 /**
  * 2. CATEGORY SETTINGS
- * This is where we map your specific spreadsheet category names to Emojis.
+ * Maps your specific spreadsheet category names to Emojis.
  */
 const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "mach 1"];
 
@@ -86,7 +85,6 @@ function getSmartImage(id, bizName, isProfile = false) {
 
 /**
  * 6. CATEGORY DROPDOWN GENERATOR
- * Pulls categories exactly as they appear in your sheet.
  */
 function generateCategoryDropdown(data) {
     const catSelect = document.getElementById('cat-select');
@@ -126,7 +124,7 @@ async function loadDirectory() {
 }
 
 /**
- * 8. RENDER MAIN DIRECTORY (index.html)
+ * 8. RENDER MAIN DIRECTORY
  */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
@@ -166,7 +164,7 @@ function renderCards(data) {
 }
 
 /**
- * 9. PROFILE PAGE ENGINE (profile.html)
+ * 9. PROFILE PAGE ENGINE
  */
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
@@ -220,18 +218,15 @@ function loadProfile(data) {
 function applyFilters() {
     const selectedTown = document.getElementById('town-select').value;
     const selectedCat = document.getElementById('cat-select').value;
-    const searchVal = document.getElementById('search-input') ? document.getElementById('search-input').value.toLowerCase() : "";
 
     const filtered = masterData.filter(biz => {
         const sheetCat = (biz.Category || "Other").trim();
         const sheetTown = (biz.Town || "").trim().toLowerCase();
-        const sheetName = (biz.Name || "").toLowerCase();
         
         const matchTown = (selectedTown === 'All' || sheetTown === selectedTown.toLowerCase());
         const matchCat = (selectedCat === 'All' || sheetCat === selectedCat);
-        const matchSearch = sheetName.includes(searchVal);
 
-        return matchTown && matchCat && matchSearch;
+        return matchTown && matchCat;
     });
 
     renderCards(filtered);

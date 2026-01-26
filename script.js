@@ -32,23 +32,19 @@ function updateNewspaperHeader() {
     }
 }
 
-// 4. SMART IMAGE HELPER (Universal Extension Support)
-// This logic checks for .jpeg, then .png, then .jpg automatically.
+// 4. SMART IMAGE HELPER
 function getSmartImage(id, bizName, isProfile = false) {
     if (!id && !bizName) return `https://via.placeholder.com/${isProfile ? '250' : '150'}?text=Logo+Pending`;
     
     let fileName = id.trim().toLowerCase();
     const nameLower = bizName ? bizName.toLowerCase() : "";
 
-    // Brand logic for shared logos
     const brandMatch = sharedBrands.find(brand => nameLower.includes(brand));
     if (brandMatch) {
         fileName = brandMatch.replace(/['\s]/g, ""); 
     }
 
     const placeholder = `https://via.placeholder.com/${isProfile ? '250' : '150'}?text=Logo+Pending`;
-    
-    // Attempt 1: .jpeg (Your most common extension)
     const primaryUrl = `${imageRepo}${fileName}.jpeg`;
     
     return `<img src="${primaryUrl}" 
@@ -67,10 +63,9 @@ async function loadDirectory() {
     Papa.parse(csvUrl, {
         download: true, header: true, skipEmptyLines: true,
         complete: (results) => {
-            // Filter out any completely empty rows
+            // Filter out empty rows
             masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
             
-            // Detect which page is active and render accordingly
             if (document.getElementById('directory-grid')) {
                 renderCards(masterData);
             } else if (document.getElementById('profile-wrap')) {
@@ -85,7 +80,6 @@ function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    // Sorting: Premium -> Plus -> Basic
     const tierOrder = { "premium": 1, "plus": 2, "basic": 3 };
 
     grid.innerHTML = data.sort((a, b) => {
@@ -99,8 +93,8 @@ function renderCards(data) {
         const townClass = (biz.Town || "unknown").toLowerCase().replace(/\s+/g, '-');
         const imageID = (biz['Image ID'] || "").trim();
         const category = (biz.Category || "Industry").trim();
+        const hours = biz['Business Hours'] || 'N/A';
 
-        // Click Logic
         let clickAttr = "";
         if (tier === 'premium') {
             clickAttr = `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID.toLowerCase())}'"`;
@@ -119,7 +113,8 @@ function renderCards(data) {
                 ${tier === 'plus' ? `
                     <div class="plus-reveal">
                         <p><strong>Phone:</strong> ${biz.Phone || 'N/A'}</p>
-                        <p><strong>Est:</strong> ${biz['Date Started'] || 'N/A'}</p>
+                        <p><strong>Hours:</strong> ${hours}</p>
+                        <p><strong>Established:</strong> ${biz.Established || 'N/A'}</p>
                     </div>` : ''}
 
                 <div style="margin-top: auto; font-style: italic; font-size: 0.85rem; color: #444;">
@@ -136,7 +131,7 @@ function loadProfile(data) {
     const wrap = document.getElementById('profile-wrap');
     if (!bizId || !wrap) return;
 
-    const biz = data.find(b => b['Image ID'].trim().toLowerCase() === bizId.toLowerCase());
+    const biz = data.find(b => b['Image ID'] && b['Image ID'].trim().toLowerCase() === bizId.toLowerCase());
     if (!biz) {
         wrap.innerHTML = `<div style="text-align:center;"><h2>Business Not Found</h2><a href="index.html">Back to Directory</a></div>`;
         return;
@@ -154,7 +149,7 @@ function loadProfile(data) {
                 <div>
                     <h1 class="biz-title">${biz.Name}</h1>
                     <p class="biz-meta">${catEmojis[category] || "📂"} ${category} | ${biz.Town}</p>
-                    <p class="biz-meta"><strong>Established:</strong> ${biz['Date Started'] || 'N/A'}</p>
+                    <p class="biz-meta"><strong>Established:</strong> ${biz.Established || 'N/A'}</p>
                 </div>
             </div>
             <div class="details-grid">
@@ -162,16 +157,17 @@ function loadProfile(data) {
                     <h3>Contact Information</h3>
                     <div class="info-item"><strong>📞 Phone:</strong> ${biz.Phone}</div>
                     <div class="info-item"><strong>📍 Address:</strong><br>${biz.Address || 'Contact for location'}</div>
-                    ${biz.Website ? `<a href="${biz.Website}" target="_blank" class="action-btn">Visit Website</a>` : ''}
-                    ${biz.Facebook ? `<br><a href="${biz.Facebook}" target="_blank" style="display:inline-block; margin-top:10px; color:#3b5998; font-weight:bold; text-decoration:none;">Find us on Facebook</a>` : ''}
+                    <div class="info-item"><strong>⏰ Hours:</strong><br>${biz['Business Hours'] || 'N/A'}</div>
+                    ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" class="action-btn">Visit Website</a>` : ''}
+                    ${biz.Facebook && biz.Facebook !== "N/A" ? `<br><a href="${biz.Facebook}" target="_blank" style="display:inline-block; margin-top:10px; color:#3b5998; font-weight:bold; text-decoration:none;">Find us on Facebook</a>` : ''}
                 </div>
                 <div class="info-section">
                     <h3>Member Specials</h3>
                     ${hasCoupon ? `<div style="background:#fff; border:2px dashed #000; padding:15px; text-align:center;"><img src="${couponImg}" style="width:80px; margin-bottom:10px;"><p style="margin:0; font-weight:bold;">Special Offer Available!</p><small>Mention SMLC to redeem.</small></div>` : '<p>No current coupons available.</p>'}
                 </div>
             </div>
-            ${biz.Bio ? `<div class="info-section" style="margin-top:30px;"><h3>About Our Business</h3><div class="bio-box">${biz.Bio}</div></div>` : ''}
-            ${biz.Address ? `<div class="info-section" style="margin-top:30px;"><h3>Location</h3><div class="map-box"><iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://www.google.com/maps?q=${encodeURIComponent(biz.Address + " " + (biz.Town || "") + " IL")}&output=embed" allowfullscreen></iframe></div></div>` : ''}
+            ${biz.Bio && biz.Bio !== "N/A" ? `<div class="info-section" style="margin-top:30px;"><h3>About Our Business</h3><div class="bio-box">${biz.Bio}</div></div>` : ''}
+            ${biz.Address && biz.Address !== "N/A" ? `<div class="info-section" style="margin-top:30px;"><h3>Location</h3><div class="map-box"><iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://maps.google.com/maps?q=${encodeURIComponent(biz.Address + " " + (biz.Town || "") + " IL")}&t=&z=13&ie=UTF8&iwloc=&output=embed" allowfullscreen></iframe></div></div>` : ''}
         </div>`;
 }
 

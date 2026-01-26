@@ -1,31 +1,23 @@
 /**
  * 1. PROJECT CONFIGURATION
- * This section connects your code to your external data sources.
- * If you rename your GitHub repo or change your Google Sheet, update these URLs.
+ * Connects to GitHub images and Google Sheets.
  */
-let masterData = []; // Storage for spreadsheet data once it's loaded
-
-// Link to your GitHub image folder (Raw version so the browser can display files)
+let masterData = []; 
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
-
-// The "Published" CSV link from your Google Sheet
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
-
-// The universal coupon image used for all businesses with a discount
 const couponImg = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
 /**
  * 2. BRAND & CATEGORY SETTINGS
- * Syncs Category names (Column E) to Emojis and handles shared logos.
+ * These names must match the "Grouped Names" we create in Section 6.
  */
-// Brands that share one logo (e.g., all Casey's locations use the same image)
 const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "mach 1"];
 
-// Maps your Category names (from Column E) to Emojis for the cards
 const catEmojis = {
     "Auto Repair": "🔧",
-    "Beauty Saloon": "💇",
-    "Barber": "💈",
+    "Beauty & Hair": "💇", // For Salon, Barber, Beauty
+    "Bar & Saloon": "🍺",  // For Bars, Grills, Saloons
+    "Agriculture": "🚜",
     "Handmade Ceramics & Pottery": "🏺",
     "Libraries and Archives": "📚",
     "Gambiling Industries": "🎰",
@@ -39,23 +31,20 @@ const catEmojis = {
     "Manufacturing": "🏗️",
     "Restaurants": "🍴",
     "Retail": "🛒",
-    "Agriculture": "🚜",
     "Financial Services": "💰",
     "Professional Services": "💼"
 };
 
 /**
  * 3. INITIALIZATION
- * These functions run as soon as the website page finishes loading.
  */
 document.addEventListener("DOMContentLoaded", () => {
-    updateNewspaperHeader(); // Sets the date in the top bar
-    loadDirectory();         // Starts fetching the Google Sheet data
+    updateNewspaperHeader();
+    loadDirectory();
 });
 
 /**
  * 4. NEWSPAPER HEADER LOGIC
- * Automatically finds the current date and puts it in your "VOL. 1" header.
  */
 function updateNewspaperHeader() {
     const now = new Date();
@@ -69,36 +58,64 @@ function updateNewspaperHeader() {
 
 /**
  * 5. SMART IMAGE HELPER
- * Tries .jpeg -> .png -> .jpg for universal image support from your GitHub.
  */
 function getSmartImage(id, bizName, isProfile = false) {
     if (!id && !bizName) return `https://via.placeholder.com/${isProfile ? '250' : '150'}?text=Logo+Pending`;
-    
-    let fileName = id.trim().toLowerCase(); // Matches GitHub lowercase file naming
+    let fileName = id.trim().toLowerCase();
     const nameLower = bizName ? bizName.toLowerCase() : "";
-
-    // Brand logic for shared logos (Subway, Casey's, etc.)
     const brandMatch = sharedBrands.find(brand => nameLower.includes(brand));
     if (brandMatch) { fileName = brandMatch.replace(/['\s]/g, ""); }
-
     const placeholder = `https://via.placeholder.com/${isProfile ? '250' : '150'}?text=Logo+Pending`;
     const primaryUrl = `${imageRepo}${fileName}.jpeg`;
-    
-    // Attempt 1: .jpeg -> Attempt 2: .png -> Attempt 3: .jpg -> Fallback: Placeholder
-    return `<img src="${primaryUrl}" 
-            class="${isProfile ? 'profile-logo' : ''}" 
-            onerror="this.onerror=null; 
-            this.src='${imageRepo}${fileName}.png'; 
-            this.onerror=function(){
-                this.onerror=null; 
-                this.src='${imageRepo}${fileName}.jpg';
-                this.onerror=function(){this.src='${placeholder}'};
-            };">`;
+    return `<img src="${primaryUrl}" class="${isProfile ? 'profile-logo' : ''}" onerror="this.onerror=null; this.src='${imageRepo}${fileName}.png'; this.onerror=function(){this.onerror=null; this.src='${imageRepo}${fileName}.jpg'; this.onerror=function(){this.src='${placeholder}'};};">`;
 }
 
 /**
- * 6. DATA LOADING & AUTO-SYNC ENGINE
- * Uses PapaParse to read your Google Sheet. It also triggers the dynamic category menu.
+ * 6. DYNAMIC CATEGORY GENERATOR (Smart Grouping)
+ * This logic specifically separates Saloons (Drinking) from Salons (Hair).
+ */
+function getGroupedCategory(rawCat) {
+    const low = (rawCat || "").trim().toLowerCase();
+    if (!low) return "Other";
+
+    // 1. HAIRCUTS & BEAUTY: Matches "Barber" and "Salon" (ending in N)
+    if (low.includes("barber") || low === "salon" || low.includes("beauty")) {
+        return "Beauty & Hair";
+    }
+
+    // 2. DRINKING SPOTS: Matches "Bar" and "Saloon" (ending in N)
+    if (low.includes("bar") || low.includes("saloon") || low.includes("gambiling")) {
+        return "Bar & Saloon";
+    }
+
+    // 3. AUTOMOTIVE
+    if (low.includes("auto")) {
+        return "Auto Repair";
+    }
+    
+    // Default: use the original name from the sheet if no group matches
+    return rawCat.trim();
+}
+
+function generateCategoryDropdown(data) {
+    const catSelect = document.getElementById('cat-select');
+    if (!catSelect) return;
+
+    // Filter categories through our smart grouping logic
+    const categories = [...new Set(data.map(biz => getGroupedCategory(biz.Category)))];
+    
+    catSelect.innerHTML = '<option value="All">📂 All Industries</option>';
+    categories.sort().forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        const emoji = catEmojis[cat] || "📁";
+        option.textContent = `${emoji} ${cat}`;
+        catSelect.appendChild(option);
+    });
+}
+
+/**
+ * 7. DATA LOADING ENGINE
  */
 async function loadDirectory() {
     Papa.parse(csvUrl, {
@@ -106,10 +123,7 @@ async function loadDirectory() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-            // Filters out empty rows
             masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
-            
-            // AUTOMATION: Builds the category dropdown based on Column E of your sheet
             generateCategoryDropdown(masterData);
 
             if (document.getElementById('directory-grid')) {
@@ -122,40 +136,12 @@ async function loadDirectory() {
 }
 
 /**
- * 7. DYNAMIC CATEGORY GENERATOR
- * This scans Column E of your sheet and updates the HTML dropdown automatically.
- */
-function generateCategoryDropdown(data) {
-    const catSelect = document.getElementById('cat-select');
-    if (!catSelect) return;
-
-    // Get unique categories from Column E, ignore empty ones
-    const categories = [...new Set(data.map(biz => (biz.Category || "Other").trim()))];
-    
-    // Keep "All Industries" at the top and clear the rest
-    catSelect.innerHTML = '<option value="All">📂 All Industries</option>';
-
-    // Sort alphabetically and add to the menu
-    categories.sort().forEach(cat => {
-        const option = document.createElement('option');
-        option.value = cat;
-        const emoji = catEmojis[cat] || "📁";
-        option.textContent = `${emoji} ${cat}`;
-        catSelect.appendChild(option);
-    });
-}
-
-/**
- * 8. RENDER MAIN DIRECTORY (index.html)
- * Builds the cards. Plus tier only reveals the phone number.
+ * 8. RENDER MAIN DIRECTORY
  */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
-
-    // Defines display order (Premium first)
     const tierOrder = { "premium": 1, "plus": 2, "basic": 3 };
-
     grid.innerHTML = data.sort((a, b) => {
         const tierA = (a.Teir || 'basic').toLowerCase();
         const tierB = (b.Teir || 'basic').toLowerCase();
@@ -166,9 +152,8 @@ function renderCards(data) {
         const hasCoupon = biz.Coupon && biz.Coupon !== "N/A" && biz.Coupon.trim() !== "";
         const townClass = (biz.Town || "unknown").toLowerCase().replace(/\s+/g, '-');
         const imageID = (biz['Image ID'] || "").trim();
-        const category = (biz.Category || "Industry").trim();
-
-        // Premium cards link to profiles, Plus cards expand on click
+        const category = getGroupedCategory(biz.Category);
+        
         let clickAttr = tier === 'premium' ? 
             `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID.toLowerCase())}'"` : 
             (tier === 'plus' ? `onclick="this.classList.toggle('expanded')"` : "");
@@ -180,9 +165,7 @@ function renderCards(data) {
                 <div class="logo-box">${getSmartImage(imageID, biz.Name)}</div>
                 <div class="town-bar ${townClass}-bar">${biz.Town || 'Unknown'}</div>
                 <h2 style="font-size: 1.4rem; margin: 5px 0;">${biz.Name}</h2>
-                
                 ${tier === 'plus' ? `<div class="plus-reveal"><p><strong>Phone:</strong> ${biz.Phone || 'N/A'}</p></div>` : ''}
-
                 <div style="margin-top: auto; font-style: italic; font-size: 0.85rem; color: #444;">
                     ${catEmojis[category] || "📁"} ${category}
                 </div>
@@ -191,8 +174,7 @@ function renderCards(data) {
 }
 
 /**
- * 9. PROFILE PAGE ENGINE (profile.html)
- * Detailed view for Premium members including Hours and Establishment dates.
+ * 9. PROFILE PAGE ENGINE
  */
 function loadProfile(data) {
     const params = new URLSearchParams(window.location.search);
@@ -207,7 +189,7 @@ function loadProfile(data) {
     }
 
     const hasCoupon = biz.Coupon && biz.Coupon !== "N/A" && biz.Coupon.trim() !== "";
-    const category = biz.Category || "Industry";
+    const category = getGroupedCategory(biz.Category);
 
     wrap.innerHTML = `
         <div class="profile-container">
@@ -242,29 +224,23 @@ function loadProfile(data) {
 
 /**
  * 10. BULLETPROOF FILTER LOGIC
- * Syncs the dropdowns with Column C (Town) and Column E (Category).
  */
 function applyFilters() {
     const selectedTown = document.getElementById('town-select').value;
     const selectedCat = document.getElementById('cat-select').value;
+    const searchVal = document.getElementById('search-input') ? document.getElementById('search-input').value.toLowerCase() : "";
 
     const filtered = masterData.filter(biz => {
-        // Clean spreadsheet data for comparison (removes extra spaces)
-        const sheetCat = (biz.Category || "").trim();
-        const sheetTown = (biz.Town || "").trim();
+        const sheetCat = getGroupedCategory(biz.Category);
+        const sheetTown = (biz.Town || "").trim().toLowerCase();
+        const sheetName = (biz.Name || "").toLowerCase();
         
-        const matchTown = (selectedTown === 'All' || sheetTown.toLowerCase() === selectedTown.toLowerCase());
+        const matchTown = (selectedTown === 'All' || sheetTown === selectedTown.toLowerCase());
         const matchCat = (selectedCat === 'All' || sheetCat === selectedCat);
+        const matchSearch = sheetName.includes(searchVal);
 
-        return matchTown && matchCat;
+        return matchTown && matchCat && matchSearch;
     });
 
     renderCards(filtered);
-}
-
-// Resets all menus to "All"
-function resetFilters() {
-    document.getElementById('town-select').value = 'All';
-    document.getElementById('cat-select').value = 'All';
-    renderCards(masterData);
 }

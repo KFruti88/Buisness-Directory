@@ -8,7 +8,6 @@ const couponImg = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon
 
 /**
  * 2. CATEGORY SETTINGS
- * Maps your specific spreadsheet category names to Emojis.
  */
 const sharedBrands = ["casey's", "mcdonald's", "huck's", "subway", "dollar general", "mach 1"];
 
@@ -124,18 +123,29 @@ async function loadDirectory() {
 }
 
 /**
- * 8. RENDER MAIN DIRECTORY
+ * 8. RENDER MAIN DIRECTORY (Tier-Priority Sorting)
  */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
-    const tierOrder = { "premium": 1, "plus": 2, "basic": 3 };
+
+    const tierOrder = { 
+        "premium": 1, 
+        "plus": 2, 
+        "basic": 3 
+    };
 
     grid.innerHTML = data.sort((a, b) => {
         const tierA = (a.Teir || 'basic').toLowerCase();
         const tierB = (b.Teir || 'basic').toLowerCase();
-        if (tierOrder[tierA] !== tierOrder[tierB]) return tierOrder[tierA] - tierOrder[tierB];
+
+        // Sort by Tier first
+        if (tierOrder[tierA] !== tierOrder[tierB]) {
+            return tierOrder[tierA] - tierOrder[tierB];
+        }
+        // Then sort alphabetically by Town within the tier
         return (a.Town || "").localeCompare(b.Town || "");
+
     }).map(biz => {
         const tier = (biz.Teir || 'basic').toLowerCase();
         const hasCoupon = biz.Coupon && biz.Coupon !== "N/A" && biz.Coupon.trim() !== "";

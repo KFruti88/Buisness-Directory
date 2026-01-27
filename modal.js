@@ -9,13 +9,15 @@ function openFullModal(bizName) {
 
     const town = (biz.town || "Clay County").trim().split(',')[0].replace(" IL", "").trim();
     const townClass = town.toLowerCase().replace(/\s+/g, '-');
-    const mapAddress = encodeURIComponent(`${biz.address}, ${biz.town}, IL`);
+    const mapAddress = encodeURIComponent(`${biz.address}, ${town}, IL`);
+    const displayCat = (typeof mapCategory === 'function') ? mapCategory(biz.category) : biz.category;
+    const displayEmoji = (typeof catEmojis !== 'undefined' && catEmojis[displayCat]) ? catEmojis[displayCat] : "";
     
     content.innerHTML = `
         <div style="text-align:center;">
             <div style="height:120px; margin-bottom:10px;">${getSmartImage(biz.imageid)}</div>
             <h1 style="font-family:'Times New Roman', serif; margin:0;">${biz.name}</h1>
-            <p style="color:#666;">${biz.category} | ${town}</p>
+            <p style="color:#666;">${displayEmoji} ${displayCat} | ${town}</p>
         </div>
         <div class="town-bar ${townClass}-bar" style="margin: 15px -30px; border-radius: 0;">${town}</div>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:25px;">

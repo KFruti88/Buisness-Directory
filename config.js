@@ -1,5 +1,3 @@
-/** * CONFIG.JS - SHARED ASSETS & RULES
- */
 const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const placeholderImg = "https://raw.githubusercontent.com/KFruti88/images/main/default.png";
 const couponImg = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";

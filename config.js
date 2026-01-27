@@ -1,11 +1,10 @@
-/** * CONFIG.JS - SHARED ASSETS
+/** * CONFIG.JS - SHARED ASSETS & RULES
  */
 const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const placeholderImg = "https://raw.githubusercontent.com/KFruti88/images/main/default.png";
 const couponImg = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 const baseCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 
-// ... keep your catEmojis and mapCategory functions below this ...
 const catEmojis = {
     "Agriculture": "🚜", "Airport": "🚁", "Automotive / Auto Sales": "🚗",
     "Auto Parts": "⚙️", "Auto Repair": "🔧", "Bars/Saloon": "🍺",

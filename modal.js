@@ -1,6 +1,4 @@
-/**
- * MODAL.JS - THE POP-OUT ENGINE
- */
+/** * MODAL.JS - THE POP-OUT ENGINE */
 function openFullModal(bizName) {
     const biz = masterData.find(b => b.name === bizName);
     if (!biz) return;
@@ -9,7 +7,7 @@ function openFullModal(bizName) {
     const content = document.getElementById('modal-body');
     if (!modal || !content) return;
 
-    let town = (biz.town || "Clay County").trim().split(',')[0].replace(" IL", "").trim();
+    const town = (biz.town || "Clay County").trim().split(',')[0].replace(" IL", "").trim();
     const townClass = town.toLowerCase().replace(/\s+/g, '-');
     const mapAddress = encodeURIComponent(`${biz.address}, ${biz.town}, IL`);
     
@@ -19,9 +17,7 @@ function openFullModal(bizName) {
             <h1 style="font-family:'Times New Roman', serif; margin:0;">${biz.name}</h1>
             <p style="color:#666;">${biz.category} | ${town}</p>
         </div>
-        
         <div class="town-bar ${townClass}-bar" style="margin: 15px -30px; border-radius: 0;">${town}</div>
-
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:25px;">
             <div>
                 <h3>Business Details</h3>
@@ -35,10 +31,10 @@ function openFullModal(bizName) {
             </div>
             <div>
                 <h3>Map Location</h3>
-                <iframe width="100%" height="250" frameborder="0" style="border:1px solid #ddd; border-radius:8px;" src="https://maps.google.com/maps?q=${mapAddress}&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+                <iframe width="100%" height="250" frameborder="0" style="border:1px solid #ddd; border-radius:8px;" src="https://maps.google.com/maps?q=${mapAddress}&output=embed"></iframe>
             </div>
         </div>
-        ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee;"><h3>Our Story</h3><p style="line-height:1.6; font-size:1.05rem;">${biz.bio}</p></div>` : ""}
+        ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee;"><h3>Our Story</h3><p style="line-height:1.6;">${biz.bio}</p></div>` : ""}
     `;
     modal.style.display = "flex";
 }

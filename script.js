@@ -36,7 +36,7 @@ const catEmojis = {
     "Manufacturing": "🏗️",
     "Medical": "🏥",
     "Professional Services": "💼",
-    "Propane": "🔥",
+    "Utility/Gas": "🔥",
     "Public Safety & Justice": "⚖️",
     "Public Works & Infrastructure": "🏗️",
     "Restaurants": "🍴",

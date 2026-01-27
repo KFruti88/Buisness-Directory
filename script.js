@@ -16,7 +16,7 @@ const catEmojis = {
     "Auto Parts": "⚙️",
     "Auto Repair": "🔧",
     "Bars/Saloon": "🍺",
-    "Beauty Salon": "💇",
+    "Beauty Salon / Barber Shop": "💇",
     "Carwash": "🧼",
     "Church": "⛪",
     "Community": "👥",

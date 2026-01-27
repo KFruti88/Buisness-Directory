@@ -1,7 +1,8 @@
 /**
- * MODAL.JS - THE POP-OUT ENGINE (LOCKED)
+ * MODAL.JS - THE POP-OUT ENGINE
  */
 function openFullModal(bizName) {
+    // Finds the exact row in the data by name
     const biz = masterData.find(b => b.name === bizName);
     if (!biz) return;
 
@@ -9,7 +10,7 @@ function openFullModal(bizName) {
     const content = document.getElementById('modal-body');
     if (!modal || !content) return;
 
-    // Town Color Sync
+    // Sync Town Colors
     let town = (biz.town || "Clay County").trim().split(',')[0].replace(" IL", "").trim();
     const townClass = town.toLowerCase().replace(/\s+/g, '-');
     const mapAddress = encodeURIComponent(`${biz.address}, ${biz.town}, IL`);
@@ -39,7 +40,7 @@ function openFullModal(bizName) {
                 <iframe width="100%" height="250" frameborder="0" style="border:1px solid #ddd; border-radius:8px;" src="https://maps.google.com/maps?q=${mapAddress}&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
             </div>
         </div>
-        ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee;"><h3>Our Story</h3><p style="line-height:1.6;">${biz.bio}</p></div>` : ""}
+        ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee;"><h3>Our Story</h3><p style="line-height:1.6; font-size:1.05rem;">${biz.bio}</p></div>` : ""}
     `;
     modal.style.display = "flex";
 }

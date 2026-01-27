@@ -1,10 +1,5 @@
 /**
- * LAYOUT.JS - TIER PINNING, IMAGE LOCKS, & MODAL ACCESS
- * Rules:
- * 1. Pinning: Premium (1), Plus (2), Basic (3).
- * 2. Basic: Show #default placeholder ONLY. No pop-out.
- * 3. Plus: Show Business Image + Phone. ENABLE pop-out.
- * 4. Premium: Show Business Image + Phone. ENABLE pop-out + "Click for Details".
+ * LAYOUT.JS - TIER PINNING, INFO CONTROL, & DROPDOWN FIX
  */
 let masterData = [];
 
@@ -30,6 +25,7 @@ async function loadDirectory() {
                 return obj;
             }).filter(row => row.name && row.name.trim() !== "");
             
+            // Fix: Call dropdown generator ONLY after data is loaded
             generateCategoryDropdown();
             renderCards(masterData);
         }
@@ -40,7 +36,6 @@ function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    // PINNING LOGIC
     const tierPriority = { "premium": 1, "plus": 2, "basic": 3 };
 
     const sortedData = [...data].sort((a, b) => {
@@ -66,22 +61,21 @@ function renderCards(data) {
         let actionHint = "";
         let clickAction = "";
 
-        // 1. BASIC LOGIC: Locked to default placeholder
+        // MAIN SCREEN CONTENT CONTROL
         if (tier === "basic") {
             imageHtml = `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">`;
         } 
-        
-        // 2. PLUS & PREMIUM LOGIC: Images, Phones, and Pop-out
-        else if (tier === "plus" || tier === "premium") {
+        else if (tier === "plus") {
             imageHtml = getSmartImage(biz.imageid, biz.name);
             phoneHtml = `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>`;
-            
-            // Both tiers now trigger the modal
+            // PLUS: No clickAction defined here = No Pop-out
+        }
+        else if (tier === "premium") {
+            imageHtml = getSmartImage(biz.imageid, biz.name);
+            phoneHtml = `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>`;
+            actionHint = `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>`;
+            // PREMIUM: Enable pop-out
             clickAction = `onclick="openFullModal(${index})" style="cursor:pointer;"`;
-            
-            if (tier === "premium") {
-                actionHint = `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>`;
-            }
         }
 
         return `
@@ -109,10 +103,10 @@ function renderCards(data) {
 }
 
 /**
- * FULL CARD POP-OUT (MODAL)
- * Now works for both Plus and Premium
+ * PREMIUM POP-OUT (SAVES THE "EVERYTHING" FOR HERE)
  */
 function openFullModal(index) {
+    // We find the specific business in the masterData array
     const biz = masterData[index];
     const modal = document.getElementById('premium-modal');
     const content = document.getElementById('modal-body');
@@ -120,7 +114,6 @@ function openFullModal(index) {
 
     const mapAddress = encodeURIComponent(`${biz.address}, ${biz.town}, IL`);
     
-    // Check for social/web links - only show if they aren't N/A
     const websiteBtn = (biz.website && biz.website !== "N/A") ? 
         `<a href="${biz.website}" target="_blank" style="background:#0c30f0; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; font-weight:bold; display:inline-block; margin-right:10px;">Website</a>` : "";
 
@@ -136,10 +129,11 @@ function openFullModal(index) {
         <hr style="margin:20px 0;">
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:25px;">
             <div>
-                <h3>Business Details</h3>
+                <h3>Full Details</h3>
                 <p><strong>📞 Phone:</strong> ${biz.phone}</p>
                 <p><strong>📍 Address:</strong> ${biz.address}</p>
                 <p><strong>⏰ Hours:</strong> ${biz.hours || 'N/A'}</p>
+                ${biz.established && biz.established !== "N/A" ? `<p><strong>Established:</strong> ${biz.established}</p>` : ""}
                 <div style="margin-top:20px;">${websiteBtn} ${facebookBtn}</div>
             </div>
             <div>
@@ -147,7 +141,7 @@ function openFullModal(index) {
                 <iframe width="100%" height="250" frameborder="0" style="border:1px solid #ddd; border-radius:8px;" src="https://maps.google.com/maps?q=${mapAddress}&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
             </div>
         </div>
-        ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee;"><h3>About Us</h3><p style="line-height:1.6;">${biz.bio}</p></div>` : ""}
+        ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee;"><h3>Our Story</h3><p style="line-height:1.6; font-size:1.05rem;">${biz.bio}</p></div>` : ""}
     `;
 
     modal.style.display = "flex";
@@ -167,4 +161,37 @@ function getSmartImage(id, bizName) {
     }
     let fileName = id.trim().toLowerCase();
     return `<img src="${imageRepo}${fileName}.jpeg" style="max-height:100%; object-fit:contain;" onerror="this.onerror=null; this.src='${imageRepo}${fileName}.png'; this.onerror=function(){this.src='${fallback}'};">`;
+}
+
+/**
+ * FIXED DROPDOWN GENERATOR
+ */
+function generateCategoryDropdown() {
+    const catSelect = document.getElementById('cat-select');
+    if (!catSelect) return;
+    
+    // Clear and add default
+    catSelect.innerHTML = '<option value="All">📂 All Industries</option>';
+    
+    // Use the locked catEmojis from config.js
+    Object.keys(catEmojis).sort().forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = `${catEmojis[cat]} ${cat}`;
+        catSelect.appendChild(option);
+    });
+}
+
+function applyFilters() {
+    const selectedTown = document.getElementById('town-select').value;
+    const selectedCat = document.getElementById('cat-select').value;
+
+    const filtered = masterData.filter(biz => {
+        const bizTown = (biz.town || "").trim();
+        const bizCat = mapCategory(biz.category);
+        const matchTown = (selectedTown === 'All' || bizTown === selectedTown);
+        const matchCat = (selectedCat === 'All' || bizCat === selectedCat);
+        return matchTown && matchCat;
+    });
+    renderCards(filtered);
 }

@@ -7,68 +7,75 @@ const baseCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8
 const couponImg = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
 /**
- * 2. CATEGORY EMOJI MAPPING
- * Ensure these names match your "Category" column in Google Sheets exactly.
+ * 2. CATEGORY DISPLAY SETTINGS
+ * This is the master list of what people will actually see on the cards.
  */
 const catEmojis = {
     "Agriculture": "🚜",
     "Auto Parts": "⚙️",
     "Auto Repair": "🔧",
     "Bars/Saloon": "🍺",
-    "Beauty Salon / Barber Shop": "💇",
+    "Beauty Salon": "💇",
     "Carwash": "🧼",
     "Church": "⛪",
     "Community": "👥",
+    "Delivery": "🚚",
     "Education & Health": "📚",
+    "Executive & Administrative": "🏛️",
     "Financial Services": "💰",
     "Flower Shop": "💐",
     "Freight Trucking": "🚛",
+    "Gambiling Industries": "🎰",
+    "Gas Station": "⛽",
+    "Government": "🏛️",
+    "Handmade Ceramics & Pottery": "🏺",
     "Healthcare": "🏥",
     "Insurance": "📄",
+    "Internet": "🌐",
+    "Legal Services": "⚖️",
+    "Libraries and Archives": "📚",
     "Manufacturing": "🏗️",
-    "Non-Profit": "🤝",
+    "Medical": "🏥",
+    "Professional Services": "💼",
+    "Propane": "🔥",
+    "Public Safety & Justice": "⚖️",
+    "Public Works & Infrastructure": "🏗️",
     "Restaurants": "🍴",
+    "Storage": "📦",
     "Stores": "🛍️",
-    "USPS/Post Office": "📬"
+    "USPS/Post Office": "📬",
+    "Non-Profit": "📝"
 };
 
 /**
- * 3. INITIALIZATION
+ * 3. CATEGORY MAPPING ENGINE
+ * This merges your various spreadsheet categories into your display list.
+ */
+function mapCategory(rawCat) {
+    if (!rawCat) return "Professional Services";
+    const cat = rawCat.trim().toLowerCase();
+
+    if (cat.includes("city hall") || cat.includes("court") || cat.includes("government")) return "Government";
+    if (cat.includes("restaurant") || cat.includes("bar") || cat.includes("saloon") || cat.includes("grill")) return "Restaurants";
+    if (cat.includes("medical") || cat.includes("healthcare") || cat.includes("hospital") || cat.includes("clinic")) return "Healthcare";
+    if (cat.includes("flower") || cat.includes("pottery") || cat.includes("art") || cat.includes("boutique")) return "Stores";
+    if (cat.includes("carwash") || cat.includes("laundry") || cat.includes("laundromat")) return "Carwash";
+    if (cat.includes("legion") || cat.includes("charity") || cat.includes("foundation") || cat.includes("non-profit")) return "Non-Profit";
+    if (cat.includes("factory") || cat.includes("warehouse") || cat.includes("delivery") || cat.includes("manufacturing")) return "Manufacturing";
+    if (cat.includes("post office") || cat.includes("usps")) return "USPS/Post Office";
+
+    // Fallback to the original name if no match found, capitalized
+    return rawCat.charAt(0).toUpperCase() + rawCat.slice(1);
+}
+
+/**
+ * 4. INITIALIZATION & DATA LOADING
  */
 document.addEventListener("DOMContentLoaded", () => {
     updateNewspaperHeader();
     loadDirectory();
 });
 
-function updateNewspaperHeader() {
-    const now = new Date();
-    const dateOptions = { month: 'long', day: 'numeric', year: 'numeric' };
-    const dateString = now.toLocaleDateString('en-US', dateOptions);
-    const headerElement = document.getElementById('header-info');
-    if(headerElement) {
-        headerElement.innerText = `VOL. 1 — NO. ${now.getMonth() + 1} | ${dateString}`;
-    }
-}
-
-/**
- * 4. SMART IMAGE HELPER
- */
-function getSmartImage(id, bizName, isProfile = false) {
-    const placeholder = `https://via.placeholder.com/${isProfile ? '250' : '150'}?text=Logo+Pending`;
-    if (!id) return `<img src="${placeholder}" class="${isProfile ? 'profile-logo' : ''}">`;
-    
-    let fileName = id.trim().toLowerCase();
-    const primaryUrl = `${imageRepo}${fileName}.jpeg`;
-    
-    return `<img src="${primaryUrl}" class="${isProfile ? 'profile-logo' : ''}" 
-            onerror="this.onerror=null; this.src='${imageRepo}${fileName}.png'; 
-            this.onerror=function(){this.onerror=null; this.src='${imageRepo}${fileName}.jpg'; 
-            this.onerror=function(){this.src='${placeholder}'};};">`;
-}
-
-/**
- * 5. DATA LOADING ENGINE (WITH CACHE BUSTER)
- */
 async function loadDirectory() {
     const cacheBuster = new Date().getTime();
     const finalUrl = `${baseCsvUrl}&cachebuster=${cacheBuster}`;
@@ -78,11 +85,8 @@ async function loadDirectory() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-            // SYNC CHECK: Ensure headers match your sheet
-            // We trim headers to prevent hidden space errors
             masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
-            
-            generateCategoryDropdown(masterData);
+            generateCategoryDropdown();
 
             if (document.getElementById('directory-grid')) {
                 renderCards(masterData);
@@ -93,26 +97,21 @@ async function loadDirectory() {
     });
 }
 
-function generateCategoryDropdown(data) {
+function generateCategoryDropdown() {
     const catSelect = document.getElementById('cat-select');
     if (!catSelect) return;
 
-    // Pull unique categories, removing any "Searching" or empty strings
-    const categories = [...new Set(data.map(biz => (biz.Category || "Other").trim()))];
     catSelect.innerHTML = '<option value="All">📂 All Industries</option>';
-
-    categories.sort().forEach(cat => {
-        if (cat === "" || cat === "undefined") return;
+    Object.keys(catEmojis).sort().forEach(cat => {
         const option = document.createElement('option');
         option.value = cat;
-        const emoji = catEmojis[cat] || "📁"; 
-        option.textContent = `${emoji} ${cat}`;
+        option.textContent = `${catEmojis[cat]} ${cat}`;
         catSelect.appendChild(option);
     });
 }
 
 /**
- * 6. RENDER CARDS
+ * 5. RENDERING ENGINE
  */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
@@ -127,63 +126,44 @@ function renderCards(data) {
         return (a.Name || "").localeCompare(b.Name || "");
     }).map(biz => {
         const tier = (biz.Tier || biz.Teir || 'basic').toLowerCase();
-        const townName = (biz.Town || "Clay County").trim(); 
-        const townClass = townName.toLowerCase().replace(/\s+/g, '-'); 
-        const category = (biz.Category || "Other").trim(); 
-        const imageID = (biz['Image ID'] || "").trim();
+        const rawTown = biz.Town || biz.town || "Clay County";
+        const townClass = rawTown.toLowerCase().replace(/\s+/g, '-');
+        
+        // Use the Mapping Engine for Categories
+        const displayCategory = mapCategory(biz.Category || biz.category);
+        const emoji = catEmojis[displayCategory] || "📁";
+
+        const imageID = (biz['Image ID'] || biz['image id'] || "").trim();
 
         return `
             <div class="card ${tier}" ${tier === 'premium' ? `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID.toLowerCase())}'"` : ''}>
                 <div class="tier-badge">${tier}</div>
                 <div class="logo-box">${getSmartImage(imageID, biz.Name)}</div>
-                <div class="town-bar ${townClass}-bar">${townName}</div>
-                <h2 style="font-size: 1.3rem;">${biz.Name}</h2>
-                <div style="margin-top: auto; font-style: italic; font-size: 0.85rem; color: #444;">
-                    ${catEmojis[category] || "📁"} ${category}
+                <div class="town-bar ${townClass}-bar">${rawTown}</div>
+                <h2>${biz.Name}</h2>
+                <div style="margin-top: auto; font-style: italic; font-size: 0.9rem; color: #222; font-weight: bold;">
+                    ${emoji} ${displayCategory}
                 </div>
             </div>`;
     }).join('');
 }
 
 /**
- * 7. PROFILE LOAD
+ * 6. SMART IMAGE HELPER
  */
-function loadProfile(data) {
-    const params = new URLSearchParams(window.location.search);
-    const bizId = params.get('id');
-    const wrap = document.getElementById('profile-wrap');
-    if (!bizId || !wrap) return;
+function getSmartImage(id, bizName) {
+    const placeholder = `https://via.placeholder.com/150?text=Logo+Pending`;
+    if (!id) return `<img src="${placeholder}">`;
+    let fileName = id.trim().toLowerCase();
+    return `<img src="${imageRepo}${fileName}.jpeg" onerror="this.onerror=null; this.src='${imageRepo}${fileName}.png'; this.onerror=function(){this.src='${placeholder}'};">`;
+}
 
-    const biz = data.find(b => b['Image ID'] && b['Image ID'].trim().toLowerCase() === bizId.toLowerCase());
-    if (!biz) return;
-
-    const category = (biz.Category || "Other").trim();
-    const mapAddress = encodeURIComponent(`${biz.Address}, ${biz.Town}, IL`);
-
-    wrap.innerHTML = `
-        <div class="profile-container">
-            <a href="index.html" class="back-link">← BACK TO DIRECTORY</a>
-            <div class="profile-header">
-                <div class="profile-logo-box">${getSmartImage(biz['Image ID'], biz.Name, true)}</div>
-                <div>
-                    <h1>${biz.Name}</h1>
-                    <p>${catEmojis[category] || "📂"} ${category} | ${biz.Town}</p>
-                </div>
-            </div>
-            <div class="details-grid">
-                <div class="info-section">
-                    <h3>Contact</h3>
-                    <p>📞 ${biz.Phone}</p>
-                    <p>📍 ${biz.Address}</p>
-                    <p>⏰ ${biz['Business Hours'] || 'N/A'}</p>
-                    ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" class="action-btn">Website</a>` : ''}
-                </div>
-                <div class="info-section">
-                    <h3>Location</h3>
-                    <iframe width="100%" height="300" frameborder="0" src="https://maps.google.com/maps?q=${mapAddress}&t=&z=15&ie=UTF8&iwloc=&output=embed"></iframe>
-                </div>
-            </div>
-        </div>`;
+function updateNewspaperHeader() {
+    const now = new Date();
+    const headerElement = document.getElementById('header-info');
+    if(headerElement) {
+        headerElement.innerText = `VOL. 1 — NO. ${now.getMonth() + 1} | ${now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+    }
 }
 
 function applyFilters() {
@@ -191,8 +171,11 @@ function applyFilters() {
     const selectedCat = document.getElementById('cat-select').value;
 
     const filtered = masterData.filter(biz => {
-        const matchTown = (selectedTown === 'All' || (biz.Town || "").trim() === selectedTown);
-        const matchCat = (selectedCat === 'All' || (biz.Category || "").trim() === selectedCat);
+        const bizTown = (biz.Town || biz.town || "").trim();
+        const bizCat = mapCategory(biz.Category || biz.category);
+        
+        const matchTown = (selectedTown === 'All' || bizTown === selectedTown);
+        const matchCat = (selectedCat === 'All' || bizCat === selectedCat);
         return matchTown && matchCat;
     });
     renderCards(filtered);

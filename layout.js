@@ -1,12 +1,11 @@
 /**
- * LAYOUT.JS - THE "SUNDAY" FIX
- * Fixed: Image paths to GitHub Raw
- * Fixed: Mismatched Pop-out Data (Name-Link System)
- * Fixed: Tier-Pinning Logic
+ * LAYOUT.JS - FINAL PRODUCTION VERSION (COLOR SYNCED)
+ * Locked: Name-Match Pop-out System
+ * Locked: GitHub Raw Image Integration
+ * Locked: Tier-Priority Pinning
+ * Added: Town-Color Synced Modal Header
  */
 let masterData = [];
-
-// GitHub Configuration
 const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -21,7 +20,6 @@ async function loadDirectory() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-            // THE NORMALIZER: Fixes "Teir" typo and cleans "Searching..."
             masterData = results.data.map(row => {
                 let obj = {};
                 for (let key in row) {
@@ -42,7 +40,6 @@ function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    // PINNING LOGIC
     const tierPriority = { "premium": 1, "plus": 2, "basic": 3 };
 
     const sortedData = [...data].sort((a, b) => {
@@ -67,18 +64,15 @@ function renderCards(data) {
         let actionHint = "";
         let clickAction = "";
 
-        // 1. BASIC: Default Image Only
         if (tier === "basic") {
             imageHtml = `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">`;
         } 
-        // 2. PLUS & PREMIUM: Custom Images from GitHub Raw
         else {
             imageHtml = getSmartImage(biz.imageid);
             phoneHtml = `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>`;
             
             if (tier === "premium") {
                 actionHint = `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>`;
-                // THE DATA FIX: Pass the Name as a string. No more index confusion.
                 const safeName = biz.name.replace(/'/g, "\\'");
                 clickAction = `onclick="openFullModal('${safeName}')" style="cursor:pointer;"`;
             }
@@ -103,8 +97,10 @@ function renderCards(data) {
     }).join('');
 }
 
+/**
+ * FIXED POP-OUT LOGIC (COLOR SYNCED)
+ */
 function openFullModal(bizName) {
-    // Search the master list for the EXACT business name clicked
     const biz = masterData.find(b => b.name === bizName);
     if (!biz) return;
 
@@ -112,15 +108,20 @@ function openFullModal(bizName) {
     const content = document.getElementById('modal-body');
     if (!modal || !content) return;
 
+    // Logic to get the color class same as the main card
+    let town = (biz.town || "Clay County").trim().split(',')[0].replace(" IL", "").trim();
+    const townClass = town.toLowerCase().replace(/\s+/g, '-');
     const mapAddress = encodeURIComponent(`${biz.address}, ${biz.town}, IL`);
     
     content.innerHTML = `
         <div style="text-align:center;">
             <div style="height:120px; margin-bottom:10px;">${getSmartImage(biz.imageid)}</div>
             <h1 style="font-family:'Times New Roman', serif; margin:0;">${biz.name}</h1>
-            <p style="color:#666;">${biz.category} | ${biz.town}</p>
+            <p style="color:#666;">${biz.category} | ${town}</p>
         </div>
-        <hr style="margin:20px 0;">
+        
+        <div class="town-bar ${townClass}-bar" style="margin: 15px -30px; border-radius: 0;">${town}</div>
+
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:25px;">
             <div>
                 <h3>Business Details</h3>
@@ -147,7 +148,6 @@ function getSmartImage(id) {
     if (!id || id === "N/A" || id === "Searching...") return `<img src="${fallback}" style="max-height:100%; object-fit:contain;">`;
     
     let fileName = id.trim().toLowerCase();
-    // Tries JPEG first, then PNG
     return `<img src="${rawRepo}${fileName}.jpeg" 
                  style="max-height:100%; object-fit:contain;" 
                  onerror="this.onerror=null; this.src='${rawRepo}${fileName}.png'; 
@@ -171,4 +171,18 @@ function generateCategoryDropdown() {
         option.textContent = `${catEmojis[cat]} ${cat}`;
         catSelect.appendChild(option);
     });
+}
+
+function applyFilters() {
+    const selectedTown = document.getElementById('town-select').value;
+    const selectedCat = document.getElementById('cat-select').value;
+
+    const filtered = masterData.filter(biz => {
+        const bizTown = (biz.town || "").trim();
+        const bizCat = mapCategory(biz.category);
+        const matchTown = (selectedTown === 'All' || bizTown === selectedTown);
+        const matchCat = (selectedCat === 'All' || bizCat === selectedCat);
+        return matchTown && matchCat;
+    });
+    renderCards(filtered);
 }

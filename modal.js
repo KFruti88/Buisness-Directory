@@ -35,7 +35,7 @@ function openFullModal(bizName) {
             </div>
             <div>
                 <h3>Map Location</h3>
-                <iframe width="100%" height="250" frameborder="0" style="border:1px solid #ddd; border-radius:8px;" src="https://maps.google.com/maps?q=${mapAddress}&output=embed"></iframe>
+                <iframe width="100%" height="250" frameborder="0" style="border:1px solid #ddd; border-radius:8px;" src="https://maps.google.com/maps?q=${mapAddress}&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
             </div>
         </div>
         ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee;"><h3>Our Story</h3><p style="line-height:1.6; font-size:1.05rem;">${biz.bio}</p></div>` : ""}

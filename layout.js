@@ -48,15 +48,15 @@ function renderCards(data) {
         const displayCat = mapCategory(biz.category);
 
         // Image Fix: Forces Raw GitHub URL
-        let imageHtml = (tier === "basic") ? `<div style="width:100%; height:100%; background-color:#e0e0e0; border-bottom:1px solid #ccc;"></div>` : getSmartImage(biz.imageid);
+        let imageHtml = (tier === "basic") ? `<div style="width:100%; height:100%; background-color:#e0e0e0;"></div>` : getSmartImage(biz.imageid);
         
         // Box Size Fix: Hidden spacers keep boxes aligned at 460px
         let phoneHtml = (tier !== "basic") ? 
-            `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>` : 
-            `<p style="margin-top:5px; visibility:hidden; height:1.1rem;">Hidden</p>`;
+            `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem; height:1.1rem; line-height:1.1rem; overflow:hidden; white-space:nowrap;">📞 ${biz.phone || 'N/A'}</p>` : 
+            `<p style="margin-top:5px; visibility:hidden; height:1.1rem; line-height:1.1rem;">Hidden</p>`;
         let actionHint = (tier === "premium") ? 
-            `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>` : 
-            `<div style="margin-top:10px; visibility:hidden; height:1.2rem;">Hidden</div>`;
+            `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline; height:1.2rem; line-height:1.2rem; overflow:hidden;">Click for Details</div>` : 
+            `<div style="margin-top:10px; visibility:hidden; height:1.2rem; line-height:1.2rem;">Hidden</div>`;
         let clickAction = (tier === "premium") ? `onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')" style="cursor:pointer;"` : "";
 
         // Badges: Tier (Top Right) & Coupon (Top Left)
@@ -65,7 +65,7 @@ function renderCards(data) {
             `<img src="https://raw.githubusercontent.com/KFruti88/images/main/coupon.png" class="coupon-badge" alt="Coupon" onerror="this.style.display='none'">` : "";
 
         return `
-            <div class="card ${tier}" ${clickAction} style="width: 380px; height: 460px; margin: 10px auto; display: flex; flex-direction: column; position:relative; overflow:hidden; border: 1px solid #ddd; background:#fff;">
+            <div class="card ${tier}" ${clickAction} style="width: 380px; max-width: 100%; height: 460px; margin: 10px auto; display: flex; flex-direction: column; position:relative; overflow:hidden; border: 1px solid #ddd; background:#fff;">
                 ${tierBadge}${couponBadge}
                 <div class="logo-box" style="height: 160px; display: flex; align-items: center; justify-content: center; background:#f4f4f4; overflow:hidden;">${imageHtml}</div>
                 <div class="town-bar ${townClass}-bar">${town}</div>
@@ -81,7 +81,7 @@ function renderCards(data) {
 function getSmartImage(id) {
     const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
     if (!id || id === "N/A" || id === "Searching..." || id.trim() === "") return `<img src="${placeholderImg}" style="max-height:100%; max-width:100%; object-fit:contain;">`;
-    let fileName = encodeURIComponent(id.trim());
+    let fileName = encodeURIComponent(id.trim().toLowerCase());
     return `<img src="${rawRepo}${fileName}.jpeg" style="max-height:100%; max-width:100%; object-fit:contain;" onerror="this.onerror=null; this.src='${rawRepo}${fileName}.png'; this.onerror=function(){this.src='${placeholderImg}'};">`;
 }
 

@@ -11,42 +11,18 @@ const placeholderImg = "https://via.placeholder.com/150?text=Member";
  * 2. MASTER CATEGORY LIST & EMOJI SYNC
  */
 const catEmojis = {
-    "Agriculture": "🚜",
-    "Airport": "🚁",
-    "Automotive / Auto Sales": "🚗",
-    "Auto Parts": "⚙️",
-    "Auto Repair": "🔧",
-    "Bars/Saloon": "🍺",
-    "Beauty Salon / Barber": "💈💇",
-    "Carwash": "🧼",
-    "Church": "⛪",
-    "Community": "👥",
-    "Delivery": "🚚",
-    "Education & Health": "📚",
-    "Executive & Administrative": "🏛️",
-    "Financial Services": "💰",
-    "Flower Shop": "💐",
-    "Freight Trucking": "🚛",
-    "Gambling Industries": "🎰",
-    "Gas Station": "⛽",
-    "Government": "🏛️",
-    "Handmade Ceramics & Pottery": "🏺",
-    "Healthcare": "🏥",
-    "Insurance": "📄",
-    "Internet": "🌐",
-    "Legal Services": "⚖️",
-    "Libraries and Archives": "📚",
-    "Manufacturing": "🏗️",
-    "Medical": "🏥",
-    "Non-Profit": "📝",
-    "Professional Services": "💼",
-    "Utility/Gas": "🔥",
-    "Public Safety & Justice": "⚖️",
-    "Public Works & Infrastructure": "🏗️",
-    "Restaurants": "🍴",
-    "Storage": "📦",
-    "Stores": "🛍️",
-    "USPS/Post Office": "📬"
+    "Agriculture": "🚜", "Airport": "🚁", "Automotive / Auto Sales": "🚗",
+    "Auto Parts": "⚙️", "Auto Repair": "🔧", "Bars/Saloon": "🍺",
+    "Beauty Salon / Barber": "💈💇", "Carwash": "🧼", "Church": "⛪",
+    "Community": "👥", "Delivery": "🚚", "Education & Health": "📚",
+    "Executive & Administrative": "🏛️", "Financial Services": "💰",
+    "Flower Shop": "💐", "Freight Trucking": "🚛", "Gambling Industries": "🎰",
+    "Gas Station": "⛽", "Government": "🏛️", "Handmade Ceramics & Pottery": "🏺",
+    "Healthcare": "🏥", "Insurance": "📄", "Internet": "🌐", "Legal Services": "⚖️",
+    "Libraries and Archives": "📚", "Manufacturing": "🏗️", "Medical": "🏥",
+    "Non-Profit": "📝", "Professional Services": "💼", "Utility/Gas": "🔥",
+    "Public Safety & Justice": "⚖️", "Public Works & Infrastructure": "🏗️",
+    "Restaurants": "🍴", "Storage": "📦", "Stores": "🛍️", "USPS/Post Office": "📬"
 };
 
 /**
@@ -55,17 +31,15 @@ const catEmojis = {
 function mapCategory(raw) {
     if (!raw || raw === "Searching..." || raw === "N/A") return "Professional Services";
     const val = raw.toLowerCase().trim();
-
     if (val.includes("airport") || val.includes("hangar")) return "Airport";
     if (val.includes("car sales") || val.includes("automotive") || val.includes("dealership")) return "Automotive / Auto Sales";
     if (val.includes("barber") || val.includes("haircut") || val.includes("salon")) return "Beauty Salon / Barber";
     if (val.includes("city hall") || val.includes("court") || val.includes("government")) return "Government";
     if (val.includes("restaurant") || val.includes("bar") || val.includes("saloon")) return "Restaurants";
     if (val.includes("medical") || val.includes("healthcare")) return "Healthcare";
-    if (val.includes("factory") || val.includes("warehouse") || val.includes("delivery") || val.includes("manufacturing")) return "Manufacturing";
+    if (val.includes("factory") || val.includes("warehouse") || val.includes("manufacturing")) return "Manufacturing";
     if (val.includes("propane") || val.includes("gas") || val.includes("utility")) return "Utility/Gas";
     if (val.includes("legion") || val.includes("non-profit")) return "Non-Profit";
-    
     return raw; 
 }
 
@@ -85,10 +59,13 @@ async function loadDirectory() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
+            // THE FIX: This normalizes headers so "Tier", "Teir", or "tier " all become "tier"
             masterData = results.data.map(row => {
                 let obj = {};
                 for (let key in row) {
-                    let cleanKey = key.trim().replace(/\s+/g, '').toLowerCase();
+                    let cleanKey = key.trim().toLowerCase();
+                    // Handle common misspelling specifically
+                    if (cleanKey === "teir") cleanKey = "tier";
                     obj[cleanKey] = row[key];
                 }
                 return obj;
@@ -101,13 +78,14 @@ async function loadDirectory() {
 }
 
 /**
- * 5. TIER-BASED RENDERING ENGINE (FIXED PLUS TIER)
+ * 5. TIER-BASED RENDERING ENGINE
  */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
     grid.innerHTML = data.map((biz, index) => {
+        // Now using normalized key 'tier'
         const tier = (biz.tier || 'basic').toLowerCase();
         let town = (biz.town || "Clay County").trim();
         town = town.split(',')[0].replace(" IL", "").trim();
@@ -116,18 +94,18 @@ function renderCards(data) {
         const displayCat = mapCategory(biz.category);
         const hasCoupon = biz.coupon && biz.coupon !== "N/A" && biz.coupon !== "";
 
-        // TIER VISUAL LOGIC
         let imageHtml = `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">`;
         let phoneHtml = "";
         let premiumHint = "";
         let clickAction = "";
 
-        // FIXED: Plus now gets Image AND Phone on main screen
+        // Plus and Premium get Images and Phone Numbers
         if (tier === "plus" || tier === "premium") {
             imageHtml = getSmartImage(biz.imageid, biz.name);
             phoneHtml = `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>`;
         }
 
+        // Premium gets the Pop-out link
         if (tier === "premium") {
             premiumHint = `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>`;
             clickAction = `onclick="openPremiumModal(${index})" style="cursor:pointer;"`;
@@ -158,7 +136,7 @@ function renderCards(data) {
 }
 
 /**
- * 6. PREMIUM POP-OUT MODAL
+ * 6. POP-OUT MODAL LOGIC
  */
 function openPremiumModal(index) {
     const biz = masterData[index];

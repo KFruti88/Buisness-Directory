@@ -37,7 +37,7 @@ function mapCategory(raw) {
     if (val.includes("city hall") || val.includes("court") || val.includes("government")) return "Government";
     if (val.includes("restaurant") || val.includes("bar") || val.includes("saloon")) return "Restaurants";
     if (val.includes("medical") || val.includes("healthcare")) return "Healthcare";
-    if (val.includes("factory") || val.includes("warehouse") || val.includes("delivery") || val.includes("manufacturing")) return "Manufacturing";
+    if (val.includes("factory") || val.includes("warehouse") || val.includes("manufacturing")) return "Manufacturing";
     if (val.includes("propane") || val.includes("gas") || val.includes("utility")) return "Utility/Gas";
     if (val.includes("legion") || val.includes("non-profit")) return "Non-Profit";
     return raw; 
@@ -59,7 +59,7 @@ async function loadDirectory() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-            // FIX: Normalizes headers so the code finds 'tier' even if capitalized or misspelled
+            // Header Normalizer: Ensures 'tier' is found even if spelled 'Teir' or capitalized
             masterData = results.data.map(row => {
                 let obj = {};
                 for (let key in row) {
@@ -77,13 +77,28 @@ async function loadDirectory() {
 }
 
 /**
- * 5. TIER-BASED RENDERING ENGINE (LOCKED LAYOUT)
+ * 5. TIER-BASED RENDERING ENGINE (PINNED TIERS)
  */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    grid.innerHTML = data.map((biz, index) => {
+    // PINNING LOGIC: Premium (1), Plus (2), Basic (3)
+    const tierPriority = { "premium": 1, "plus": 2, "basic": 3 };
+
+    const sortedData = [...data].sort((a, b) => {
+        const tierA = (a.tier || 'basic').toLowerCase();
+        const tierB = (b.tier || 'basic').toLowerCase();
+        
+        // First sort by Tier Priority
+        if (tierPriority[tierA] !== tierPriority[tierB]) {
+            return tierPriority[tierA] - tierPriority[tierB];
+        }
+        // Then sort alphabetically by Business Name
+        return (a.name || "").localeCompare(b.name || "");
+    });
+
+    grid.innerHTML = sortedData.map((biz, index) => {
         const tier = (biz.tier || 'basic').toLowerCase();
         let town = (biz.town || "Clay County").trim();
         town = town.split(',')[0].replace(" IL", "").trim();
@@ -92,19 +107,16 @@ function renderCards(data) {
         const displayCat = mapCategory(biz.category);
         const hasCoupon = biz.coupon && biz.coupon !== "N/A" && biz.coupon !== "";
 
-        // TIER LAYOUT RULES
         let imageHtml = `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">`;
         let phoneHtml = "";
         let premiumHint = "";
         let clickAction = "";
 
-        // Plus and Premium get real Image and Phone Number on main screen
         if (tier === "plus" || tier === "premium") {
             imageHtml = getSmartImage(biz.imageid, biz.name);
             phoneHtml = `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>`;
         }
 
-        // Premium only gets the Pop-out Details
         if (tier === "premium") {
             premiumHint = `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>`;
             clickAction = `onclick="openPremiumModal(${index})" style="cursor:pointer;"`;
@@ -138,7 +150,7 @@ function renderCards(data) {
  * 6. POP-OUT MODAL LOGIC (PREMIUM ONLY)
  */
 function openPremiumModal(index) {
-    const biz = masterData[index];
+    const biz = masterData[index]; // Use masterData to ensure correct indexing
     const modal = document.getElementById('premium-modal');
     const content = document.getElementById('modal-body');
     if (!modal || !content) return;

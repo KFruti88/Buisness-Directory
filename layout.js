@@ -1,9 +1,12 @@
-/** * LAYOUT.JS - THE GRID ENGINE */
+/**
+ * LAYOUT.JS - BOSS-READY FINAL VERSION
+ * Equal Box Heights + GitHub Raw Image Fix
+ */
 var masterData = []; 
 
 document.addEventListener("DOMContentLoaded", () => {
     loadDirectory();
-    setupModalClose();
+    if (typeof setupModalClose === "function") setupModalClose();
 });
 
 async function loadDirectory() {
@@ -20,7 +23,7 @@ async function loadDirectory() {
                 }
                 return obj;
             }).filter(row => row.name && row.name.trim() !== "" && row.name !== "Searching...");
-            generateCategoryDropdown();
+            if (typeof generateCategoryDropdown === "function") generateCategoryDropdown();
             renderCards(masterData);
         }
     });
@@ -44,14 +47,21 @@ function renderCards(data) {
         const townClass = town.toLowerCase().replace(/\s+/g, '-');
         const displayCat = mapCategory(biz.category);
 
-        let imageHtml = (tier === "basic") ? `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">` : getSmartImage(biz.imageid);
-        let phoneHtml = (tier !== "basic") ? `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>` : `<p style="visibility:hidden; height:1.1rem;">Hidden</p>`;
-        let actionHint = (tier === "premium") ? `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>` : `<div style="visibility:hidden; height:1.2rem;">Hidden</div>`;
+        // Image Fix: Forces Raw GitHub URL
+        let imageHtml = (tier === "basic") ? `<img src="${placeholderImg}" style="height:150px; max-width:100%; object-fit:contain;">` : getSmartImage(biz.imageid);
+        
+        // Box Size Fix: Hidden spacers keep boxes aligned at 460px
+        let phoneHtml = (tier !== "basic") ? 
+            `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>` : 
+            `<p style="margin-top:5px; visibility:hidden; height:1.1rem;">Hidden</p>`;
+        let actionHint = (tier === "premium") ? 
+            `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>` : 
+            `<div style="margin-top:10px; visibility:hidden; height:1.2rem;">Hidden</div>`;
         let clickAction = (tier === "premium") ? `onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')" style="cursor:pointer;"` : "";
 
         return `
-            <div class="card ${tier}" ${clickAction} style="width: 380px; height: 460px; margin: 10px auto; display: flex; flex-direction: column; position:relative; overflow:hidden; border: 1px solid #ddd; background:#fff;">
-                <div class="logo-box" style="height: 160px; display: flex; align-items: center; justify-content: center; background:#f4f4f4;">${imageHtml}</div>
+            <div class="card ${tier}" ${clickAction} style="width: 380px; max-width: 100%; height: 460px; margin: 10px auto; display: flex; flex-direction: column; position:relative; overflow:hidden; border: 1px solid #ddd; background:#fff;">
+                <div class="logo-box" style="height: 160px; display: flex; align-items: center; justify-content: center; background:#f4f4f4; overflow:hidden;">${imageHtml}</div>
                 <div class="town-bar ${townClass}-bar">${town}</div>
                 <div style="flex-grow: 1; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align:center;">
                     <h2 style="margin:0; font-size:1.4rem; height: 3em; overflow: hidden; display: flex; align-items: center; justify-content: center;">${biz.name}</h2>
@@ -63,9 +73,10 @@ function renderCards(data) {
 }
 
 function getSmartImage(id) {
-    if (!id || id === "N/A" || id === "Searching..." || id.trim() === "") return `<img src="${placeholderImg}" style="max-height:100%; object-fit:contain;">`;
-    let fileName = id.trim().toLowerCase();
-    return `<img src="${rawRepo}${fileName}.jpeg" style="max-height:100%; object-fit:contain;" onerror="this.onerror=null; this.src='${rawRepo}${fileName}.png'; this.onerror=function(){this.src='${placeholderImg}'};">`;
+    const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
+    if (!id || id === "N/A" || id === "Searching..." || id.trim() === "") return `<img src="${placeholderImg}" style="max-height:100%; max-width:100%; object-fit:contain;">`;
+    let fileName = encodeURIComponent(id.trim().toLowerCase());
+    return `<img src="${rawRepo}${fileName}.jpeg" style="max-height:100%; max-width:100%; object-fit:contain;" onerror="this.onerror=null; this.src='${rawRepo}${fileName}.png'; this.onerror=function(){this.src='${placeholderImg}'};">`;
 }
 
 function generateCategoryDropdown() {

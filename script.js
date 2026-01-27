@@ -3,12 +3,11 @@
  */
 let masterData = []; 
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
-const baseCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
+const baseCsvUrl = "https://docs.google.com/spreadsheets/d/e/PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?output=csv";
 const couponImg = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
 /**
- * 2. CATEGORY DISPLAY SETTINGS
- * This is the master list of what people will actually see on the cards.
+ * 2. MASTER CATEGORY LIST (With Emoji Mapping)
  */
 const catEmojis = {
     "Agriculture": "🚜",
@@ -48,28 +47,25 @@ const catEmojis = {
 };
 
 /**
- * 3. CATEGORY MAPPING ENGINE
- * This merges your various spreadsheet categories into your display list.
+ * 3. CATEGORY MAPPING LOGIC
+ * Merges your raw sheet data into the categories above.
  */
-function mapCategory(rawCat) {
-    if (!rawCat) return "Professional Services";
-    const cat = rawCat.trim().toLowerCase();
-
-    if (cat.includes("city hall") || cat.includes("court") || cat.includes("government")) return "Government";
-    if (cat.includes("restaurant") || cat.includes("bar") || cat.includes("saloon") || cat.includes("grill")) return "Restaurants";
-    if (cat.includes("medical") || cat.includes("healthcare") || cat.includes("hospital") || cat.includes("clinic")) return "Healthcare";
-    if (cat.includes("flower") || cat.includes("pottery") || cat.includes("art") || cat.includes("boutique")) return "Stores";
-    if (cat.includes("carwash") || cat.includes("laundry") || cat.includes("laundromat")) return "Carwash";
-    if (cat.includes("legion") || cat.includes("charity") || cat.includes("foundation") || cat.includes("non-profit")) return "Non-Profit";
-    if (cat.includes("factory") || cat.includes("warehouse") || cat.includes("delivery") || cat.includes("manufacturing")) return "Manufacturing";
-    if (cat.includes("post office") || cat.includes("usps")) return "USPS/Post Office";
-
-    // Fallback to the original name if no match found, capitalized
-    return rawCat.charAt(0).toUpperCase() + rawCat.slice(1);
+function mapCategory(raw) {
+    if (!raw) return "Professional Services";
+    const val = raw.toLowerCase();
+    if (val.includes("city hall") || val.includes("court") || val.includes("government")) return "Government";
+    if (val.includes("restaurant") || val.includes("bar") || val.includes("saloon") || val.includes("grill")) return "Restaurants";
+    if (val.includes("medical") || val.includes("healthcare") || val.includes("hospital") || val.includes("clinic")) return "Healthcare";
+    if (val.includes("flower") || val.includes("pottery") || val.includes("art") || val.includes("boutique")) return "Stores";
+    if (val.includes("carwash") || val.includes("laundry") || val.includes("laundromat")) return "Carwash";
+    if (val.includes("legion") || val.includes("charity") || val.includes("foundation") || val.includes("non-profit")) return "Non-Profit";
+    if (val.includes("factory") || val.includes("warehouse") || val.includes("delivery") || val.includes("manufacturing")) return "Manufacturing";
+    if (val.includes("post office") || val.includes("usps")) return "USPS/Post Office";
+    return raw; 
 }
 
 /**
- * 4. INITIALIZATION & DATA LOADING
+ * 4. INITIALIZATION
  */
 document.addEventListener("DOMContentLoaded", () => {
     updateNewspaperHeader();
@@ -86,12 +82,12 @@ async function loadDirectory() {
         skipEmptyLines: true,
         complete: (results) => {
             masterData = results.data.filter(row => row.Name && row.Name.trim() !== "");
+            
+            // Re-build dropdowns immediately once data arrives
             generateCategoryDropdown();
 
             if (document.getElementById('directory-grid')) {
                 renderCards(masterData);
-            } else if (document.getElementById('profile-wrap')) {
-                loadProfile(masterData);
             }
         }
     });
@@ -101,6 +97,7 @@ function generateCategoryDropdown() {
     const catSelect = document.getElementById('cat-select');
     if (!catSelect) return;
 
+    // Clear "Searching..." and build from your static catEmojis list
     catSelect.innerHTML = '<option value="All">📂 All Industries</option>';
     Object.keys(catEmojis).sort().forEach(cat => {
         const option = document.createElement('option');
@@ -111,7 +108,7 @@ function generateCategoryDropdown() {
 }
 
 /**
- * 5. RENDERING ENGINE
+ * 5. RENDERING THE BUSINESS CARDS
  */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
@@ -126,31 +123,47 @@ function renderCards(data) {
         return (a.Name || "").localeCompare(b.Name || "");
     }).map(biz => {
         const tier = (biz.Tier || biz.Teir || 'basic').toLowerCase();
-        const rawTown = biz.Town || biz.town || "Clay County";
-        const townClass = rawTown.toLowerCase().replace(/\s+/g, '-');
-        
-        // Use the Mapping Engine for Categories
-        const displayCategory = mapCategory(biz.Category || biz.category);
-        const emoji = catEmojis[displayCategory] || "📁";
-
-        const imageID = (biz['Image ID'] || biz['image id'] || "").trim();
+        const town = biz.Town || biz.town || "Clay County";
+        const townClass = town.toLowerCase().replace(/\s+/g, '-');
+        const displayCat = mapCategory(biz.Category || biz.category);
+        const emoji = catEmojis[displayCat] || "📁";
+        const imageID = (biz['Image ID'] || "").trim();
 
         return `
             <div class="card ${tier}" ${tier === 'premium' ? `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID.toLowerCase())}'"` : ''}>
                 <div class="tier-badge">${tier}</div>
                 <div class="logo-box">${getSmartImage(imageID, biz.Name)}</div>
-                <div class="town-bar ${townClass}-bar">${rawTown}</div>
+                <div class="town-bar ${townClass}-bar">${town}</div>
                 <h2>${biz.Name}</h2>
                 <div style="margin-top: auto; font-style: italic; font-size: 0.9rem; color: #222; font-weight: bold;">
-                    ${emoji} ${displayCategory}
+                    ${emoji} ${displayCat}
                 </div>
             </div>`;
     }).join('');
 }
 
 /**
- * 6. SMART IMAGE HELPER
+ * 6. UTILITIES (Filtering & Header)
  */
+function applyFilters() {
+    const selectedTown = document.getElementById('town-select').value;
+    const selectedCat = document.getElementById('cat-select').value;
+    const searchVal = document.getElementById('search-bar') ? document.getElementById('search-bar').value.toLowerCase() : "";
+
+    const filtered = masterData.filter(biz => {
+        const bizTown = (biz.Town || biz.town || "").trim();
+        const bizCat = mapCategory(biz.Category || biz.category);
+        const bizName = (biz.Name || "").toLowerCase();
+
+        const matchTown = (selectedTown === 'All' || bizTown === selectedTown);
+        const matchCat = (selectedCat === 'All' || bizCat === selectedCat);
+        const matchSearch = bizName.includes(searchVal);
+
+        return matchTown && matchCat && matchSearch;
+    });
+    renderCards(filtered);
+}
+
 function getSmartImage(id, bizName) {
     const placeholder = `https://via.placeholder.com/150?text=Logo+Pending`;
     if (!id) return `<img src="${placeholder}">`;
@@ -164,19 +177,4 @@ function updateNewspaperHeader() {
     if(headerElement) {
         headerElement.innerText = `VOL. 1 — NO. ${now.getMonth() + 1} | ${now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
     }
-}
-
-function applyFilters() {
-    const selectedTown = document.getElementById('town-select').value;
-    const selectedCat = document.getElementById('cat-select').value;
-
-    const filtered = masterData.filter(biz => {
-        const bizTown = (biz.Town || biz.town || "").trim();
-        const bizCat = mapCategory(biz.Category || biz.category);
-        
-        const matchTown = (selectedTown === 'All' || bizTown === selectedTown);
-        const matchCat = (selectedCat === 'All' || bizCat === selectedCat);
-        return matchTown && matchCat;
-    });
-    renderCards(filtered);
 }

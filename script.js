@@ -23,7 +23,7 @@ const catEmojis = {
 };
 
 /**
- * 3. CATEGORY MAPPING
+ * 3. CATEGORY MAPPING LOGIC
  */
 function mapCategory(raw) {
     if (!raw || raw === "Searching..." || raw === "N/A") return "Professional Services";
@@ -45,14 +45,14 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function loadDirectory() {
-    const cacheBuster = new Date().getTime(); // Forced cache clean
+    const cacheBuster = new Date().getTime(); // Forces fresh data from Google
     
     Papa.parse(`${baseCsvUrl}&cb=${cacheBuster}`, {
         download: true,
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-            // Header Normalization Engine
+            // Normalizes headers to lowercase/no spaces to avoid formula glitches
             masterData = results.data.map(row => {
                 let obj = {};
                 for (let key in row) {
@@ -68,7 +68,7 @@ async function loadDirectory() {
 }
 
 /**
- * 5. RENDERING ENGINE (Includes 90% Width & Height Logic)
+ * 5. RENDERING ENGINE (Mobile Responsive & Size Locked)
  */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
@@ -76,8 +76,13 @@ function renderCards(data) {
 
     grid.innerHTML = data.map(biz => {
         const tier = (biz.tier || biz.teir || 'basic').toLowerCase();
+        
+        // Extract Town Name from the address or the town column
         let townName = (biz.town || "").trim();
         if (townName === "" || townName === "Searching...") townName = "Clay County";
+        
+        // Remove " IL" or Zip if it snuck into the Town column from your formula
+        townName = townName.split(',')[0].replace(" IL", "").trim();
         
         const townClass = townName.toLowerCase().replace(/\s+/g, '-');
         const displayCat = mapCategory(biz.category || "");
@@ -85,24 +90,22 @@ function renderCards(data) {
 
         return `
             <div class="card ${tier}" 
-                 style="width: 95%; max-width: 400px; height: 420px; margin: 10px auto; display: flex; flex-direction: column;"
+                 style="width: 95%; max-width: 380px; height: 420px; margin: 10px auto; display: flex; flex-direction: column;"
                  ${tier === 'premium' ? `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID.toLowerCase())}'"` : ''}>
                 
-                <div class="tier-badge" style="font-size: 0.7rem;">${tier}</div>
+                <div class="tier-badge">${tier}</div>
                 
                 <div class="logo-box" style="height: 150px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
                     ${getSmartImage(imageID, biz.name)}
                 </div>
 
-                <div class="town-bar ${townClass}-bar" style="width: 100%; text-align: center; font-weight: bold; padding: 10px 0;">
-                    ${townName}
-                </div>
+                <div class="town-bar ${townClass}-bar">${townName}</div>
 
-                <h2 style="font-size: 1.4rem; flex-grow: 1; display: flex; align-items: center; justify-content: center; text-align: center; margin: 10px 0;">
+                <h2 style="font-size: 1.3rem; flex-grow: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 10px;">
                     ${biz.name}
                 </h2>
 
-                <div class="category-footer" style="margin-top: auto; padding-bottom: 15px; font-weight: bold; font-style: italic; font-size: 0.9rem;">
+                <div class="category-footer" style="padding-bottom: 15px; font-weight: bold; font-style: italic; font-size: 0.85rem;">
                     ${catEmojis[displayCat] || "📁"} ${displayCat}
                 </div>
             </div>`;
@@ -111,10 +114,10 @@ function renderCards(data) {
 
 function getSmartImage(id, bizName) {
     const placeholder = `https://via.placeholder.com/150?text=Logo+Pending`;
-    if (!id || id === "N/A" || id === "Searching...") return `<img src="${placeholder}" style="max-height: 100%; max-width: 100%; object-fit: contain;">`;
+    if (!id || id === "N/A" || id === "Searching...") return `<img src="${placeholder}" style="max-height: 100%; object-fit: contain;">`;
     let fileName = id.trim().toLowerCase();
     return `<img src="${imageRepo}${fileName}.jpeg" 
-                 style="max-height: 100%; max-width: 100%; object-fit: contain;"
+                 style="max-height: 100%; object-fit: contain;"
                  onerror="this.onerror=null; this.src='${imageRepo}${fileName}.png'; 
                  this.onerror=function(){this.src='${placeholder}'};">`;
 }

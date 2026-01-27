@@ -1,21 +1,17 @@
 /**
- * LAYOUT.JS - FINAL BOX ALIGNMENT FIX
+ * LAYOUT.JS - THE GRID ENGINE
  */
 var masterData = []; 
 
 document.addEventListener("DOMContentLoaded", () => {
     loadDirectory();
-    if (typeof setupModalClose === "function") {
-        setupModalClose();
-    }
+    setupModalClose();
 });
 
 async function loadDirectory() {
     const cacheBuster = new Date().getTime();
     Papa.parse(`${baseCsvUrl}&cb=${cacheBuster}`, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
+        download: true, header: true, skipEmptyLines: true,
         complete: (results) => {
             masterData = results.data.map(row => {
                 let obj = {};
@@ -51,45 +47,33 @@ function renderCards(data) {
         const townClass = town.toLowerCase().replace(/\s+/g, '-');
         const displayCat = mapCategory(biz.category);
 
-        let imageHtml = (tier === "basic") ? 
-            `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">` : 
-            getSmartImage(biz.imageid);
+        let imageHtml = (tier === "basic") ? `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">` : getSmartImage(biz.imageid);
         
-        // --- THE ALIGNMENT FIX ---
-        // We wrap the phone and hint in a fixed-height div (80px). 
-        // This ensures the box doesn't grow or shrink if a phone number or hint is missing.
-        
+        // SUNDAY BOX FIX: Consistent spacing ensures equal card heights
         let phoneHtml = (tier === "plus" || tier === "premium") ? 
-            `<p style="font-weight:bold; margin: 5px 0 0 0; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>` : 
-            `<p style="margin: 5px 0 0 0; visibility:hidden; height:1.1rem;">Hidden</p>`;
+            `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>` : 
+            `<p style="margin-top:5px; visibility:hidden; height:1.1rem;">Hidden</p>`;
             
         let actionHint = (tier === "premium") ? 
-            `<div style="color:#0c30f0; font-weight:bold; margin-top:8px; text-decoration:underline; font-size:0.9rem;">Click for Details</div>` : 
-            `<div style="margin-top:8px; visibility:hidden; height:1rem;">Hidden</div>`;
+            `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>` : 
+            `<div style="margin-top:10px; visibility:hidden; height:1.2rem;">Hidden</div>`;
 
         let clickAction = (tier === "premium") ? 
             `onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')" style="cursor:pointer;"` : "";
 
         return `
-            <div class="card ${tier}" ${clickAction} style="width: 95%; max-width: 380px; height: 460px; margin: 10px auto; display: flex; flex-direction: column; position:relative; overflow:hidden; border: 1px solid #ddd; background:#fff; box-shadow: 2px 2px 8px rgba(0,0,0,0.1);">
-                <div class="tier-badge" style="position:absolute; top:0; left:0; background:#eee; padding:2px 8px; font-size:10px; text-transform:uppercase; z-index:10;">${tier}</div>
-                
-                <div class="logo-box" style="height: 160px; min-height: 160px; display: flex; align-items: center; justify-content: center; background:#f4f4f4;">
+            <div class="card ${tier}" ${clickAction} style="width: 380px; height: 460px; margin: 10px auto; display: flex; flex-direction: column; position:relative; overflow:hidden; border: 1px solid #ddd; background:#fff;">
+                <div class="tier-badge" style="position:absolute; top:0; left:0; background:#eee; padding:2px 8px; font-size:10px; text-transform:uppercase;">${tier}</div>
+                <div class="logo-box" style="height: 160px; display: flex; align-items: center; justify-content: center; background:#f4f4f4;">
                     ${imageHtml}
                 </div>
-
-                <div class="town-bar ${townClass}-bar" style="height: 30px; line-height: 30px; text-align: center; font-weight: bold; color: white;">${town}</div>
-
-                <div style="flex-grow: 1; padding: 15px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align:center;">
-                    <h2 style="margin:0; font-size:1.3rem; line-height: 1.2; color:#222; height: 3.2em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">${biz.name}</h2>
-                    
-                    <div style="height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                        ${phoneHtml}
-                        ${actionHint}
-                    </div>
+                <div class="town-bar ${townClass}-bar">${town}</div>
+                <div style="flex-grow: 1; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align:center;">
+                    <h2 style="margin:0; font-size:1.4rem; height: 3em; overflow: hidden; display: flex; align-items: center;">${biz.name}</h2>
+                    ${phoneHtml}
+                    ${actionHint}
                 </div>
-
-                <div class="category-footer" style="height: 40px; line-height: 40px; border-top: 1px solid #eee; font-weight:bold; font-style:italic; font-size:0.85rem; text-align:center; background: #fafafa;">
+                <div class="category-footer" style="padding-bottom:15px; font-weight:bold; font-style:italic; font-size:0.85rem; text-align:center;">
                     ${catEmojis[displayCat] || "📁"} ${displayCat}
                 </div>
             </div>`;
@@ -118,7 +102,7 @@ function applyFilters() {
     const selectedTown = document.getElementById('town-select').value;
     const selectedCat = document.getElementById('cat-select').value;
     const filtered = masterData.filter(biz => {
-        const matchTown = (selectedTown === 'All' || (biz.town && biz.town.includes(selectedTown)));
+        const matchTown = (selectedTown === 'All' || biz.town.includes(selectedTown));
         const matchCat = (selectedCat === 'All' || mapCategory(biz.category) === selectedCat);
         return matchTown && matchCat;
     });

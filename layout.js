@@ -59,8 +59,14 @@ function renderCards(data) {
             `<div style="margin-top:10px; visibility:hidden; height:1.2rem;">Hidden</div>`;
         let clickAction = (tier === "premium") ? `onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')" style="cursor:pointer;"` : "";
 
+        // Badges: Tier (Top Right) & Coupon (Top Left)
+        let tierBadge = `<div class="tier-badge">${tier.toUpperCase()}</div>`;
+        let couponBadge = (biz.coupon && biz.coupon.toLowerCase() === "yes") ? 
+            `<img src="https://raw.githubusercontent.com/KFruti88/images/main/coupon.png" class="coupon-badge" alt="Coupon" onerror="this.style.display='none'">` : "";
+
         return `
             <div class="card ${tier}" ${clickAction} style="width: 380px; max-width: 100%; height: 460px; margin: 10px auto; display: flex; flex-direction: column; position:relative; overflow:hidden; border: 1px solid #ddd; background:#fff;">
+                ${tierBadge}${couponBadge}
                 <div class="logo-box" style="height: 160px; display: flex; align-items: center; justify-content: center; background:#f4f4f4; overflow:hidden;">${imageHtml}</div>
                 <div class="town-bar ${townClass}-bar">${town}</div>
                 <div style="flex-grow: 1; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align:center;">
@@ -75,7 +81,7 @@ function renderCards(data) {
 function getSmartImage(id) {
     const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
     if (!id || id === "N/A" || id === "Searching..." || id.trim() === "") return `<img src="${placeholderImg}" style="max-height:100%; max-width:100%; object-fit:contain;">`;
-    let fileName = encodeURIComponent(id.trim());
+    let fileName = encodeURIComponent(id.trim().toLowerCase());
     return `<img src="${rawRepo}${fileName}.jpeg" style="max-height:100%; max-width:100%; object-fit:contain;" onerror="this.onerror=null; this.src='${rawRepo}${fileName}.png'; this.onerror=function(){this.src='${placeholderImg}'};">`;
 }
 

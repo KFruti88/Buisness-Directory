@@ -8,29 +8,75 @@ const couponImg = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon
 const placeholderImg = "https://via.placeholder.com/150?text=Member";
 
 /**
- * 2. MASTER CATEGORY LIST
+ * 2. MASTER CATEGORY LIST & EMOJI SYNC
  */
 const catEmojis = {
-    "Agriculture": "🚜", "Auto Parts": "⚙️", "Auto Repair": "🔧", "Bars/Saloon": "🍺",
-    "Beauty Salon": "💇", "Carwash": "🧼", "Church": "⛪", "Community": "👥",
-    "Delivery": "🚚", "Education & Health": "📚", "Executive & Administrative": "🏛️",
-    "Financial Services": "💰", "Flower Shop": "💐", "Freight Trucking": "🚛",
-    "Gambiling Industries": "🎰", "Gas Station": "⛽", "Government": "🏛️",
-    "Handmade Ceramics & Pottery": "🏺", "Healthcare": "🏥", "Insurance": "📄",
-    "Internet": "🌐", "Legal Services": "⚖️", "Libraries and Archives": "📚",
-    "Manufacturing": "🏗️", "Medical": "🏥", "Professional Services": "💼",
-    "Utility/Gas": "🔥", "Public Safety & Justice": "⚖️", "Public Works & Infrastructure": "🏗️",
-    "Restaurants": "🍴", "Storage": "📦", "Stores": "🛍️", "USPS/Post Office": "📬",
-    "Non-Profit": "📝"
+    "Agriculture": "🚜",
+    "Airport": "🚁",
+    "Automotive / Auto Sales": "🚗",
+    "Auto Parts": "⚙️",
+    "Auto Repair": "🔧",
+    "Bars/Saloon": "🍺",
+    "Beauty Salon / Barber": "💈💇",
+    "Carwash": "🧼",
+    "Church": "⛪",
+    "Community": "👥",
+    "Delivery": "🚚",
+    "Education & Health": "📚",
+    "Executive & Administrative": "🏛️",
+    "Financial Services": "💰",
+    "Flower Shop": "💐",
+    "Freight Trucking": "🚛",
+    "Gambling Industries": "🎰",
+    "Gas Station": "⛽",
+    "Government": "🏛️",
+    "Handmade Ceramics & Pottery": "🏺",
+    "Healthcare": "🏥",
+    "Insurance": "📄",
+    "Internet": "🌐",
+    "Legal Services": "⚖️",
+    "Libraries and Archives": "📚",
+    "Manufacturing": "🏗️",
+    "Medical": "🏥",
+    "Non-Profit": "📝",
+    "Professional Services": "💼",
+    "Utility/Gas": "🔥",
+    "Public Safety & Justice": "⚖️",
+    "Public Works & Infrastructure": "🏗️",
+    "Restaurants": "🍴",
+    "Storage": "📦",
+    "Stores": "🛍️",
+    "USPS/Post Office": "📬"
 };
 
 /**
- * 3. INITIALIZATION
+ * 3. CATEGORY MAPPING LOGIC
+ * Groups specific keywords into your display categories.
+ */
+function mapCategory(raw) {
+    if (!raw || raw === "Searching..." || raw === "N/A") return "Professional Services";
+    const val = raw.toLowerCase().trim();
+
+    if (val.includes("airport") || val.includes("hangar")) return "Airport";
+    if (val.includes("car sales") || val.includes("automotive") || val.includes("dealership")) return "Automotive / Auto Sales";
+    if (val.includes("barber") || val.includes("haircut") || val.includes("salon")) return "Beauty Salon / Barber";
+    if (val.includes("city hall") || val.includes("court") || val.includes("government")) return "Government";
+    if (val.includes("restaurant") || val.includes("bar") || val.includes("saloon")) return "Restaurants";
+    if (val.includes("medical") || val.includes("healthcare")) return "Healthcare";
+    if (val.includes("factory") || val.includes("warehouse") || val.includes("manufacturing")) return "Manufacturing";
+    if (val.includes("propane") || val.includes("gas") || val.includes("utility")) return "Utility/Gas";
+    if (val.includes("legion") || val.includes("non-profit")) return "Non-Profit";
+    
+    return raw; 
+}
+
+/**
+ * 4. INITIALIZATION & DATA LOADING
  */
 document.addEventListener("DOMContentLoaded", () => {
     updateNewspaperHeader();
     loadDirectory();
-    setupModalClose(); // Listener for the pop-out close button
+    setupModalClose();
 });
 
 async function loadDirectory() {
@@ -40,6 +86,7 @@ async function loadDirectory() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
+            // Clean up headers from ARRAYFORMULA glitches
             masterData = results.data.map(row => {
                 let obj = {};
                 for (let key in row) {
@@ -47,7 +94,7 @@ async function loadDirectory() {
                     obj[cleanKey] = row[key];
                 }
                 return obj;
-            }).filter(row => row.name && row.name.trim() !== "");
+            }).filter(row => row.name && row.name.trim() !== "" && row.name !== "Searching...");
 
             generateCategoryDropdown();
             renderCards(masterData);
@@ -56,7 +103,7 @@ async function loadDirectory() {
 }
 
 /**
- * 4. RENDERING ENGINE (TIER-BASED LOGIC)
+ * 5. TIER-BASED RENDERING ENGINE
  */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
@@ -64,49 +111,47 @@ function renderCards(data) {
 
     grid.innerHTML = data.map((biz, index) => {
         const tier = (biz.tier || 'basic').toLowerCase();
-        const town = (biz.town || "Clay County").split(',')[0].replace(" IL", "").trim();
-        const townClass = town.toLowerCase().replace(/\s+/g, '-');
-        const displayCat = biz.category || "Professional Services";
+        let town = (biz.town || "Clay County").trim();
+        town = town.split(',')[0].replace(" IL", "").trim();
         
-        // Coupon Check
+        const townClass = town.toLowerCase().replace(/\s+/g, '-');
+        const displayCat = mapCategory(biz.category);
         const hasCoupon = biz.coupon && biz.coupon !== "N/A" && biz.coupon !== "";
 
-        // TIER CONTENT LOGIC
+        // Tier Visual Overrides
         let imageHtml = `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">`;
         let phoneHtml = "";
-        let actionHtml = "";
-        let cardClick = "";
+        let premiumHint = "";
+        let clickAction = "";
 
         if (tier === "plus" || tier === "premium") {
             imageHtml = getSmartImage(biz.imageid, biz.name);
-            phoneHtml = `<p style="margin:5px 0; font-weight:bold;">📞 ${biz.phone || 'N/A'}</p>`;
+            phoneHtml = `<p style="font-weight:bold; margin-top:5px;">📞 ${biz.phone || 'N/A'}</p>`;
         }
 
         if (tier === "premium") {
-            actionHtml = `<div style="color:blue; font-weight:bold; margin-top:10px;">Click for Details</div>`;
-            cardClick = `onclick="openPremiumModal(${index})" style="cursor:pointer;"`;
+            premiumHint = `<div style="color:#0c30f0; font-weight:bold; margin-top:10px;">Click for Details</div>`;
+            clickAction = `onclick="openPremiumModal(${index})" style="cursor:pointer;"`;
         }
 
         return `
-            <div class="card ${tier}" ${cardClick} 
-                 style="width: 95%; max-width: 380px; height: 450px; margin: 10px auto; display: flex; flex-direction: column; position:relative;">
-                
+            <div class="card ${tier}" ${clickAction} style="width: 95%; max-width: 380px; height: 450px; margin: 10px auto; display: flex; flex-direction: column; position:relative;">
                 <div class="tier-badge">${tier}</div>
                 ${hasCoupon ? `<img src="${couponImg}" style="position:absolute; top:10px; right:10px; width:60px; z-index:5;">` : ""}
                 
-                <div class="logo-box" style="height: 150px; display: flex; align-items: center; justify-content: center; background:#f9f9f9;">
+                <div class="logo-box" style="height: 150px; display: flex; align-items: center; justify-content: center; background:#f4f4f4;">
                     ${imageHtml}
                 </div>
 
                 <div class="town-bar ${townClass}-bar">${town}</div>
 
-                <div style="flex-grow: 1; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <h2 style="margin:0; font-size:1.4rem;">${biz.name}</h2>
+                <div style="flex-grow: 1; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align:center;">
+                    <h2 style="margin:0; font-size:1.4rem; color:#222;">${biz.name}</h2>
                     ${phoneHtml}
-                    ${actionHtml}
+                    ${premiumHint}
                 </div>
 
-                <div class="category-footer" style="padding-bottom: 15px; font-weight: bold; font-style: italic; font-size: 0.85rem;">
+                <div class="category-footer" style="padding-bottom:15px; font-weight:bold; font-style:italic; font-size:0.85rem;">
                     ${catEmojis[displayCat] || "📁"} ${displayCat}
                 </div>
             </div>`;
@@ -114,7 +159,7 @@ function renderCards(data) {
 }
 
 /**
- * 5. PREMIUM POP-OUT MODAL LOGIC
+ * 6. PREMIUM POP-OUT MODAL
  */
 function openPremiumModal(index) {
     const biz = masterData[index];
@@ -124,36 +169,41 @@ function openPremiumModal(index) {
 
     const mapAddress = encodeURIComponent(`${biz.address}, ${biz.town}, IL`);
     
-    // Conditional Sections
-    const couponSection = (biz.coupon && biz.coupon !== "N/A") ? `<div class="modal-section" style="background:#fff3cd; padding:15px; border-radius:8px; border:1px dashed #856404; margin-bottom:15px; text-align:center;"><h3>🎟️ LIVE COUPON</h3><p>${biz.coupon}</p></div>` : "";
-    const webBtn = (biz.website && biz.website !== "N/A") ? `<a href="${biz.website}" target="_blank" class="modal-btn">Visit Website</a>` : "";
-    const fbBtn = (biz.facebook && biz.facebook !== "N/A") ? `<a href="${biz.facebook}" target="_blank" class="modal-btn" style="background:#3b5998;">Facebook</a>` : "";
-    const estDate = (biz.established && biz.established !== "N/A") ? `<p><strong>Established:</strong> ${biz.established}</p>` : "";
-    const bioText = (biz.bio && biz.bio !== "N/A") ? `<div class="modal-section"><h3>About Us</h3><p>${biz.bio}</p></div>` : "";
+    // Dynamic Section Building (Hides N/A values)
+    const couponBox = (biz.coupon && biz.coupon !== "N/A") ? 
+        `<div style="background:#fff3cd; border:2px dashed #856404; padding:15px; margin-bottom:15px; border-radius:8px; text-align:center;">
+            <h3 style="margin:0;">🎟️ SPECIAL OFFER</h3><p style="font-size:1.2rem; margin:10px 0;">${biz.coupon}</p>
+        </div>` : "";
+
+    const websiteBtn = (biz.website && biz.website !== "N/A") ? 
+        `<a href="${biz.website}" target="_blank" style="background:#0c30f0; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; font-weight:bold; display:inline-block; margin-right:10px;">Website</a>` : "";
+
+    const facebookBtn = (biz.facebook && biz.facebook !== "N/A") ? 
+        `<a href="${biz.facebook}" target="_blank" style="background:#3b5998; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; font-weight:bold; display:inline-block;">Facebook</a>` : "";
 
     content.innerHTML = `
         <div style="text-align:center;">
-            <div style="height:120px;">${getSmartImage(biz.imageid, biz.name)}</div>
-            <h1 style="margin:10px 0;">${biz.name}</h1>
-            <p>${biz.town} | ${biz.category}</p>
+            <div style="height:100px; margin-bottom:10px;">${getSmartImage(biz.imageid, biz.name)}</div>
+            <h1 style="font-family:'Playfair Display', serif; margin:0;">${biz.name}</h1>
+            <p style="color:#666;">${biz.category} | ${biz.town}</p>
         </div>
-        <hr>
-        ${couponSection}
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+        <hr style="margin:20px 0;">
+        ${couponBox}
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
             <div>
-                <h3>Contact Info</h3>
-                <p>📞 ${biz.phone}</p>
-                <p>📍 ${biz.address}</p>
-                <p>⏰ ${biz.hours || 'N/A'}</p>
-                ${estDate}
-                <div style="margin-top:15px;">${webBtn} ${fbBtn}</div>
+                <h3>Contact & Info</h3>
+                <p><strong>📞 Phone:</strong> ${biz.phone}</p>
+                <p><strong>📍 Address:</strong> ${biz.address}</p>
+                <p><strong>⏰ Hours:</strong> ${biz.hours || 'N/A'}</p>
+                ${biz.established && biz.established !== "N/A" ? `<p><strong>Established:</strong> ${biz.established}</p>` : ""}
+                <div style="margin-top:20px;">${websiteBtn} ${facebookBtn}</div>
             </div>
             <div>
-                <h3>Location</h3>
-                <iframe width="100%" height="200" frameborder="0" src="https://maps.google.com/maps?q=${mapAddress}&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+                <h3>Map Location</h3>
+                <iframe width="100%" height="250" frameborder="0" style="border:1px solid #ddd; border-radius:8px;" src="https://maps.google.com/maps?q=${mapAddress}&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
             </div>
         </div>
-        ${bioText}
+        ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee;"><h3>Our Story</h3><p style="line-height:1.6;">${biz.bio}</p></div>` : ""}
     `;
 
     modal.style.display = "flex";
@@ -161,31 +211,19 @@ function openPremiumModal(index) {
 
 function setupModalClose() {
     const modal = document.getElementById('premium-modal');
+    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
     const closeBtn = document.querySelector('.close-modal');
-    if (closeBtn) {
-        closeBtn.onclick = () => modal.style.display = "none";
-    }
-    window.onclick = (event) => {
-        if (event.target == modal) modal.style.display = "none";
-    }
+    if(closeBtn) closeBtn.onclick = () => { modal.style.display = "none"; };
 }
 
 /**
- * 6. UTILITIES
+ * 7. CORE UTILITIES
  */
 function getSmartImage(id, bizName) {
-    const fallback = `https://via.placeholder.com/150?text=Logo+Pending`;
-    if (!id || id === "N/A") return `<img src="${fallback}" style="max-height:100%; object-fit:contain;">`;
+    const placeholder = `https://via.placeholder.com/150?text=Logo+Pending`;
+    if (!id || id === "N/A" || id === "Searching...") return `<img src="${placeholder}" style="max-height:100%; object-fit:contain;">`;
     let fileName = id.trim().toLowerCase();
-    return `<img src="${imageRepo}${fileName}.jpeg" style="max-height:100%; object-fit:contain;" onerror="this.src='${imageRepo}${fileName}.png'; this.onerror=function(){this.src='${fallback}'};">`;
-}
-
-function updateNewspaperHeader() {
-    const header = document.getElementById('header-info');
-    if(header) {
-        const now = new Date();
-        header.innerText = `VOL. 1 — NO. ${now.getMonth() + 1} | ${now.toLocaleDateString()}`;
-    }
+    return `<img src="${imageRepo}${fileName}.jpeg" style="max-height:100%; object-fit:contain;" onerror="this.src='${imageRepo}${fileName}.png'; this.onerror=function(){this.src='${placeholder}'};">`;
 }
 
 function generateCategoryDropdown() {
@@ -198,4 +236,12 @@ function generateCategoryDropdown() {
         option.textContent = `${catEmojis[cat]} ${cat}`;
         catSelect.appendChild(option);
     });
+}
+
+function updateNewspaperHeader() {
+    const header = document.getElementById('header-info');
+    if(header) {
+        const now = new Date();
+        header.innerText = `VOL. 1 — NO. ${now.getMonth() + 1} | ${now.toLocaleDateString()}`;
+    }
 }

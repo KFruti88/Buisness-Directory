@@ -1,11 +1,11 @@
-
-/** * CONFIG.JS - DATA & CATEGORY RULES (LOCKED)
+/** * CONFIG.JS - SHARED ASSETS
  */
-const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
-const baseCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
+const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
+const placeholderImg = "https://raw.githubusercontent.com/KFruti88/images/main/default.png";
 const couponImg = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
-const placeholderImg = "https://via.placeholder.com/150?text=Member";
+const baseCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 
+// ... keep your catEmojis and mapCategory functions below this ...
 const catEmojis = {
     "Agriculture": "🚜", "Airport": "🚁", "Automotive / Auto Sales": "🚗",
     "Auto Parts": "⚙️", "Auto Repair": "🔧", "Bars/Saloon": "🍺",

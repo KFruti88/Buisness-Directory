@@ -1,7 +1,13 @@
 /**
- * LAYOUT.JS - FINAL SYNC & IMAGE FIX
+ * LAYOUT.JS - THE "SUNDAY" FIX
+ * Fixed: Image paths to GitHub Raw
+ * Fixed: Mismatched Pop-out Data (Name-Link System)
+ * Fixed: Tier-Pinning Logic
  */
 let masterData = [];
+
+// GitHub Configuration
+const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 
 document.addEventListener("DOMContentLoaded", () => {
     loadDirectory();
@@ -15,7 +21,7 @@ async function loadDirectory() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-            // NORMALIZATION: This ensures 'Teir' in Sheets = 'tier' in Code
+            // THE NORMALIZER: Fixes "Teir" typo and cleans "Searching..."
             masterData = results.data.map(row => {
                 let obj = {};
                 for (let key in row) {
@@ -36,9 +42,9 @@ function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
+    // PINNING LOGIC
     const tierPriority = { "premium": 1, "plus": 2, "basic": 3 };
 
-    // SORT THE DATA
     const sortedData = [...data].sort((a, b) => {
         const tierA = (a.tier || 'basic').toLowerCase();
         const tierB = (b.tier || 'basic').toLowerCase();
@@ -61,19 +67,20 @@ function renderCards(data) {
         let actionHint = "";
         let clickAction = "";
 
-        // TIER RULES
+        // 1. BASIC: Default Image Only
         if (tier === "basic") {
             imageHtml = `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">`;
         } 
+        // 2. PLUS & PREMIUM: Custom Images from GitHub Raw
         else {
-            // Plus and Premium get GitHub Raw Images
             imageHtml = getSmartImage(biz.imageid);
-            phoneHtml = `<p style="font-weight:bold; margin-top:5px;">📞 ${biz.phone || 'N/A'}</p>`;
+            phoneHtml = `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>`;
             
             if (tier === "premium") {
                 actionHint = `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>`;
-                // FIX: Pass the NAME as a string to find the EXACT business, no more mismatched IDs
-                clickAction = `onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')" style="cursor:pointer;"`;
+                // THE DATA FIX: Pass the Name as a string. No more index confusion.
+                const safeName = biz.name.replace(/'/g, "\\'");
+                clickAction = `onclick="openFullModal('${safeName}')" style="cursor:pointer;"`;
             }
         }
 
@@ -96,11 +103,8 @@ function renderCards(data) {
     }).join('');
 }
 
-/**
- * FIXED POP-OUT LOGIC
- * Finds business by Name so the data always matches the card you clicked.
- */
 function openFullModal(bizName) {
+    // Search the master list for the EXACT business name clicked
     const biz = masterData.find(b => b.name === bizName);
     if (!biz) return;
 
@@ -124,8 +128,8 @@ function openFullModal(bizName) {
                 <p><strong>📍 Address:</strong> ${biz.address}</p>
                 <p><strong>⏰ Hours:</strong> ${biz.hours || 'N/A'}</p>
                 <div style="margin-top:20px;">
-                    ${biz.website && biz.website !== "N/A" ? `<a href="${biz.website}" target="_blank" class="modal-btn">Website</a>` : ""}
-                    ${biz.facebook && biz.facebook !== "N/A" ? `<a href="${biz.facebook}" target="_blank" class="modal-btn" style="background:#3b5998;">Facebook</a>` : ""}
+                    ${biz.website && biz.website !== "N/A" ? `<a href="${biz.website}" target="_blank" style="background:#0c30f0; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; font-weight:bold; display:inline-block; margin-right:10px;">Website</a>` : ""}
+                    ${biz.facebook && biz.facebook !== "N/A" ? `<a href="${biz.facebook}" target="_blank" style="background:#3b5998; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; font-weight:bold; display:inline-block;">Facebook</a>` : ""}
                 </div>
             </div>
             <div>
@@ -133,23 +137,17 @@ function openFullModal(bizName) {
                 <iframe width="100%" height="250" frameborder="0" style="border:1px solid #ddd; border-radius:8px;" src="https://maps.google.com/maps?q=${mapAddress}&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
             </div>
         </div>
-        ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee;"><h3>About Us</h3><p style="line-height:1.6;">${biz.bio}</p></div>` : ""}
+        ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee;"><h3>Our Story</h3><p style="line-height:1.6;">${biz.bio}</p></div>` : ""}
     `;
     modal.style.display = "flex";
 }
 
-/**
- * GITHUB RAW IMAGE LOGIC
- */
 function getSmartImage(id) {
-    const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
-    const fallback = `${rawRepo}default.png`; // Points to your default in the repo
+    const fallback = `${rawRepo}default.png`; 
+    if (!id || id === "N/A" || id === "Searching...") return `<img src="${fallback}" style="max-height:100%; object-fit:contain;">`;
     
-    if (!id || id === "N/A" || id === "Searching...") {
-        return `<img src="${fallback}" style="max-height:100%; object-fit:contain;">`;
-    }
-
     let fileName = id.trim().toLowerCase();
+    // Tries JPEG first, then PNG
     return `<img src="${rawRepo}${fileName}.jpeg" 
                  style="max-height:100%; object-fit:contain;" 
                  onerror="this.onerror=null; this.src='${rawRepo}${fileName}.png'; 
@@ -158,9 +156,9 @@ function getSmartImage(id) {
 
 function setupModalClose() {
     const modal = document.getElementById('premium-modal');
-    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
     const closeBtn = document.querySelector('.close-modal');
     if(closeBtn) closeBtn.onclick = () => { modal.style.display = "none"; };
+    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
 }
 
 function generateCategoryDropdown() {

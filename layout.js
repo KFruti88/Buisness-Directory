@@ -1,7 +1,7 @@
 /**
- * LAYOUT.JS - THE GRID ENGINE
+ * LAYOUT.JS - GRID ENGINE (BOX SIZE FIX ONLY)
  */
-var masterData = []; // Global scope
+var masterData = []; 
 
 document.addEventListener("DOMContentLoaded", () => {
     loadDirectory();
@@ -51,22 +51,43 @@ function renderCards(data) {
         const townClass = town.toLowerCase().replace(/\s+/g, '-');
         const displayCat = mapCategory(biz.category);
 
-        // LOCKING CARD STRUCTURE (Every card gets same height components)
-        let imageHtml = (tier === "basic") ? `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">` : getSmartImage(biz.imageid);
-        let phoneHtml = (tier !== "basic") ? `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>` : `<p style="margin-top:5px; visibility:hidden; height:1.1rem;">Hidden</p>`;
-        let actionHint = (tier === "premium") ? `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>` : `<div style="margin-top:10px; visibility:hidden; height:1.2rem;">Hidden</div>`;
-        let clickAction = (tier === "premium") ? `onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')" style="cursor:pointer;"` : "";
+        // IMAGE LOGIC (Kept exactly as requested)
+        let imageHtml = (tier === "basic") ? 
+            `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">` : 
+            getSmartImage(biz.imageid);
+        
+        // BOX SIZE FIX: Every card gets the exact same number of elements. 
+        // If a tier doesn't have a phone or hint, we use a "visibility:hidden" placeholder 
+        // so the box doesn't shrink.
+        
+        let phoneHtml = (tier === "plus" || tier === "premium") ? 
+            `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>` : 
+            `<p style="margin-top:5px; visibility:hidden; height:1.1rem;">Hidden</p>`;
+            
+        let actionHint = (tier === "premium") ? 
+            `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>` : 
+            `<div style="margin-top:10px; visibility:hidden; height:1.2rem;">Hidden</div>`;
+
+        let clickAction = (tier === "premium") ? 
+            `onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')" style="cursor:pointer;"` : "";
 
         return `
-            <div class="card ${tier}" ${clickAction} style="width: 95%; max-width: 380px; height: 460px; margin: 10px auto; display: flex; flex-direction: column; position:relative; overflow:hidden;">
+            <div class="card ${tier}" ${clickAction} style="width: 95%; max-width: 380px; height: 460px; margin: 10px auto; display: flex; flex-direction: column; position:relative; overflow:hidden; border: 1px solid #ddd; background:#fff;">
                 <div class="tier-badge" style="position:absolute; top:0; left:0; background:#eee; padding:2px 8px; font-size:10px; text-transform:uppercase;">${tier}</div>
-                <div class="logo-box" style="height: 160px; display: flex; align-items: center; justify-content: center; background:#f4f4f4;">${imageHtml}</div>
-                <div class="town-bar ${townClass}-bar">${town}</div>
-                <div style="flex-grow: 1; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align:center;">
-                    <h2 style="margin:0; font-size:1.4rem;">${biz.name}</h2>
-                    ${phoneHtml}${actionHint}
+                
+                <div class="logo-box" style="height: 160px; min-height: 160px; display: flex; align-items: center; justify-content: center; background:#f4f4f4;">
+                    ${imageHtml}
                 </div>
-                <div class="category-footer" style="padding-bottom:15px; font-weight:bold; font-style:italic; font-size:0.85rem;">
+
+                <div class="town-bar ${townClass}-bar">${town}</div>
+
+                <div style="flex-grow: 1; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align:center;">
+                    <h2 style="margin:0; font-size:1.4rem; color:#222;">${biz.name}</h2>
+                    ${phoneHtml}
+                    ${actionHint}
+                </div>
+
+                <div class="category-footer" style="padding-bottom:15px; font-weight:bold; font-style:italic; font-size:0.85rem; text-align:center;">
                     ${catEmojis[displayCat] || "📁"} ${displayCat}
                 </div>
             </div>`;
@@ -76,7 +97,10 @@ function renderCards(data) {
 function getSmartImage(id) {
     if (!id || id === "N/A" || id === "Searching..." || id.trim() === "") return `<img src="${placeholderImg}" style="max-height:100%; object-fit:contain;">`;
     let fileName = id.trim().toLowerCase();
-    return `<img src="${rawRepo}${fileName}.jpeg" style="max-height:100%; object-fit:contain;" onerror="this.onerror=null; this.src='${rawRepo}${fileName}.png'; this.onerror=function(){this.src='${placeholderImg}'};">`;
+    return `<img src="${rawRepo}${fileName}.jpeg" 
+                 style="max-height:100%; object-fit:contain;" 
+                 onerror="this.onerror=null; this.src='${rawRepo}${fileName}.png'; 
+                 this.onerror=function(){this.src='${placeholderImg}'};">`;
 }
 
 function generateCategoryDropdown() {
@@ -92,7 +116,7 @@ function applyFilters() {
     const selectedTown = document.getElementById('town-select').value;
     const selectedCat = document.getElementById('cat-select').value;
     const filtered = masterData.filter(biz => {
-        const matchTown = (selectedTown === 'All' || biz.town.includes(selectedTown));
+        const matchTown = (selectedTown === 'All' || (biz.town && biz.town.includes(selectedTown)));
         const matchCat = (selectedCat === 'All' || mapCategory(biz.category) === selectedCat);
         return matchTown && matchCat;
     });

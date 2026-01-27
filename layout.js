@@ -1,9 +1,5 @@
 /**
- * LAYOUT.JS - TIER PINNING & VISUALS (ADJUSTABLE)
- * Rules: 
- * - Premium (Top), Plus (Middle), Basic (Bottom)
- * - Plus/Premium: Show Image + Phone
- * - Basic: Show Placeholder + No Phone
+ * LAYOUT.JS - TIER PINNING & VISUALS (FINAL IMAGE FIX)
  */
 let masterData = [];
 
@@ -60,14 +56,19 @@ function renderCards(data) {
         const displayCat = mapCategory(biz.category);
         const hasCoupon = biz.coupon && biz.coupon !== "N/A" && biz.coupon !== "";
 
-        // IMAGE LOGIC: Plus and Premium get the real Image
-        let imageHtml = `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">`;
+        // IMAGE LOGIC: 
+        // 1. Basic gets the #default placeholder.
+        // 2. Plus/Premium get the Smart Image function.
+        let imageHtml = "";
         let phoneHtml = "";
         let premiumHint = "";
         let clickAction = "";
 
-        if (tier === "plus" || tier === "premium") {
-            // Pulls correct custom image from GitHub repo
+        if (tier === "basic") {
+            // Rule: Basic ALWAYS shows the default placeholder
+            imageHtml = `<img src="${placeholderImg}" style="height:150px; object-fit:contain;" alt="Placeholder">`;
+        } else if (tier === "plus" || tier === "premium") {
+            // Rule: Plus/Premium pull the custom image
             imageHtml = getSmartImage(biz.imageid, biz.name);
             phoneHtml = `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>`;
         }
@@ -102,37 +103,22 @@ function renderCards(data) {
 }
 
 /**
- * CORE UTILITIES
+ * SMART IMAGE LOGIC
+ * Fixes the "Searching..." bug from Google formulas
  */
 function getSmartImage(id, bizName) {
     const fallback = `https://via.placeholder.com/150?text=Logo+Pending`;
-    if (!id || id === "N/A" || id === "Searching...") return `<img src="${fallback}" style="max-height:100%; object-fit:contain;">`;
+    
+    // Check if ID is empty or stuck on "Searching..." formula text
+    if (!id || id === "N/A" || id === "Searching..." || id.trim() === "") {
+        return `<img src="${fallback}" style="max-height:100%; object-fit:contain;">`;
+    }
+
     let fileName = id.trim().toLowerCase();
-    return `<img src="${imageRepo}${fileName}.jpeg" style="max-height:100%; object-fit:contain;" onerror="this.src='${imageRepo}${fileName}.png'; this.onerror=function(){this.src='${fallback}'};">`;
-}
-
-function generateCategoryDropdown() {
-    const catSelect = document.getElementById('cat-select');
-    if (!catSelect) return;
-    catSelect.innerHTML = '<option value="All">📂 All Industries</option>';
-    Object.keys(catEmojis).sort().forEach(cat => {
-        const option = document.createElement('option');
-        option.value = cat;
-        option.textContent = `${catEmojis[cat]} ${cat}`;
-        catSelect.appendChild(option);
-    });
-}
-
-function applyFilters() {
-    const selectedTown = document.getElementById('town-select').value;
-    const selectedCat = document.getElementById('cat-select').value;
-
-    const filtered = masterData.filter(biz => {
-        const bizTown = (biz.town || "").trim();
-        const bizCat = mapCategory(biz.category);
-        const matchTown = (selectedTown === 'All' || bizTown === selectedTown);
-        const matchCat = (selectedCat === 'All' || bizCat === selectedCat);
-        return matchTown && matchCat;
-    });
-    renderCards(filtered);
+    
+    // Attempts to load .jpeg, then .png, then fallbacks to placeholder
+    return `<img src="${imageRepo}${fileName}.jpeg" 
+                 style="max-height:100%; object-fit:contain;" 
+                 onerror="this.onerror=null; this.src='${imageRepo}${fileName}.png'; 
+                 this.onerror=function(){this.src='${fallback}'};">`;
 }

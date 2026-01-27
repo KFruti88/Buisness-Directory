@@ -4,10 +4,9 @@
 let masterData = []; 
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 const baseCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
-const couponImg = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
 
 /**
- * 2. MASTER CATEGORY LIST (With Emoji Mapping)
+ * 2. MASTER CATEGORY LIST
  */
 const catEmojis = {
     "Agriculture": "🚜", "Auto Parts": "⚙️", "Auto Repair": "🔧", "Bars/Saloon": "🍺",
@@ -24,78 +23,86 @@ const catEmojis = {
 };
 
 /**
- * 3. CATEGORY MAPPING LOGIC
- * Fixes the "Searching..." bug by mapping it to a real category.
+ * 3. CATEGORY MAPPING
  */
 function mapCategory(raw) {
     if (!raw || raw === "Searching..." || raw === "N/A") return "Professional Services";
     const val = raw.toLowerCase().trim();
-
     if (val.includes("city hall") || val.includes("court") || val.includes("government")) return "Government";
     if (val.includes("restaurant") || val.includes("bar") || val.includes("saloon")) return "Restaurants";
     if (val.includes("medical") || val.includes("healthcare")) return "Healthcare";
     if (val.includes("flower") || val.includes("pottery") || val.includes("store")) return "Stores";
     if (val.includes("legion") || val.includes("non-profit")) return "Non-Profit";
-    if (val.includes("factory") || val.includes("manufacturing") || val.includes("delivery")) return "Manufacturing";
-    
+    if (val.includes("factory") || val.includes("warehouse") || val.includes("delivery") || val.includes("manufacturing")) return "Manufacturing";
     return raw; 
 }
 
 /**
- * 4. INITIALIZATION
+ * 4. INITIALIZATION & CACHE BUSTING
  */
 document.addEventListener("DOMContentLoaded", () => {
-    updateNewspaperHeader();
     loadDirectory();
 });
 
 async function loadDirectory() {
-    const cacheBuster = new Date().getTime();
+    const cacheBuster = new Date().getTime(); // Forced cache clean
+    
     Papa.parse(`${baseCsvUrl}&cb=${cacheBuster}`, {
         download: true,
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-            // Formula Header Cleanup
-            const cleaned = results.data.map(row => {
-                const newRow = {};
-                Object.keys(row).forEach(key => {
-                    newRow[key.trim()] = row[key]; 
-                });
-                return newRow;
-            });
+            // Header Normalization Engine
+            masterData = results.data.map(row => {
+                let obj = {};
+                for (let key in row) {
+                    let cleanKey = key.trim().replace(/\s+/g, '').toLowerCase();
+                    obj[cleanKey] = row[key];
+                }
+                return obj;
+            }).filter(row => row.name && row.name !== "" && row.name !== "Searching...");
 
-            // Filter out empty formula rows
-            masterData = cleaned.filter(row => row.Name && row.Name !== "" && row.Name !== "Searching...");
             renderCards(masterData);
         }
     });
 }
 
 /**
- * 5. RENDERING ENGINE (Fixes the Blank Town Bars)
+ * 5. RENDERING ENGINE (Includes 90% Width & Height Logic)
  */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
     grid.innerHTML = data.map(biz => {
-        const tier = (biz.Tier || biz.Teir || 'basic').toLowerCase();
+        const tier = (biz.tier || biz.teir || 'basic').toLowerCase();
+        let townName = (biz.town || "").trim();
+        if (townName === "" || townName === "Searching...") townName = "Clay County";
         
-        // Fix: If Town is "Searching..." or blank, default to "Clay County"
-        let town = (biz.Town || biz.town || "").trim();
-        if (town === "" || town === "Searching..." || town === "UNKNOWN") town = "Clay County";
-        
-        const townClass = town.toLowerCase().replace(/\s+/g, '-');
-        const displayCat = mapCategory(biz.Category || biz.category);
+        const townClass = townName.toLowerCase().replace(/\s+/g, '-');
+        const displayCat = mapCategory(biz.category || "");
+        const imageID = (biz.imageid || "").trim();
 
         return `
-            <div class="card ${tier}">
-                <div class="tier-badge">${tier}</div>
-                <div class="logo-box">${getSmartImage(biz['Image ID'], biz.Name)}</div>
-                <div class="town-bar ${townClass}-bar">${town}</div>
-                <h2>${biz.Name}</h2>
-                <div style="margin-top: auto; font-weight: bold; font-style: italic; color: #333;">
+            <div class="card ${tier}" 
+                 style="width: 95%; max-width: 400px; height: 420px; margin: 10px auto; display: flex; flex-direction: column;"
+                 ${tier === 'premium' ? `onclick="window.location.href='profile.html?id=${encodeURIComponent(imageID.toLowerCase())}'"` : ''}>
+                
+                <div class="tier-badge" style="font-size: 0.7rem;">${tier}</div>
+                
+                <div class="logo-box" style="height: 150px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                    ${getSmartImage(imageID, biz.name)}
+                </div>
+
+                <div class="town-bar ${townClass}-bar" style="width: 100%; text-align: center; font-weight: bold; padding: 10px 0;">
+                    ${townName}
+                </div>
+
+                <h2 style="font-size: 1.4rem; flex-grow: 1; display: flex; align-items: center; justify-content: center; text-align: center; margin: 10px 0;">
+                    ${biz.name}
+                </h2>
+
+                <div class="category-footer" style="margin-top: auto; padding-bottom: 15px; font-weight: bold; font-style: italic; font-size: 0.9rem;">
                     ${catEmojis[displayCat] || "📁"} ${displayCat}
                 </div>
             </div>`;
@@ -104,11 +111,10 @@ function renderCards(data) {
 
 function getSmartImage(id, bizName) {
     const placeholder = `https://via.placeholder.com/150?text=Logo+Pending`;
-    if (!id || id === "N/A") return `<img src="${placeholder}">`;
-    return `<img src="${imageRepo}${id.trim().toLowerCase()}.jpeg" onerror="this.src='${placeholder}'">`;
-}
-
-function updateNewspaperHeader() {
-    const header = document.getElementById('header-info');
-    if(header) header.innerText = `VOL. 1 | ${new Date().toLocaleDateString()}`;
+    if (!id || id === "N/A" || id === "Searching...") return `<img src="${placeholder}" style="max-height: 100%; max-width: 100%; object-fit: contain;">`;
+    let fileName = id.trim().toLowerCase();
+    return `<img src="${imageRepo}${fileName}.jpeg" 
+                 style="max-height: 100%; max-width: 100%; object-fit: contain;"
+                 onerror="this.onerror=null; this.src='${imageRepo}${fileName}.png'; 
+                 this.onerror=function(){this.src='${placeholder}'};">`;
 }

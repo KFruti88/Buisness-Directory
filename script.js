@@ -51,7 +51,6 @@ const catEmojis = {
 
 /**
  * 3. CATEGORY MAPPING LOGIC
- * Groups specific keywords into your display categories.
  */
 function mapCategory(raw) {
     if (!raw || raw === "Searching..." || raw === "N/A") return "Professional Services";
@@ -63,7 +62,7 @@ function mapCategory(raw) {
     if (val.includes("city hall") || val.includes("court") || val.includes("government")) return "Government";
     if (val.includes("restaurant") || val.includes("bar") || val.includes("saloon")) return "Restaurants";
     if (val.includes("medical") || val.includes("healthcare")) return "Healthcare";
-    if (val.includes("factory") || val.includes("warehouse") || val.includes("manufacturing")) return "Manufacturing";
+    if (val.includes("factory") || val.includes("warehouse") || val.includes("delivery") || val.includes("manufacturing")) return "Manufacturing";
     if (val.includes("propane") || val.includes("gas") || val.includes("utility")) return "Utility/Gas";
     if (val.includes("legion") || val.includes("non-profit")) return "Non-Profit";
     
@@ -86,7 +85,6 @@ async function loadDirectory() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-            // Clean up headers from ARRAYFORMULA glitches
             masterData = results.data.map(row => {
                 let obj = {};
                 for (let key in row) {
@@ -94,7 +92,7 @@ async function loadDirectory() {
                     obj[cleanKey] = row[key];
                 }
                 return obj;
-            }).filter(row => row.name && row.name.trim() !== "" && row.name !== "Searching...");
+            }).filter(row => row.name && row.name.trim() !== "");
 
             generateCategoryDropdown();
             renderCards(masterData);
@@ -103,7 +101,7 @@ async function loadDirectory() {
 }
 
 /**
- * 5. TIER-BASED RENDERING ENGINE
+ * 5. TIER-BASED RENDERING ENGINE (FIXED PLUS TIER)
  */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
@@ -118,28 +116,29 @@ function renderCards(data) {
         const displayCat = mapCategory(biz.category);
         const hasCoupon = biz.coupon && biz.coupon !== "N/A" && biz.coupon !== "";
 
-        // Tier Visual Overrides
+        // TIER VISUAL LOGIC
         let imageHtml = `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">`;
         let phoneHtml = "";
         let premiumHint = "";
         let clickAction = "";
 
+        // FIXED: Plus now gets Image AND Phone on main screen
         if (tier === "plus" || tier === "premium") {
             imageHtml = getSmartImage(biz.imageid, biz.name);
-            phoneHtml = `<p style="font-weight:bold; margin-top:5px;">📞 ${biz.phone || 'N/A'}</p>`;
+            phoneHtml = `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>`;
         }
 
         if (tier === "premium") {
-            premiumHint = `<div style="color:#0c30f0; font-weight:bold; margin-top:10px;">Click for Details</div>`;
+            premiumHint = `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>`;
             clickAction = `onclick="openPremiumModal(${index})" style="cursor:pointer;"`;
         }
 
         return `
-            <div class="card ${tier}" ${clickAction} style="width: 95%; max-width: 380px; height: 450px; margin: 10px auto; display: flex; flex-direction: column; position:relative;">
+            <div class="card ${tier}" ${clickAction} style="width: 95%; max-width: 380px; height: 460px; margin: 10px auto; display: flex; flex-direction: column; position:relative;">
                 <div class="tier-badge">${tier}</div>
                 ${hasCoupon ? `<img src="${couponImg}" style="position:absolute; top:10px; right:10px; width:60px; z-index:5;">` : ""}
                 
-                <div class="logo-box" style="height: 150px; display: flex; align-items: center; justify-content: center; background:#f4f4f4;">
+                <div class="logo-box" style="height: 160px; display: flex; align-items: center; justify-content: center; background:#f4f4f4; overflow:hidden;">
                     ${imageHtml}
                 </div>
 
@@ -169,7 +168,6 @@ function openPremiumModal(index) {
 
     const mapAddress = encodeURIComponent(`${biz.address}, ${biz.town}, IL`);
     
-    // Dynamic Section Building (Hides N/A values)
     const couponBox = (biz.coupon && biz.coupon !== "N/A") ? 
         `<div style="background:#fff3cd; border:2px dashed #856404; padding:15px; margin-bottom:15px; border-radius:8px; text-align:center;">
             <h3 style="margin:0;">🎟️ SPECIAL OFFER</h3><p style="font-size:1.2rem; margin:10px 0;">${biz.coupon}</p>
@@ -183,13 +181,13 @@ function openPremiumModal(index) {
 
     content.innerHTML = `
         <div style="text-align:center;">
-            <div style="height:100px; margin-bottom:10px;">${getSmartImage(biz.imageid, biz.name)}</div>
+            <div style="height:120px; margin-bottom:10px;">${getSmartImage(biz.imageid, biz.name)}</div>
             <h1 style="font-family:'Playfair Display', serif; margin:0;">${biz.name}</h1>
-            <p style="color:#666;">${biz.category} | ${biz.town}</p>
+            <p style="color:#666; font-size:1.1rem;">${biz.category} | ${biz.town}</p>
         </div>
         <hr style="margin:20px 0;">
         ${couponBox}
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:25px;">
             <div>
                 <h3>Contact & Info</h3>
                 <p><strong>📞 Phone:</strong> ${biz.phone}</p>
@@ -203,7 +201,7 @@ function openPremiumModal(index) {
                 <iframe width="100%" height="250" frameborder="0" style="border:1px solid #ddd; border-radius:8px;" src="https://maps.google.com/maps?q=${mapAddress}&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
             </div>
         </div>
-        ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee;"><h3>Our Story</h3><p style="line-height:1.6;">${biz.bio}</p></div>` : ""}
+        ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee;"><h3>Our Story</h3><p style="line-height:1.6; font-size:1.05rem;">${biz.bio}</p></div>` : ""}
     `;
 
     modal.style.display = "flex";

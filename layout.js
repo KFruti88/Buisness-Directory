@@ -1,5 +1,10 @@
 /**
- * LAYOUT.JS - TIER PINNING & VISUALS (FINAL IMAGE FIX)
+ * LAYOUT.JS - TIER PINNING, IMAGE LOCKS, & MODAL ACCESS
+ * Rules:
+ * 1. Pinning: Premium (1), Plus (2), Basic (3).
+ * 2. Basic: Show #default placeholder ONLY. No pop-out.
+ * 3. Plus: Show Business Image + Phone. ENABLE pop-out.
+ * 4. Premium: Show Business Image + Phone. ENABLE pop-out + "Click for Details".
  */
 let masterData = [];
 
@@ -35,7 +40,7 @@ function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    // PINNING LOGIC: Premium (1), Plus (2), Basic (3)
+    // PINNING LOGIC
     const tierPriority = { "premium": 1, "plus": 2, "basic": 3 };
 
     const sortedData = [...data].sort((a, b) => {
@@ -56,26 +61,27 @@ function renderCards(data) {
         const displayCat = mapCategory(biz.category);
         const hasCoupon = biz.coupon && biz.coupon !== "N/A" && biz.coupon !== "";
 
-        // IMAGE LOGIC: 
-        // 1. Basic gets the #default placeholder.
-        // 2. Plus/Premium get the Smart Image function.
         let imageHtml = "";
         let phoneHtml = "";
-        let premiumHint = "";
+        let actionHint = "";
         let clickAction = "";
 
+        // 1. BASIC LOGIC: Locked to default placeholder
         if (tier === "basic") {
-            // Rule: Basic ALWAYS shows the default placeholder
-            imageHtml = `<img src="${placeholderImg}" style="height:150px; object-fit:contain;" alt="Placeholder">`;
-        } else if (tier === "plus" || tier === "premium") {
-            // Rule: Plus/Premium pull the custom image
+            imageHtml = `<img src="${placeholderImg}" style="height:150px; object-fit:contain;">`;
+        } 
+        
+        // 2. PLUS & PREMIUM LOGIC: Images, Phones, and Pop-out
+        else if (tier === "plus" || tier === "premium") {
             imageHtml = getSmartImage(biz.imageid, biz.name);
             phoneHtml = `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>`;
-        }
-
-        if (tier === "premium") {
-            premiumHint = `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>`;
-            clickAction = `onclick="openPremiumModal(${index})" style="cursor:pointer;"`;
+            
+            // Both tiers now trigger the modal
+            clickAction = `onclick="openFullModal(${index})" style="cursor:pointer;"`;
+            
+            if (tier === "premium") {
+                actionHint = `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>`;
+            }
         }
 
         return `
@@ -92,7 +98,7 @@ function renderCards(data) {
                 <div style="flex-grow: 1; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align:center;">
                     <h2 style="margin:0; font-size:1.4rem; color:#222;">${biz.name}</h2>
                     ${phoneHtml}
-                    ${premiumHint}
+                    ${actionHint}
                 </div>
 
                 <div class="category-footer" style="padding-bottom:15px; font-weight:bold; font-style:italic; font-size:0.85rem;">
@@ -103,22 +109,62 @@ function renderCards(data) {
 }
 
 /**
- * SMART IMAGE LOGIC
- * Fixes the "Searching..." bug from Google formulas
+ * FULL CARD POP-OUT (MODAL)
+ * Now works for both Plus and Premium
  */
+function openFullModal(index) {
+    const biz = masterData[index];
+    const modal = document.getElementById('premium-modal');
+    const content = document.getElementById('modal-body');
+    if (!modal || !content) return;
+
+    const mapAddress = encodeURIComponent(`${biz.address}, ${biz.town}, IL`);
+    
+    // Check for social/web links - only show if they aren't N/A
+    const websiteBtn = (biz.website && biz.website !== "N/A") ? 
+        `<a href="${biz.website}" target="_blank" style="background:#0c30f0; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; font-weight:bold; display:inline-block; margin-right:10px;">Website</a>` : "";
+
+    const facebookBtn = (biz.facebook && biz.facebook !== "N/A") ? 
+        `<a href="${biz.facebook}" target="_blank" style="background:#3b5998; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; font-weight:bold; display:inline-block;">Facebook</a>` : "";
+
+    content.innerHTML = `
+        <div style="text-align:center;">
+            <div style="height:120px; margin-bottom:10px;">${getSmartImage(biz.imageid, biz.name)}</div>
+            <h1 style="font-family:'Times New Roman', serif; margin:0;">${biz.name}</h1>
+            <p style="color:#666; font-size:1.1rem;">${biz.category} | ${biz.town}</p>
+        </div>
+        <hr style="margin:20px 0;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:25px;">
+            <div>
+                <h3>Business Details</h3>
+                <p><strong>📞 Phone:</strong> ${biz.phone}</p>
+                <p><strong>📍 Address:</strong> ${biz.address}</p>
+                <p><strong>⏰ Hours:</strong> ${biz.hours || 'N/A'}</p>
+                <div style="margin-top:20px;">${websiteBtn} ${facebookBtn}</div>
+            </div>
+            <div>
+                <h3>Map Location</h3>
+                <iframe width="100%" height="250" frameborder="0" style="border:1px solid #ddd; border-radius:8px;" src="https://maps.google.com/maps?q=${mapAddress}&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+            </div>
+        </div>
+        ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee;"><h3>About Us</h3><p style="line-height:1.6;">${biz.bio}</p></div>` : ""}
+    `;
+
+    modal.style.display = "flex";
+}
+
+function setupModalClose() {
+    const modal = document.getElementById('premium-modal');
+    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+    const closeBtn = document.querySelector('.close-modal');
+    if(closeBtn) closeBtn.onclick = () => { modal.style.display = "none"; };
+}
+
 function getSmartImage(id, bizName) {
     const fallback = `https://via.placeholder.com/150?text=Logo+Pending`;
-    
-    // Check if ID is empty or stuck on "Searching..." formula text
     if (!id || id === "N/A" || id === "Searching..." || id.trim() === "") {
         return `<img src="${fallback}" style="max-height:100%; object-fit:contain;">`;
     }
-
     let fileName = id.trim().toLowerCase();
-    
-    // Attempts to load .jpeg, then .png, then fallbacks to placeholder
-    return `<img src="${imageRepo}${fileName}.jpeg" 
-                 style="max-height:100%; object-fit:contain;" 
-                 onerror="this.onerror=null; this.src='${imageRepo}${fileName}.png'; 
-                 this.onerror=function(){this.src='${fallback}'};">`;
+    return `<img src="${imageRepo}${fileName}.jpeg" style="max-height:100%; object-fit:contain;" onerror="this.onerror=null; this.src='${imageRepo}${fileName}.png'; this.onerror=function(){this.src='${fallback}'};">`;
 }

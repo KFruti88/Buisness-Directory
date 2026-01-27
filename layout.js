@@ -48,7 +48,7 @@ function renderCards(data) {
         const displayCat = mapCategory(biz.category);
 
         // Image Fix: Forces Raw GitHub URL
-        let imageHtml = (tier === "basic") ? `<img src="${placeholderImg}" style="height:150px; max-width:100%; object-fit:contain;">` : getSmartImage(biz.imageid);
+        let imageHtml = (tier === "basic") ? `<div style="width:100%; height:100%; background-color:#e0e0e0; border-bottom:1px solid #ccc;"></div>` : getSmartImage(biz.imageid);
         
         // Box Size Fix: Hidden spacers keep boxes aligned at 460px
         let phoneHtml = (tier !== "basic") ? 
@@ -75,7 +75,7 @@ function renderCards(data) {
 function getSmartImage(id) {
     const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
     if (!id || id === "N/A" || id === "Searching..." || id.trim() === "") return `<img src="${placeholderImg}" style="max-height:100%; max-width:100%; object-fit:contain;">`;
-    let fileName = encodeURIComponent(id.trim().toLowerCase());
+    let fileName = encodeURIComponent(id.trim());
     return `<img src="${rawRepo}${fileName}.jpeg" style="max-height:100%; max-width:100%; object-fit:contain;" onerror="this.onerror=null; this.src='${rawRepo}${fileName}.png'; this.onerror=function(){this.src='${placeholderImg}'};">`;
 }
 

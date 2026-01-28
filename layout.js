@@ -1,26 +1,12 @@
-/**
- * PROJECT: Clay County Directory Engine
- * VERSION: 1.42 (Yellow Layout Sync)
- */
-
-// Color Lock Mapping Standard [cite: 2026-01-28]
-const townColors = { 
-    "Flora": { bg: "#0c0b82", text: "#fe4f00" }, 
-    "Louisville": { bg: "#010101", text: "#eb1c24" }, 
-    "North Clay": { bg: "#010101", text: "#eb1c24" }, 
-    "Clay City": { bg: "#0c30f0", text: "#8a8a88" }, 
-    "Xenia": { bg: "#000000", text: "#fdb813" }, 
-    "Sailor Springs": { bg: "#000000", text: "#a020f0" }, 
-    "Clay County": { bg: "#333333", text: "#ffffff" } 
-};
-
 function renderDirectoryGrid(data) {
     const grid = document.getElementById('directory-grid');
-    if (!grid) return;
+    if (!grid || !data) return;
 
     grid.innerHTML = data.map(biz => {
-        const tierL = biz.tier.toLowerCase();
-        // Pull Town color mapping based on Column G [cite: 2026-01-28]
+        // 1. MUST use lowercase 'tier' to match JSON output
+        const tierL = (biz.tier || 'basic').toLowerCase();
+        
+        // 2. MUST use lowercase 'town' for the Color Lock check [cite: 2026-01-28]
         const style = townColors[biz.town] || townColors["Clay County"];
         
         return `

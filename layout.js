@@ -1,7 +1,7 @@
 /**
  * PROJECT: Clay County Directory Engine - Main Layout
- * VERSION: 1.23 (Sandbox Optimized)
- * UPDATES: Integrated Custom Town Color Palette, Live Cache Buster, Heartbeat.
+ * VERSION: 1.24 (Sandbox Optimized)
+ * UPDATES: Expanded Categories/Emojis, Custom Town Colors, Live Cache Buster, Heartbeat.
  */
 
 let masterData = [];
@@ -25,18 +25,45 @@ const townStyles = {
     "Clay County": { bg: "#333333", text: "#ffffff" }
 };
 
+// --- EXPANDED CATEGORIES & EMOJIS ---
 const catEmojis = {
-    "Bars": "🍺", "Emergency": "🚨", "Church": "⛪", "Post Office": "📬", 
-    "Restaurants": "🍴", "Retail": "🛒", "Shopping": "🛍️", "Manufacturing": "🏗️", 
-    "Industry": "🏭", "Financial Services": "💰", "Healthcare": "🏥", 
-    "Gas Station": "⛽", "Internet": "🌐", "Support Services": "🛠️", 
-    "Professional Services": "💼", "Agriculture": "🚜"
+    "Bars": "🍺", 
+    "Emergency": "🚨", 
+    "Church": "⛪", 
+    "Post Office": "📬", 
+    "Restaurants": "🍴", 
+    "Retail": "🛒", 
+    "Shopping": "🛍️", 
+    "Manufacturing": "🏗️", 
+    "Industry": "🏭", 
+    "Financial Services": "💰", 
+    "Healthcare": "🏥", 
+    "Gas Station": "⛽", 
+    "Internet": "🌐", 
+    "Support Services": "🛠️", 
+    "Professional Services": "💼", 
+    "Agriculture": "🚜",
+    "Education": "🎓",
+    "Beauty & Hair": "✂️",
+    "Automotive": "🚗",
+    "Construction": "🔨",
+    "Real Estate": "🏠",
+    "Legal": "⚖️",
+    "Lodging": "🏨",
+    "Parks & Rec": "🌳",
+    "Non-Profit": "🤝",
+    "Cleaning Services": "🧹",
+    "Entertainment": "🍿",
+    "Fitness": "💪",
+    "Insurance": "📄",
+    "Technology": "💻"
 };
 
 document.addEventListener("DOMContentLoaded", () => { 
     updateHeaderDate(); 
     fetchDirectoryData();
     
+    // HEARTBEAT: Auto-refresh data every 5 minutes
     setInterval(() => {
         console.log("Heartbeat: Fetching latest CSV data...");
         fetchDirectoryData();
@@ -103,7 +130,7 @@ function renderDirectoryGrid(data) {
         
         // Match town to style or fallback to gray
         const style = townStyles[townName] || { bg: "#d3d3d3", text: "#1a1a1a" };
-        const inlineStyle = `style="background-color: ${style.bg}; color: ${style.text};"`;
+        const inlineStyle = `style="background-color: ${style.bg}; color: ${style.text}; font-weight: bold; text-align: center; border-top: 1px solid #999; border-bottom: 1px solid #999;"`;
 
         let clickAction = (tierL === 'premium' || (biz.CouponLink && biz.CouponLink !== "")) 
                     ? `onclick="openFullModal('${biz.Name.replace(/'/g, "\\'")}')"` : "";

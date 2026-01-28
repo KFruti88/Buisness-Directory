@@ -1,36 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clay County Directory | SMLC Universal</title>
-    <link rel="stylesheet" href="style.css">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+
+    <style>
+        /* --- 1. BASE STYLES & UNIVERSAL SCREENS [cite: 2026-01-26] --- */
+        body { background-color: #e5e5e5; font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; }
+        .site-wrapper { width: 93%; margin: 0 auto; padding: 20px 0; } /* 93% Width Standard [cite: 2026-01-26] */
+
+        /* --- 2. NEWSPAPER HEADER [cite: 2026-01-26] --- */
+        .nav-header { background-color: #38b6ff; color: white; padding: 12px 0; text-align: center; font-weight: bold; }
+        .nav-header a { color: white; text-decoration: none; margin: 0 15px; }
+        .main-title { text-align: center; padding: 20px; background-color: #fff5ba; border-bottom: 2px solid #000; }
+        .single-row { display: flex; justify-content: space-between; align-items: center; border-top: 2px solid #000; border-bottom: 1px solid #000; padding: 10px 0; background-color: #fff5ba; font-weight: bold; }
+
+        /* --- 3. YELLOW CARD LAYOUT [cite: 2026-01-26, 2026-01-28] --- */
+        #directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 25px; }
+        .card { 
+            background-color: #fff5ba !important; border: 2px solid #000; 
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.1); height: 480px; 
+            display: flex; flex-direction: column; position: relative; overflow: hidden; 
+        }
+        
+        /* TOWN BAR: CENTERED MIDDLE [cite: 2026-01-28] */
+        .town-bar { 
+            height: 35px; display: flex; align-items: center; justify-content: center; 
+            text-transform: uppercase; font-weight: 900; border-top: 2px solid #000; border-bottom: 2px solid #000; 
+            margin: 10px 0;
+        }
+
+        .logo-box { height: 160px; display: flex; align-items: center; justify-content: center; padding: 10px; }
+        .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
+        .biz-name { height: 80px; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: bold; font-size: 1.4rem; padding: 5px; }
+        
+        /* MODAL ENGINE STYLES [cite: 2026-01-26] */
+        #premium-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; }
+        .modal-container { background: #fff5ba; width: 90%; max-width: 850px; padding: 30px; border: 4px solid #000; position: relative; box-shadow: 10px 10px 0px rgba(0,0,0,0.5); }
+        .close-modal { position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; font-weight: bold; }
+    </style>
 </head>
-<body style="background-color: #e5e5e5; margin: 0; padding: 0;">
+<body>
 
     <div class="nav-header">
         <a href="https://supportmylocalcommunity.com/">Home</a>
         <a href="https://supportmylocalcommunity.com/clay-city/">Clay City</a>
         <a href="https://ourflora.com/">Flora</a>
         <a href="https://supportmylocalcommunity.com/louisville/">Louisville</a>
-        <a href="https://supportmylocalcommunity.com/sailor-springs/">Sailor Springs</a>
         <a href="https://supportmylocalcommunity.com/xenia/">Xenia</a>
     </div>
 
     <header class="main-title">
         <h1>Clay County Directory</h1>
         <div class="newspaper-meta single-row">
-            <div class="meta-item left-meta" /*id="header-info"*/ >VOL. 1 — NO. 1 | LOADING...</div>
-            <div class="meta-item center-header"><span class="directory-pages">BUSINESS DIRECTORY PAGES</span></div>
-            <div class="meta-item right-meta"><span id="weather-box" class="weather-text"></span></div>
+            <div class="meta-item" id="header-info">VOL. 1 | LOADING...</div>
+            <div class="meta-item"><span class="directory-pages">BUSINESS DIRECTORY PAGES</span></div>
+            <div class="meta-item right-meta">
+                 <div style="width: 200px;"> 
+                    <a class="weatherwidget-io" href="https://forecast7.com/en/38d67n88d49/flora/" data-label_1="Flora" data-label_2="Illinois" data-font="Times New Roman" data-mode="Current" data-theme="pure" data-basecolor="#fff5ba" data-unit="us">Flora Illinois</a>
+                </div>
+            </div>
         </div>
     </header>
 
-    <div class="site-wrapper" style="width: 93%; margin: 0 auto; padding: 20px 0;">
+    <div class="site-wrapper">
         <div id="directory-grid"></div>
     </div>
 
@@ -41,8 +81,128 @@
         </div>
     </div>
 
-    <script src="config.js"></script>
-    <script src="modal.js"></script>
-    <script type="module" src="layout.js"></script>
+    <script>
+        /* --- ⚙️ INTEGRATED CONFIG [cite: 2026-01-28] --- */
+        const CONFIG = {
+            CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv",
+            IMAGE_REPO: "https://raw.githubusercontent.com/KFruti88/images/main/",
+            COUPON_ICON: "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png",
+            AMAZON_TAG: "werewolf3788-20", // [cite: 2026-01-27]
+            
+            // A-N Column Mapping [cite: 2026-01-28]
+            MAP: { IMG: 0, NAME: 1, TIER: 2, CAT: 3, PHONE: 4, ADDR: 5, TOWN: 6, EST: 12, COUPON: 13 },
+            
+            // Color Lock Branding [cite: 2026-01-28]
+            TOWN_COLORS: {
+                "Flora": { bg: "#0c0b82", text: "#fe4f00" },
+                "Louisville": { bg: "#010101", text: "#eb1c24" },
+                "North Clay": { bg: "#010101", text: "#eb1c24" },
+                "Clay City": { bg: "#0c30f0", text: "#8a8a88" },
+                "Xenia": { bg: "#000000", text: "#fdb813" },
+                "Sailor Springs": { bg: "#000000", text: "#a020f0" },
+                "Clay County": { bg: "#333333", text: "#ffffff" }
+            }
+        };
+
+        /* --- 🛠️ DIRECTORY ENGINE --- */
+        let masterData = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            updateHeader();
+            fetchData();
+            setInterval(fetchData, 300000); // 5 min heartbeat [cite: 2026-01-26]
+            
+            // Weather Widget Init [cite: 2026-01-26]
+            !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+        });
+
+        function updateHeader() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            document.getElementById('header-info').innerText = `VOL. 1 — NO. ${now.getMonth() + 1} | ${dateStr}`;
+        }
+
+        async function fetchData() {
+            Papa.parse(`${CONFIG.CSV_URL}&t=${new Date().getTime()}`, {
+                download: true, header: false, skipEmptyLines: true,
+                complete: function(results) {
+                    masterData = results.data.slice(1).map(row => ({
+                        ImageID: row[CONFIG.MAP.IMG],
+                        Name: row[CONFIG.MAP.NAME],
+                        Tier: row[CONFIG.MAP.TIER],
+                        Category: row[CONFIG.MAP.CAT],
+                        Phone: row[CONFIG.MAP.PHONE],
+                        Address: row[CONFIG.MAP.ADDR],
+                        Town: row[CONFIG.MAP.TOWN] || "Clay County",
+                        Est: row[CONFIG.MAP.EST],
+                        Coupon: row[CONFIG.MAP.COUPON]
+                    })).filter(b => b.Name && b.Name !== "Name");
+                    renderCards(masterData);
+                }
+            });
+        }
+
+        function renderCards(data) {
+            const grid = document.getElementById('directory-grid');
+            grid.innerHTML = data.map(biz => {
+                const style = CONFIG.TOWN_COLORS[biz.Town.trim()] || CONFIG.TOWN_COLORS["Clay County"];
+                const tierL = (biz.Tier || 'basic').toLowerCase();
+                const hasCoupon = (biz.Coupon && biz.Coupon !== "N/A");
+
+                return `
+                <div class="card ${tierL}" onclick="openFullModal('${biz.Name.replace(/'/g, "\\'")}')">
+                    <div style="position:absolute; top:8px; left:8px; font-size:0.7rem; border:1px solid #000; background:#fff; padding:2px 5px; z-index:10;">${biz.Tier}</div>
+                    ${hasCoupon ? `<img src="${CONFIG.COUPON_ICON}" style="position:absolute; top:8px; right:8px; width:30px; z-index:10;">` : ""}
+                    
+                    <div class="logo-box">
+                        <img src="${CONFIG.IMAGE_REPO}${biz.ImageID}.jpeg" onerror="this.src='https://via.placeholder.com/150'">
+                    </div>
+
+                    <div class="town-bar" style="background-color: ${style.bg}; color: ${style.text};">
+                        ${biz.Town}
+                    </div>
+
+                    <div class="biz-name">${biz.Name}</div>
+
+                    <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding-bottom:15px;">
+                        ${(tierL === 'premium' || tierL === 'plus') ? `<div style="color:#0c30f0; font-weight:bold; font-size: 1.2rem; margin-bottom:5px;">📞 ${biz.Phone}</div>` : ''}
+                        <div style="font-weight:bold; color:#444;">📁 ${biz.Category}</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        /* --- 📱 MODAL ENGINE [cite: 2026-01-26, 2026-01-27] --- */
+        window.openFullModal = function(bizName) {
+            const biz = masterData.find(b => b.Name === bizName);
+            if (!biz) return;
+            const modal = document.getElementById('premium-modal');
+            const mapAddr = encodeURIComponent(`${biz.Address}, ${biz.Town}, IL`);
+
+            document.getElementById('modal-body').innerHTML = `
+                <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:15px;">
+                    <h1 style="margin:0;">${biz.Name}</h1>
+                    <p>${biz.Category} | Est. ${biz.Est || 'N/A'}</p>
+                </div>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px; margin-top:20px;">
+                    <div>
+                        <h3>Details</h3>
+                        <p>📞 Phone: <a href="tel:${biz.Phone}">${biz.Phone}</a></p>
+                        <p>📍 Address: ${biz.Address}, ${biz.Town}</p>
+                    </div>
+                    <div style="border:2px solid #000; height:250px;">
+                        <iframe width="100%" height="100%" frameborder="0" src="https://maps.google.com/maps?q=${mapAddr}&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+                    </div>
+                </div>
+                <div style="margin-top:20px; text-align:center;">
+                    <a href="https://www.amazon.com/dp/ASIN_HERE?tag=${CONFIG.AMAZON_TAG}" target="_blank" style="background:#ff9900; color:#000; padding:10px 20px; text-decoration:none; font-weight:bold; border:1px solid #000;">Local Deals</a>
+                </div>
+            `;
+            modal.style.display = "flex";
+        }
+
+        window.closeModal = function() { document.getElementById('premium-modal').style.display = "none"; }
+        window.onclick = function(e) { if (e.target.id === 'premium-modal') closeModal(); }
+    </script>
 </body>
 </html>

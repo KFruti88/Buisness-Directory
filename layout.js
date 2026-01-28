@@ -1,115 +1,135 @@
 /**
- * LAYOUT.JS - BOSS-READY FINAL VERSION
- * Equal Box Heights + GitHub Raw Image Fix
+ * PROJECT: Clay County Directory Engine
+ * VERSION: 1.10
+ * MAPPING: A=ImageID, B=Name, G=Address (Index 6), D=Teir, F=Phone
+ * UPDATES: Corrected extension to .jpeg; Phone visible for Premium/Plus.
  */
-var masterData = []; 
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadDirectory();
-    if (typeof setupModalClose === "function") setupModalClose();
+let masterData = [];
+
+// 2. INITIALIZATION
+document.addEventListener("DOMContentLoaded", () => { 
+    updateNewspaperHeader(); 
+    loadDirectory();         
 });
 
-async function loadDirectory() {
-    const cacheBuster = new Date().getTime();
-    Papa.parse(`${baseCsvUrl}&cb=${cacheBuster}`, {
-        download: true, header: true, skipEmptyLines: true,
-        complete: (results) => {
-            masterData = results.data.map(row => {
-                let obj = {};
-                for (let key in row) {
-                    let cleanKey = key.trim().toLowerCase();
-                    if (cleanKey === "teir") cleanKey = "tier"; 
-                    obj[cleanKey] = row[key];
-                }
-                
-                // Town Parsing Logic (Matches Snippet: Extracts from Address)
-                if (obj.address) {
-                    const parts = obj.address.split(',');
-                    if (parts.length >= 2) { obj.town = parts[1].trim(); }
-                }
+// 3. NEWSPAPER HEADER
+function updateNewspaperHeader() {
+    const now = new Date();
+    const dateString = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const headerInfo = document.getElementById('header-info');
+    if (headerInfo) { 
+        headerInfo.innerText = `VOL. 1 — NO. ${now.getMonth() + 1} | ${dateString}`; 
+    }
+}
 
-                return obj;
-            }).filter(row => row.name && row.name.trim() !== "" && row.name !== "Searching...");
-            if (typeof generateCategoryDropdown === "function") generateCategoryDropdown();
-            renderCards(masterData);
+// 4. SMART IMAGE ENGINE (Targets .jpeg specifically)
+function getSmartImage(imageID, bizName) {
+    let fileName = imageID ? imageID.trim() : "";
+    
+    // Fallback if Column A is empty
+    if (!fileName && bizName) {
+        fileName = bizName.toLowerCase().replace(/['\s]/g, ""); 
+    }
+
+    const placeholder = `https://via.placeholder.com/150?text=Logo+Pending`;
+    
+    // Updated to .jpeg per your latest update
+    const imgUrl = `${imageRepo}${fileName}.jpeg`;
+    
+    return `<img src="${imgUrl}" 
+            class="logo-img" 
+            alt="${bizName}"
+            onerror="this.onerror=null; 
+                     this.src='${imageRepo}${fileName}.png'; 
+                     this.onerror=function(){this.src='${placeholder}'};">`;
+}
+
+// 5. DATA LOADING & ADDRESS PARSING
+async function loadDirectory() {
+    Papa.parse(csvUrl, {
+        download: true, 
+        header: false, 
+        skipEmptyLines: true,
+        complete: function(results) {
+            const rawRows = results.data;
+            
+            masterData = rawRows.slice(1).map(row => {
+                // Extract Town from Column G (Index 6)
+                const fullAddress = row[6] || "";
+                const parts = fullAddress.split(',');
+                let town = "Clay County";
+                if (parts.length >= 2) { town = parts[1].trim(); }
+
+                return {
+                    ImageID: row[0] || "",    // Column A
+                    Name: row[1] || "N/A",    // Column B
+                    Town: town,               // From Column G
+                    Tier: row[3] || "Basic",  // Column D
+                    Category: row[4] || "N/A",// Column E
+                    Phone: row[5] || ""       // Column F
+                };
+            }).filter(biz => biz.Name !== "N/A" && biz.Name !== "Name");
+
+            if (document.getElementById('directory-grid')) {
+                renderCards(masterData);
+            }
         }
     });
 }
 
+// 6. RENDER CARDS
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    const tierPriority = { "premium": 1, "plus": 2, "basic": 3 };
-    const sortedData = [...data].sort((a, b) => {
-        const tierA = (a.tier || 'basic').toLowerCase();
-        const tierB = (b.tier || 'basic').toLowerCase();
-        if (tierPriority[tierA] !== tierPriority[tierB]) return tierPriority[tierA] - tierPriority[tierB];
-        return (a.name || "").localeCompare(b.name || "");
-    });
+    const tierOrder = { "premium": 1, "plus": 2, "basic": 3 };
 
-    grid.innerHTML = sortedData.map((biz) => {
-        const tier = (biz.tier || 'basic').toLowerCase();
-        let town = (biz.town || "Clay County").trim().split(',')[0].replace(" IL", "").trim();
-        const townClass = town.toLowerCase().replace(/\s+/g, '-');
-        const displayCat = mapCategory(biz.category);
+    grid.innerHTML = data.sort((a, b) => {
+        const tA = a.Tier.toLowerCase();
+        const tB = b.Tier.toLowerCase();
+        if (tierOrder[tA] !== tierOrder[tB]) {
+            return (tierOrder[tA] || 4) - (tierOrder[tB] || 4);
+        }
+        return a.Town.localeCompare(b.Town);
+    }).map(biz => {
+        const tierL = biz.Tier.toLowerCase();
+        const townClass = biz.Town.toLowerCase().replace(/\s+/g, '-');
 
-        // Image Fix: Forces Raw GitHub URL
-        let imageHtml = (tier === "basic") ? `<img src="${placeholderImg}" style="height:150px; max-width:100%; object-fit:contain;">` : getSmartImage(biz.imageid, biz.name);
-        
-        // Box Size Fix: Hidden spacers keep boxes aligned at 460px
-        let phoneHtml = (tier !== "basic") ? 
-            `<p style="font-weight:bold; margin-top:5px; font-size:1.1rem;">📞 ${biz.phone || 'N/A'}</p>` : 
-            `<p style="margin-top:5px; visibility:hidden; height:1.1rem;">Hidden</p>`;
-        let actionHint = (tier === "premium") ? 
-            `<div style="color:#0c30f0; font-weight:bold; margin-top:10px; text-decoration:underline;">Click for Details</div>` : 
-            `<div style="margin-top:10px; visibility:hidden; height:1.2rem;">Hidden</div>`;
-        let clickAction = (tier === "premium") ? `onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')" style="cursor:pointer;"` : "";
+        // Click logic: ONLY Premium goes to profile.html
+        let clickAttr = "";
+        let cursorStyle = "default";
+        if (tierL === 'premium') {
+            clickAttr = `onclick="window.location.href='profile.html?id=${encodeURIComponent(biz.ImageID)}'"` ;
+            cursorStyle = "pointer";
+        }
+
+        // Phone logic: Display for Premium and Plus only
+        const showPhone = (tierL === 'premium' || tierL === 'plus') && biz.Phone;
 
         return `
-            <div class="card ${tier}" ${clickAction} style="width: 380px; height: 460px; margin: 10px auto; display: flex; flex-direction: column; position:relative; overflow:hidden; border: 1px solid #ddd; background:#fff;">
-                <div class="logo-box" style="height: 160px; display: flex; align-items: center; justify-content: center; background:#f4f4f4;">${imageHtml}</div>
-                <div class="town-bar ${townClass}-bar">${town}</div>
-                <div style="flex-grow: 1; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align:center;">
-                    <h2 style="margin:0; font-size:1.4rem; height: 3em; overflow: hidden; display: flex; align-items: center; justify-content: center;">${biz.name}</h2>
-                    ${phoneHtml}${actionHint}
-                </div>
-                <div class="category-footer" style="padding-bottom:15px; font-weight:bold; font-style:italic; font-size:0.85rem; text-align:center;">${catEmojis[displayCat] || "📁"} ${displayCat}</div>
-            </div>`;
+        <div class="card ${tierL}" ${clickAttr} style="cursor: ${cursorStyle};">
+            <div class="tier-badge">${biz.Tier}</div> 
+            <div class="logo-box">
+                ${getSmartImage(biz.ImageID, biz.Name)} 
+            </div>
+            <div class="town-bar ${townClass}-bar">${biz.Town}</div> 
+            <div class="biz-name">${biz.Name}</div> 
+            
+            ${showPhone ? `<div class="biz-phone">📞 ${biz.Phone}</div>` : ''}
+            
+            <div class="cat-text">${catEmojis[biz.Category] || "📁"} ${biz.Category}</div> 
+        </div>`;
     }).join('');
 }
 
-function getSmartImage(id, bizName) {
-    const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
-    
-    let fileName = (id && id !== "N/A" && id !== "Searching...") ? id.trim() : "";
-    
-    // Fallback: Generate filename from Business Name if ID is missing
-    if (!fileName && bizName) {
-        fileName = bizName.toLowerCase().replace(/['\s]/g, ""); 
-    }
-    
-    if (!fileName) return `<img src="${placeholderImg}" style="max-height:100%; max-width:100%; object-fit:contain;">`;
-    
-    return `<img src="${rawRepo}${fileName}.jpeg" style="max-height:100%; max-width:100%; object-fit:contain;" onerror="this.onerror=null; this.src='${rawRepo}${fileName}.png'; this.onerror=function(){this.src='${placeholderImg}'};">`;
-}
-
-function generateCategoryDropdown() {
-    const catSelect = document.getElementById('cat-select');
-    if (!catSelect) return;
-    catSelect.innerHTML = '<option value="All">📂 All Industries</option>';
-    Object.keys(catEmojis).sort().forEach(cat => {
-        catSelect.innerHTML += `<option value="${cat}">${catEmojis[cat]} ${cat}</option>`;
-    });
-}
-
+// 7. FILTERS
 function applyFilters() {
-    const selectedTown = document.getElementById('town-select').value;
-    const selectedCat = document.getElementById('cat-select').value;
-    const filtered = masterData.filter(biz => {
-        const matchTown = (selectedTown === 'All' || biz.town.includes(selectedTown));
-        const matchCat = (selectedCat === 'All' || mapCategory(biz.category) === selectedCat);
-        return matchTown && matchCat;
-    });
+    const catVal = document.getElementById('cat-select').value;
+    const townVal = document.getElementById('town-select').value;
+    const filtered = masterData.filter(biz => 
+        (catVal === 'All' || biz.Category === catVal) && 
+        (townVal === 'All' || biz.Town === townVal)
+    );
     renderCards(filtered);
 }

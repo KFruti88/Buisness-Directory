@@ -1,18 +1,19 @@
 /** * MODAL.JS - THE POP-OUT ENGINE */
 function getSmartImage(id) {
-    // 1. If no ID is provided, return your placeholder from GitHub
+    // Fallback if ID is missing
     if (!id || id === "" || id === "N/A") {
         return `<img src="https://raw.githubusercontent.com/KFruti88/images/main/placeholder.png" 
-                     alt="Placeholder" 
-                     style="max-height: 100%; border-radius: 8px;">`;
+                     alt="Placeholder" style="max-height:100%; border-radius:8px;">`;
     }
 
-    // 2. Otherwise, look for the image in your local assets folder
-    // Adjust "assets/logos/" to match your actual folder structure
-    return `<img src="assets/logos/${id}.png" 
+    // Convert ID to lowercase to match GitHub's strict file system
+    const safeId = id.toLowerCase().trim();
+
+    // The "./" is critical for GitHub Project Pages
+    return `<img src="./assets/logos/${safeId}.png" 
                  alt="Business Logo" 
-                 style="max-height: 100%; border-radius: 8px;"
-                 onerror="this.src='https://raw.githubusercontent.com/KFruti88/images/main/placeholder.png'">`;
+                 style="max-height:100%; border-radius:8px;"
+                 onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/KFruti88/images/main/placeholder.png';">`;
 }
 
 function openFullModal(bizName) {

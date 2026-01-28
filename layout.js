@@ -1,7 +1,7 @@
 /**
  * PROJECT: Clay County Directory Engine - Main Layout
- * VERSION: 1.31
- * FEATURES: Live Sync Heartbeat, Cache Buster, 450px Grid, Auto-Shrink Names.
+ * VERSION: 1.32
+ * FEATURES: Transparent Bottom Section, Live Sync, 450px Grid, Auto-Shrink Names.
  */
 
 let masterData = [];
@@ -10,7 +10,6 @@ const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 // --- LIVE DATA CONFIG WITH CACHE BUSTER ---
 const baseCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 
-// Forces Google to provide the absolute freshest data
 function getLiveCsvUrl() {
     return `${baseCsvUrl}&t=${new Date().getTime()}`;
 }
@@ -43,9 +42,8 @@ document.addEventListener("DOMContentLoaded", () => {
     updateHeaderDate(); 
     fetchDirectoryData();
     
-    // LIVE SYNC HEARTBEAT: Checks for spreadsheet updates every 5 minutes
     setInterval(() => {
-        console.log("Live Sync: Refreshing data from Google Sheets...");
+        console.log("Live Sync: Refreshing data...");
         fetchDirectoryData();
     }, 300000); 
 });
@@ -124,7 +122,7 @@ function renderDirectoryGrid(data) {
                 ${biz.Name}
             </div> 
             
-            <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: space-around; padding: 10px; background: #fafafa; border-top: 1px solid #eee;">
+            <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: space-around; padding: 10px; background: transparent;">
                 ${(tierL === 'premium' || tierL === 'plus') ? `<div class="biz-phone" style="text-align:center; font-weight:bold; font-size: 1.1rem; color: #0c30f0;">📞 ${biz.Phone}</div>` : ''}
                 <div class="cat-text" style="text-align:center; font-size: 0.9rem; color: #444;">
                     ${catEmojis[biz.Category] || "📁"} ${biz.Category}

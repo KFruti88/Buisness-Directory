@@ -1,8 +1,6 @@
 /**
  * MODAL.JS - THE POP-OUT ENGINE
- * VERSION: 1.18
- * UPDATES: Added Data URL support for testing, Coupon under Bio, 
- * Clickable Phone (Premium/Plus), and Click-Outside-to-Close.
+ * VERSION: 1.19
  */
 
 function openFullModal(bizName) {
@@ -15,7 +13,6 @@ function openFullModal(bizName) {
     
     const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 
-    // --- COUPON IMAGE LOGIC (Supports Files & Data URLs) ---
     let couponImg = "";
     if (biz.CouponLink && biz.CouponLink !== "" && biz.CouponLink !== "N/A") {
         const link = biz.CouponLink.trim();
@@ -26,7 +23,6 @@ function openFullModal(bizName) {
         }
     }
 
-    // --- PREMIUM & PLUS VIEW (The Pro Newspaper Layout) ---
     if (tierL === 'premium' || tierL === 'plus') {
         const mapAddr = encodeURIComponent(`${biz.Address}, ${biz.Town}, IL`);
 
@@ -75,22 +71,19 @@ function openFullModal(bizName) {
             ${couponImg ? `
                 <div style="margin-top:30px; border:4px dashed #d4af37; background:#fffbe6; padding:25px; text-align:center;">
                     <h2 style="color:#d4af37; margin:0 0 15px 0; font-size: 1.8rem;">🎟️ EXCLUSIVE COMMUNITY DEAL</h2>
-                    <p style="font-size: 1.2rem; font-weight:bold; margin-bottom: 15px;">${biz.CouponText || 'Show this at the register!'}</p>
+                    <p style="font-size: 1.2rem; font-weight:bold; margin-bottom: 15px;">${biz.CouponText || ''}</p>
                     <div style="max-width:100%; display:flex; justify-content:center;">
                         <img src="${couponImg}" style="max-width:100%; height:auto; max-height:300px; border:1px solid #000; box-shadow: 4px 4px 0px rgba(0,0,0,0.1); object-fit:contain;">
                     </div>
                 </div>` : ""}
         `;
-    } 
-    // --- BASIC VIEW ---
-    else {
+    } else {
         body.innerHTML = `
             <div style="text-align:center; padding:10px;">
                 <h2 style="font-family:'Times New Roman', serif; font-size: 2.2rem; margin-bottom: 10px;">${biz.Name}</h2>
                 <div style="border:5px dashed #000; padding:30px; background:#fff; margin-top:15px; box-shadow: 8px 8px 0px rgba(0,0,0,0.1);">
-                    <p style="font-size:1.4rem; font-weight:bold; margin-bottom:20px;">${biz.CouponText || 'Special Offer'}</p>
+                    <p style="font-size:1.4rem; font-weight:bold; margin-bottom:20px;">${biz.CouponText || ''}</p>
                     <img src="${couponImg}" style="max-width:100%; height:auto; max-height:400px; object-fit:contain;">
-                    <p style="margin-top:20px; font-style:italic; color:#555;">Scan or show this image at the register.</p>
                 </div>
             </div>
         `;
@@ -99,10 +92,8 @@ function openFullModal(bizName) {
     modal.style.display = "flex";
 }
 
-// --- UNIVERSAL CLOSING LOGIC ---
 window.onclick = function(event) {
     const modal = document.getElementById('premium-modal');
-    // Closes if you click the background OR the X button (by class or text)
     if (event.target == modal || event.target.classList.contains('close-btn') || event.target.innerHTML === '×') {
         modal.style.display = "none";
     }

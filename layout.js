@@ -1,7 +1,7 @@
 /**
  * PROJECT: Clay County Directory Engine - Main Layout
- * VERSION: 1.32
- * FEATURES: Transparent Bottom Section, Live Sync, 450px Grid, Auto-Shrink Names.
+ * VERSION: 1.33
+ * FEATURES: 93% Width Row Centering, Transparent Bottoms, Live Sync, 450px Grid.
  */
 
 let masterData = [];
@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateHeaderDate(); 
     fetchDirectoryData();
     
+    // HEARTBEAT: Auto-sync every 5 mins
     setInterval(() => {
         console.log("Live Sync: Refreshing data...");
         fetchDirectoryData();
@@ -92,6 +93,14 @@ async function fetchDirectoryData() {
 function renderDirectoryGrid(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
+    
+    // --- FORCE 93% WIDTH AND CENTERING ON THE ROW CONTAINER ---
+    grid.style.width = "93%";
+    grid.style.margin = "0 auto";
+    grid.style.display = "grid";
+    grid.style.gridTemplateColumns = "repeat(auto-fit, minmax(300px, 1fr))";
+    grid.style.gap = "20px";
+
     const tierOrder = { "premium": 1, "plus": 2, "basic": 3 };
 
     grid.innerHTML = data.sort((a, b) => {

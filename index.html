@@ -7,8 +7,9 @@
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clay County Business Directory | SMLC</title>
+    
     <link rel="stylesheet" href="style.css?v=1.12">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    
     <style>
         /* Modal Style for Pop-out Engine */
         #premium-modal {
@@ -42,6 +43,8 @@
             cursor: pointer;
             font-weight: bold;
         }
+        /* 90% Container Standard */
+        .site-wrapper { width: 90%; margin: auto; }
     </style>
 </head>
 <body>
@@ -51,7 +54,7 @@
         <a href="https://supportmylocalcommunity.com/clay-city/">Clay City</a>
         <a href="https://ourflora.com/">Flora</a>
         <a href="https://supportmylocalcommunity.com/louisville/">Louisville</a>
-        <a href="https://supportmylocalcommunity.com/sailor-springs/">Sailor Springs</a>
+        <a href="https://supportmylocalcommunity.com/sail-springs/">Sailor Springs</a>
         <a href="https://supportmylocalcommunity.com/xenia/">Xenia</a>
     </div>
 
@@ -59,7 +62,7 @@
         <h1>Clay County Directory</h1>
         
         <div class="newspaper-meta single-row">
-            <div class="meta-item left-meta" id="header-info">VOL. 1 — NO. 1 | LOADING...</div>
+            <div class="meta-item left-meta" id="header-info">VOL. 1 — NO. 1 | CLAY COUNTY, IL</div>
 
             <div class="meta-item">
                 <select id="town-select" onchange="applyFilters()">
@@ -82,29 +85,21 @@
                     <option value="Emergency">🚨 Emergency Services</option> 
                     <option value="Manufacturing">🏗️ Manufacturing</option>
                     <option value="Bars">🍺 Bars & Taverns</option>
-                    <option value="Professional Services">💼 Professional Services</option>
-                    <option value="Financial Services">💰 Financial Services</option>
                     <option value="Retail">🛒 Retail</option>
-                    <option value="Shopping">🛍️ Shopping</option>
                     <option value="Restaurants">🍴 Restaurants</option>
                     <option value="Church">⛪ Church</option>
-                    <option value="Post Office">📬 Post Office</option>
                     <option value="Healthcare">🏥 Healthcare</option>
-                    <option value="Support Services">🛠️ Support Services</option>
-                    <option value="Internet">🌐 Internet</option>
-                    <option value="Gas Station">⛽ Gas Station</option>
-                    <option value="Industry">🏭 Industry</option>
                 </select>
             </div>
 
             <div class="meta-item right-meta">
-                 <span id="weather-box" class="weather-text"></span>
+                 <span id="weather-box" class="weather-text">WEATHER LOADING...</span>
             </div>
         </div>
     </header>
 
     <div class="site-wrapper">
-        <div id="directory-grid"></div>
+        <div id="directory-grid" class="grid-container"></div>
     </div>
 
     <div id="premium-modal">
@@ -114,9 +109,66 @@
         </div>
     </div>
 
-    <script src="modal.js?v=1.12"></script>
-    <script src="layout.js?v=1.12"></script>
     <script>
+        // Color Lock Mapping for Towns
+        const townColors = { 
+            "Flora": { bg: "#0c0b82", text: "#fe4f00" }, 
+            "Louisville": { bg: "#010101", text: "#eb1c24" }, 
+            "North Clay": { bg: "#010101", text: "#eb1c24" }, 
+            "Clay City": { bg: "#0c30f0", text: "#8a8a88" }, 
+            "Xenia": { bg: "#000000", text: "#fdb813" }, 
+            "Sailor Springs": { bg: "#000000", text: "#a020f0" }, 
+            "Clay County": { bg: "#333333", text: "#ffffff" } 
+        };
+
+        let allData = [];
+
+        async function loadDirectory() {
+            try {
+                // Fetch JSON generated from A-M Mapping
+                const response = await fetch('directory.json?v=' + new Date().getTime());
+                allData = await response.json();
+                renderCards(allData);
+            } catch (error) {
+                console.error("Error sync data:", error);
+                document.getElementById('directory-grid').innerHTML = "<h2>Directory Syncing... Please Refresh.</h2>";
+            }
+        }
+
+        function renderCards(data) {
+            const grid = document.getElementById('directory-grid');
+            grid.innerHTML = data.map(biz => {
+                const colors = townColors[biz.town] || townColors["Clay County"];
+                const profileUrl = `profile.html?biz=${biz.name.replace(/\s+/g, '-').toLowerCase()}`;
+                
+                return `
+                    <div class="biz-card" onclick="location.href='${profileUrl}'" style="background-color: ${colors.bg}; color: ${colors.text}; cursor: pointer; border: 2px solid #fff; padding: 20px; border-radius: 8px;">
+                        <h2 style="margin: 0;">${biz.name}</h2>
+                        <p><strong>Town:</strong> ${biz.town}</p>
+                        <p><strong>Industry:</strong> ${biz.category}</p>
+                        <p style="font-size: 0.9rem; border-top: 1px solid ${colors.text}; padding-top: 10px;">
+                            ${biz.bio.substring(0, 75)}...
+                        </p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function applyFilters() {
+            const town = document.getElementById('town-select').value;
+            const cat = document.getElementById('cat-select').value;
+
+            let filtered = allData;
+            if (town !== "All") filtered = filtered.filter(b => b.town === town);
+            if (cat !== "All") filtered = filtered.filter(b => b.category.includes(cat));
+
+            renderCards(filtered);
+        }
+
+        // Initialize
+        window.onload = loadDirectory;
+
+        // Maintain Weather Widget Logic
         !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
     </script>
 </body>

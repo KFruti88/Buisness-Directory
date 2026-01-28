@@ -1,17 +1,21 @@
 /**
  * PROJECT: Clay County Directory Engine - Main Layout
- * VERSION: 1.29
- * FEATURES: Expanded Card Heights (450px), Readable Biz Names, Standardized Alignment.
+ * VERSION: 1.31
+ * FEATURES: Live Sync Heartbeat, Cache Buster, 450px Grid, Auto-Shrink Names.
  */
 
 let masterData = [];
 const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
+
+// --- LIVE DATA CONFIG WITH CACHE BUSTER ---
 const baseCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
 
+// Forces Google to provide the absolute freshest data
 function getLiveCsvUrl() {
     return `${baseCsvUrl}&t=${new Date().getTime()}`;
 }
 
+// --- MASTER TOWN COLOR PALETTE ---
 const townStyles = {
     "Flora": { bg: "#0c0b82", text: "#fe4f00" },
     "Louisville": { bg: "#010101", text: "#eb1c24" },
@@ -22,19 +26,28 @@ const townStyles = {
     "Clay County": { bg: "#333333", text: "#ffffff" }
 };
 
+// --- MASTER CATEGORY LIST ---
 const catEmojis = {
     "Bars": "🍺", "Emergency": "🚨", "Church": "⛪", "Post Office": "📬", 
     "Restaurants": "🍴", "Retail": "🛒", "Shopping": "🛍️", "Manufacturing": "🏗️", 
     "Industry": "🏭", "Financial Services": "💰", "Healthcare": "🏥", 
     "Gas Station": "⛽", "Internet": "🌐", "Support Services": "🛠️", 
-    "Professional Services": "💼", "Agriculture": "🚜", "Beauty & Hair": "✂️",
-    "Automotive": "🚗", "Construction": "🔨", "Real Estate": "🏠", "Legal": "⚖️"
+    "Professional Services": "💼", "Agriculture": "🚜", "Education": "🎓",
+    "Beauty & Hair": "✂️", "Automotive": "🚗", "Construction": "🔨",
+    "Real Estate": "🏠", "Legal": "⚖️", "Lodging": "🏨", "Parks & Rec": "🌳",
+    "Non-Profit": "🤝", "Cleaning Services": "🧹", "Entertainment": "🍿",
+    "Fitness": "💪", "Insurance": "📄", "Technology": "💻"
 };
 
 document.addEventListener("DOMContentLoaded", () => { 
     updateHeaderDate(); 
     fetchDirectoryData();
-    setInterval(() => fetchDirectoryData(), 300000); 
+    
+    // LIVE SYNC HEARTBEAT: Checks for spreadsheet updates every 5 minutes
+    setInterval(() => {
+        console.log("Live Sync: Refreshing data from Google Sheets...");
+        fetchDirectoryData();
+    }, 300000); 
 });
 
 function updateHeaderDate() {
@@ -52,10 +65,9 @@ function getSmartLogo(imageID, bizName) {
             onerror="this.onerror=null; this.src='${imageRepo}${fileName}.png'; this.onerror=function(){this.src='${placeholder}'};">`;
 }
 
-// Adjusted Font Logic: Keep it readable even for long names
 function getBizFontSize(name) {
     if (name.length > 35) return "0.95rem"; 
-    if (name.length > 20) return "1.1rem";    
+    if (name.length > 22) return "1.1rem";    
     return "1.3rem";                       
 }
 
@@ -93,13 +105,12 @@ function renderDirectoryGrid(data) {
         const townName = biz.Town.trim();
         const style = townStyles[townName] || { bg: "#d3d3d3", text: "#1a1a1a" };
         const bizFontSize = getBizFontSize(biz.Name);
-        
         let clickAction = (tierL === 'premium' || (biz.CouponLink && biz.CouponLink !== "")) 
                     ? `onclick="openFullModal('${biz.Name.replace(/'/g, "\\'")}')"` : "";
 
         return `
-        <div class="card ${tierL}" ${clickAction} style="cursor: ${clickAction ? 'pointer' : 'default'}; height: 450px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #ccc; background: #fff; margin-bottom: 20px;">
-            <div class="tier-badge">${biz.Tier}</div> 
+        <div class="card ${tierL}" ${clickAction} style="cursor: ${clickAction ? 'pointer' : 'default'}; height: 450px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #000; background: #fff;">
+            <div class="tier-badge" style="position:absolute; top:5px; right:5px; font-size: 0.7rem; background:rgba(0,0,0,0.1); padding:2px 5px; border-radius:3px;">${biz.Tier}</div> 
             
             <div class="logo-box" style="height: 140px; display: flex; align-items: center; justify-content: center; padding: 15px;">
                 ${getSmartLogo(biz.ImageID, biz.Name)}
@@ -115,7 +126,7 @@ function renderDirectoryGrid(data) {
             
             <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: space-around; padding: 10px; background: #fafafa; border-top: 1px solid #eee;">
                 ${(tierL === 'premium' || tierL === 'plus') ? `<div class="biz-phone" style="text-align:center; font-weight:bold; font-size: 1.1rem; color: #0c30f0;">📞 ${biz.Phone}</div>` : ''}
-                <div class="cat-text" style="text-align:center; font-size: 0.9rem; color: #444; font-style: italic;">
+                <div class="cat-text" style="text-align:center; font-size: 0.9rem; color: #444;">
                     ${catEmojis[biz.Category] || "📁"} ${biz.Category}
                 </div> 
             </div>

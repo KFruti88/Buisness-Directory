@@ -68,7 +68,8 @@ async function loadDirectory() {
                     Town: town,               // From Column G
                     Tier: row[3] || "Basic",  // Column D
                     Category: (row[4] || "N/A").trim(),// Column E
-                    Phone: row[5] || ""       // Column F
+                    Phone: row[5] || "",      // Column F
+                    Coupon: row[11] || ""     // Column L
                 };
             }).filter(biz => biz.Name !== "N/A" && biz.Name !== "Name");
 
@@ -108,9 +109,13 @@ function renderCards(data) {
         // Phone logic: Display for Premium and Plus only
         const showPhone = (tierL === 'premium' || tierL === 'plus') && biz.Phone;
 
+        // Coupon logic: Show badge if Column L has content
+        const showCoupon = (biz.Coupon && biz.Coupon.trim() !== "");
+
         return `
         <div class="card ${tierL}" ${clickAttr} style="cursor: ${cursorStyle};">
             <div class="tier-badge">${biz.Tier}</div> 
+            ${showCoupon ? `<img src="${imageRepo}coupon.png" class="coupon-badge" alt="Coupon">` : ''}
             <div class="logo-box">
                 ${getSmartImage(biz.ImageID, biz.Name)} 
             </div>

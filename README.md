@@ -42,6 +42,7 @@ Coupon Integration: Supports a "Live Coupon" badge system to drive customer traf
 
 🛠️ Technical Architecture
 Frontend: HTML5, CSS3 (Newspaper Aesthetic), JavaScript (ES6).
+Make sure to add a Universal Browser, Univeral Devices, and Universal Screen
 
 Data Engine: PapaParse integration for real-time CSV processing.
 

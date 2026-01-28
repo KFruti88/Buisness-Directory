@@ -1,11 +1,10 @@
 /**
- * MODAL.JS - THE POP-OUT ENGINE (RESTORED & FIXED)
- * VERSION: 1.14
- * FIX: Locked image dimensions to prevent overlap while keeping the Newspaper look.
+ * MODAL.JS - THE POP-OUT ENGINE
+ * VERSION: 1.15
+ * FIXED: Clickable phone for Premium/Plus ONLY. Image overlap protection included.
  */
 
 function openFullModal(bizName) {
-    // We use .Name to match your specific masterData structure
     const biz = masterData.find(b => b.Name === bizName);
     if (!biz) return;
 
@@ -13,17 +12,16 @@ function openFullModal(bizName) {
     const body = document.getElementById('modal-body');
     const tierL = biz.Tier.toLowerCase();
     
-    // IMAGE REPO FIX
     const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 
-    // Coupon Image logic with "Fit" security
     let couponImg = "";
     if (biz.CouponLink && biz.CouponLink !== "" && biz.CouponLink !== "N/A") {
         const fileName = biz.CouponLink.trim();
         couponImg = fileName.startsWith('http') ? fileName : `${rawRepo}${fileName}.png`;
     }
 
-    if (tierL === 'premium') {
+    // --- PREMIUM & PLUS VIEW (The "Good" Version) ---
+    if (tierL === 'premium' || tierL === 'plus') {
         const mapAddr = encodeURIComponent(`${biz.Address}, ${biz.Town}, IL`);
 
         body.innerHTML = `
@@ -41,14 +39,14 @@ function openFullModal(bizName) {
                 <div style="padding: 10px;">
                     <h3 style="border-bottom: 2px solid #000; padding-bottom: 8px; margin-top:0; text-transform: uppercase;">Business Details</h3>
                     <div style="font-size: 1.15rem; line-height: 1.8;">
-                        <p><strong>📞 Phone:</strong> <a href="tel:${biz.Phone}" style="color:#000; text-decoration:none;">${biz.Phone}</a></p>
+                        <p><strong>📞 Phone:</strong> <a href="tel:${biz.Phone}" style="color:#0c30f0; text-decoration:underline; font-weight:bold;">${biz.Phone}</a></p>
                         <p><strong>📍 Address:</strong> ${biz.Address}</p>
                         <p><strong>⏰ Hours:</strong> ${biz.Hours || 'N/A'}</p>
                     </div>
                     
                     <div style="margin-top:25px; display:flex; gap:12px; flex-wrap: wrap;">
-                        ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" style="background:#0c30f0; color:#ffffff !important; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; display:inline-block; border:1px solid #000;">🌐 Website</a>` : ""}
-                        ${biz.Facebook && biz.Facebook !== "N/A" ? `<a href="${biz.Facebook}" target="_blank" style="background:#3b5998; color:#ffffff !important; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; display:inline-block; border:1px solid #000;">f Facebook</a>` : ""}
+                        ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" style="background:#0c30f0; color:#fff; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; display:inline-block; border:1px solid #000;">🌐 Website</a>` : ""}
+                        ${biz.Facebook && biz.Facebook !== "N/A" ? `<a href="${biz.Facebook}" target="_blank" style="background:#3b5998; color:#fff; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; display:inline-block; border:1px solid #000;">f Facebook</a>` : ""}
                     </div>
                 </div>
 
@@ -56,7 +54,7 @@ function openFullModal(bizName) {
                     <h3 style="border-bottom: 2px solid #000; padding-bottom: 8px; margin-top:0; text-transform: uppercase;">Location</h3>
                     <div style="border: 2px solid #000; height: 280px; background:#eee; box-shadow: 4px 4px 0px rgba(0,0,0,0.1); overflow:hidden;">
                         <iframe width="100%" height="100%" frameborder="0" style="border:0;" 
-                            src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY_HERE&q=${mapAddr}">
+                            src="https://maps.google.com/maps?q=${mapAddr}&t=&z=14&ie=UTF8&iwloc=&output=embed">
                         </iframe>
                     </div>
                 </div>
@@ -77,13 +75,14 @@ function openFullModal(bizName) {
                     </div>
                 </div>` : ""}
         `;
-    } else {
-        // Simple View for Basic/Plus
+    } 
+    // --- BASIC VIEW (Keep it Basic) ---
+    else {
         body.innerHTML = `
             <div style="text-align:center; padding:10px;">
                 <h2 style="font-family:'Times New Roman', serif; font-size: 2.2rem; margin-bottom: 10px;">${biz.Name}</h2>
                 <div style="border:5px dashed #000; padding:30px; background:#fff; margin-top:15px; box-shadow: 8px 8px 0px rgba(0,0,0,0.1);">
-                    <p style="font-size:1.4rem; font-weight:bold; margin-bottom:20px;">${biz.CouponText}</p>
+                    <p style="font-size:1.4rem; font-weight:bold; margin-bottom:20px;">${biz.CouponText || 'Special Offer'}</p>
                     <img src="${couponImg}" style="max-width:100%; height:auto; max-height:400px; object-fit:contain;">
                     <p style="margin-top:20px; font-style:italic; color:#555;">Scan or show this image at the register.</p>
                 </div>

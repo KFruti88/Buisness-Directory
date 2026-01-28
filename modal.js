@@ -1,46 +1,44 @@
 /**
- * MODAL.JS - THE POP-OUT ENGINE
- * VERSION: 1.30
+ * 🛠️ MODAL.JS - THE POP-OUT ENGINE (JSON VERSION)
+ * VERSION: 1.31
  */
 
 function openFullModal(bizName) {
-    const biz = masterData.find(b => b.Name === bizName);
+    // 1. We now look into the JSON 'allData' instead of CSV masterData
+    const biz = allData.find(b => b.name === bizName); 
     if (!biz) return;
 
     const modal = document.getElementById('premium-modal');
     const body = document.getElementById('modal-body');
-    const tierL = (biz.Tier || 'basic').toLowerCase();
+    const tierL = (biz.tier || 'basic').toLowerCase();
     const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 
+    // 2. Coupon logic using your Column M index
     let couponImg = "";
-    if (biz.CouponLink && biz.CouponLink !== "" && biz.CouponLink !== "N/A") {
-        const link = biz.CouponLink.trim();
+    if (biz.coupon && biz.coupon !== "" && biz.coupon !== "N/A") {
+        const link = biz.coupon.trim();
         couponImg = (link.startsWith('data:image') || link.startsWith('http')) ? link : `${rawRepo}${link}.png`;
     }
 
+    // 3. Address Logic: Use 'full_location' built by Python for Accuracy
     if (tierL === 'premium' || tierL === 'plus') {
-        const mapAddr = encodeURIComponent(`${biz.Address}, ${biz.Town}, IL`);
+        const mapAddr = encodeURIComponent(biz.full_location); // F+G+H combined
         body.innerHTML = `
             <div style="text-align:center; width:100%; padding-bottom: 20px; border-bottom: 2px solid #000; margin-bottom: 25px;">
-                <div style="height:150px; width:100%; margin-bottom:15px; display:flex; justify-content:center; align-items:center; overflow:hidden;">
-                    <div style="max-width:90%; height:100%; display:flex; align-items:center; justify-content:center;">
-                        ${getSmartLogo(biz.ImageID, biz.Name)}
-                    </div>
-                </div>
-                <h1 style="font-family:'Times New Roman', serif; margin:0 auto; font-size: 2.8rem; display:block; width:100%;">${biz.Name}</h1>
-                <p style="color:#666; font-style:italic; font-size: 1.2rem; margin: 5px 0 0 0;">${biz.Category} | Est. ${biz.Established || 'N/A'}</p>
+                <h1 style="font-family:'Times New Roman', serif; margin:0 auto; font-size: 2.8rem; display:block; width:100%;">${biz.name}</h1>
+                <p style="color:#666; font-style:italic; font-size: 1.2rem; margin: 5px 0 0 0;">${biz.category} | Est. ${biz.established || 'N/A'}</p>
             </div>
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:30px;">
                 <div style="padding: 10px;">
                     <h3 style="border-bottom: 2px solid #000; padding-bottom: 8px; margin-top:0; text-transform: uppercase;">Business Details</h3>
                     <div style="font-size: 1.15rem; line-height: 1.8;">
-                        <p><strong>📞 Phone:</strong> <a href="tel:${biz.Phone}" style="color:#0c30f0; text-decoration:underline; font-weight:bold;">${biz.Phone}</a></p>
-                        <p><strong>📍 Address:</strong> ${biz.Address}</p>
-                        <p><strong>⏰ Hours:</strong> ${biz.Hours || 'N/A'}</p>
+                        <p><strong>📞 Phone:</strong> <a href="tel:${biz.phone}" style="color:#0c30f0; text-decoration:underline; font-weight:bold;">${biz.phone}</a></p>
+                        <p><strong>📍 Address:</strong> ${biz.full_location}</p>
+                        <p><strong>⏰ Hours:</strong> ${biz.hours || 'N/A'}</p>
                     </div>
                     <div style="margin-top:25px; display:flex; gap:12px; flex-wrap: wrap;">
-                        ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" style="background:#0c30f0; color:#fff; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; border:1px solid #000;">🌐 Website</a>` : ""}
-                        ${biz.Facebook && biz.Facebook !== "N/A" ? `<a href="${biz.Facebook}" target="_blank" style="background:#3b5998; color:#fff; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; border:1px solid #000;">f Facebook</a>` : ""}
+                        ${biz.website && biz.website !== "N/A" ? `<a href="${biz.website}" target="_blank" style="background:#0c30f0; color:#fff; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; border:1px solid #000;">🌐 Website</a>` : ""}
+                        ${biz.facebook && biz.facebook !== "N/A" ? `<a href="${biz.facebook}" target="_blank" style="background:#3b5998; color:#fff; padding:10px 20px; text-decoration:none; border-radius:5px; font-weight:bold; border:1px solid #000;">f Facebook</a>` : ""}
                     </div>
                 </div>
                 <div style="padding: 10px;">
@@ -50,18 +48,20 @@ function openFullModal(bizName) {
                     </div>
                 </div>
             </div>
-            ${biz.Bio && biz.Bio !== "N/A" ? `<div style="margin-top:30px; padding-top:20px; border-top:2.5px double #000;"><h3 style="text-transform:uppercase; margin-top:0;">Our Story</h3><p style="line-height:1.7; font-size: 1.15rem; color:#222;">${biz.Bio}</p></div>` : ""}
-            ${couponImg ? `<div style="margin-top:30px; border:4px dashed #d4af37; background:#fffbe6; padding:25px; text-align:center;"><h2 style="color:#d4af37; margin:0 0 15px 0; font-size: 1.8rem;">🎟️ EXCLUSIVE COMMUNITY DEAL</h2><p style="font-size: 1.2rem; font-weight:bold; margin-bottom: 15px;">${biz.CouponText || ''}</p><div style="max-width:100%; display:flex; justify-content:center;"><img src="${couponImg}" style="max-width:100%; height:auto; max-height:300px; border:1px solid #000; box-shadow: 4px 4px 0px rgba(0,0,0,0.1); object-fit:contain;"></div></div>` : ""}
+            ${biz.bio && biz.bio !== "N/A" ? `<div style="margin-top:30px; padding-top:20px; border-top:2.5px double #000;"><h3 style="text-transform:uppercase; margin-top:0;">Our Story</h3><p style="line-height:1.7; font-size: 1.15rem; color:#222;">${biz.bio}</p></div>` : ""}
+            ${couponImg ? `<div style="margin-top:30px; border:4px dashed #d4af37; background:#fffbe6; padding:25px; text-align:center;"><h2 style="color:#d4af37; margin:0 0 15px 0; font-size: 1.8rem;">🎟️ EXCLUSIVE COMMUNITY DEAL</h2><img src="${couponImg}" style="max-width:100%; height:auto; max-height:300px; border:1px solid #000;"></div>` : ""}
         `;
     } else {
-        body.innerHTML = `<div style="text-align:center; padding:10px;"><h2 style="font-family:'Times New Roman', serif; font-size: 2.2rem; margin-bottom: 10px;">${biz.Name}</h2><div style="border:5px dashed #000; padding:30px; background:#fff; margin-top:15px; box-shadow: 8px 8px 0px rgba(0,0,0,0.1);"><p style="font-size:1.4rem; font-weight:bold; margin-bottom:20px;">${biz.CouponText || ''}</p><img src="${couponImg}" style="max-width:100%; height:auto; max-height:400px; object-fit:contain;"></div></div>`;
+        body.innerHTML = `<div style="text-align:center; padding:10px;"><h2 style="font-family:'Times New Roman', serif; font-size: 2.2rem;">${biz.name}</h2><div style="border:5px dashed #000; padding:30px; background:#fff;"><img src="${couponImg}" style="max-width:100%; height:auto; max-height:400px; object-fit:contain;"></div></div>`;
     }
     modal.style.display = "flex";
 }
 
+// Close logic remains the same
 window.onclick = function(event) {
     const modal = document.getElementById('premium-modal');
-    if (event.target == modal || event.target.classList.contains('close-btn') || event.target.innerHTML === '×') { modal.style.display = "none"; }
+    if (event.target == modal || event.target.classList.contains('close-btn') || event.target.innerHTML === '×') { 
+        modal.style.display = "none"; 
+    }
 }
-
 function closeModal() { document.getElementById('premium-modal').style.display = "none"; }

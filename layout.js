@@ -34,15 +34,16 @@ function getSmartImage(imageID, bizName) {
 
     const placeholder = `https://via.placeholder.com/150?text=Logo+Pending`;
     
-    // Updated to .jpeg per your latest update
-    const imgUrl = `${imageRepo}${fileName}.jpeg`;
-    
-    return `<img src="${imgUrl}" 
+    // Updated to try .jpeg -> .jpg -> .png
+    return `<img src="${imageRepo}${fileName}.jpeg" 
             class="logo-img" 
             alt="${bizName}"
             onerror="this.onerror=null; 
-                     this.src='${imageRepo}${fileName}.png'; 
-                     this.onerror=function(){this.src='${placeholder}'};">`;
+                     this.src='${imageRepo}${fileName}.jpg'; 
+                     this.onerror=function(){
+                        this.src='${imageRepo}${fileName}.png'; 
+                        this.onerror=function(){this.src='${placeholder}'};
+                     };">`;
 }
 
 // 5. DATA LOADING & ADDRESS PARSING
@@ -66,7 +67,7 @@ async function loadDirectory() {
                     Name: row[1] || "N/A",    // Column B
                     Town: town,               // From Column G
                     Tier: row[3] || "Basic",  // Column D
-                    Category: row[4] || "N/A",// Column E
+                    Category: (row[4] || "N/A").trim(),// Column E
                     Phone: row[5] || ""       // Column F
                 };
             }).filter(biz => biz.Name !== "N/A" && biz.Name !== "Name");

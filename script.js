@@ -8,6 +8,37 @@ const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9
 
 let directoryData = [];
 
+/**
+ * Escapes HTML special characters to prevent XSS attacks
+ * @param {string} text - The text to escape
+ * @returns {string} - The escaped text safe for HTML insertion
+ */
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+/**
+ * Validates that a URL uses safe protocols (http or https)
+ * @param {string} url - The URL to validate
+ * @returns {string} - The URL if safe, empty string otherwise
+ */
+function validateUrl(url) {
+    if (!url || url === "N/A") return "";
+    try {
+        const parsed = new URL(url);
+        return (parsed.protocol === 'http:' || parsed.protocol === 'https:') ? url : "";
+    } catch {
+        return "";
+    }
+}
+
+/**
+ * Loads business directory data from Google Sheets CSV
+ * Parses the CSV using PapaParse and renders the profile
+ */
 function loadDirectory() {
     Papa.parse(csvUrl, {
         download: true,
@@ -51,6 +82,10 @@ function loadDirectory() {
     });
 }
 
+/**
+ * Renders the business profile page based on URL parameter
+ * Reads the 'name' parameter from URL and displays the matching business
+ */
 function renderProfile() {
     const params = new URLSearchParams(window.location.search);
     const bizName = params.get('name');
@@ -99,37 +134,50 @@ function renderProfile() {
         }
     }
     
+    // Validate and escape all user-controlled data
+    const safeName = escapeHtml(business.Name);
+    const safeCategory = escapeHtml(business.Category);
+    const safeEstablished = escapeHtml(business.Established || 'N/A');
+    const safeTown = escapeHtml(business.Town);
+    const safePhone = escapeHtml(business.Phone || 'N/A');
+    const safeAddress = escapeHtml(business.Address || 'N/A');
+    const safeHours = escapeHtml(business.Hours || 'Call for hours');
+    const safeBio = escapeHtml(business.Bio);
+    const safeCouponText = escapeHtml(business.CouponText);
+    const safeWebsite = validateUrl(business.Website);
+    const safeFacebook = validateUrl(business.Facebook);
+    
     document.getElementById('profile-wrap').innerHTML = `
         <div class="profile-container">
-            <span class="tier-indicator">${business.Tier}</span>
+            <span class="tier-indicator">${escapeHtml(business.Tier)}</span>
             
             <a href="index.html" class="back-link">← Back to Directory</a>
             
             <div class="profile-header">
                 <div class="profile-logo-box">
-                    <img src="${logoSrc}" alt="${business.Name}" 
+                    <img src="${logoSrc}" alt="${safeName}" 
                          onerror="this.onerror=null; this.src='${imageRepo}${fileName}.png'; this.onerror=function(){this.src='${placeholder}';};">
                 </div>
                 <div>
-                    <h1 class="biz-title">${business.Name}</h1>
-                    <p class="biz-meta">${business.Category} | Est. ${business.Established || 'N/A'}</p>
-                    <p class="biz-meta">${business.Town}, Illinois</p>
+                    <h1 class="biz-title">${safeName}</h1>
+                    <p class="biz-meta">${safeCategory} | Est. ${safeEstablished}</p>
+                    <p class="biz-meta">${safeTown}, Illinois</p>
                 </div>
             </div>
             
             <div class="details-grid">
                 <div class="info-section">
                     <h3>Contact Information</h3>
-                    <div class="info-item"><strong>📞 Phone:</strong> <a href="tel:${business.Phone}">${business.Phone || 'N/A'}</a></div>
-                    <div class="info-item"><strong>📍 Address:</strong> ${business.Address || 'N/A'}</div>
-                    <div class="info-item"><strong>⏰ Hours:</strong> ${business.Hours || 'Call for hours'}</div>
+                    <div class="info-item"><strong>📞 Phone:</strong> <a href="tel:${business.Phone}">${safePhone}</a></div>
+                    <div class="info-item"><strong>📍 Address:</strong> ${safeAddress}</div>
+                    <div class="info-item"><strong>⏰ Hours:</strong> ${safeHours}</div>
                     
-                    ${business.Website && business.Website !== "N/A" ? `
-                        <a href="${business.Website}" target="_blank" class="action-btn">🌐 Visit Website</a>
+                    ${safeWebsite ? `
+                        <a href="${safeWebsite}" target="_blank" rel="noopener noreferrer" class="action-btn">🌐 Visit Website</a>
                     ` : ""}
                     
-                    ${business.Facebook && business.Facebook !== "N/A" ? `
-                        <a href="${business.Facebook}" target="_blank" class="action-btn" style="background:#3b5998; margin-left:10px;">f Facebook</a>
+                    ${safeFacebook ? `
+                        <a href="${safeFacebook}" target="_blank" rel="noopener noreferrer" class="action-btn" style="background:#3b5998; margin-left:10px;">f Facebook</a>
                     ` : ""}
                 </div>
                 
@@ -143,18 +191,18 @@ function renderProfile() {
                 </div>
             </div>
             
-            ${business.Bio && business.Bio !== "N/A" ? `
+            ${safeBio && safeBio !== "N/A" ? `
                 <div class="bio-box">
                     <h3 style="margin-top:0;">Our Story</h3>
-                    <p>${business.Bio}</p>
+                    <p>${safeBio}</p>
                 </div>
             ` : ""}
             
             ${couponImg ? `
                 <div style="margin-top:30px; border:4px dashed #d4af37; background:#fffbe6; padding:25px; text-align:center;">
                     <h2 style="color:#d4af37; margin:0 0 15px 0;">🎟️ EXCLUSIVE COMMUNITY DEAL</h2>
-                    <p style="font-size: 1.2rem; font-weight:bold; margin-bottom: 15px;">${business.CouponText || ''}</p>
-                    <img src="${couponImg}" style="max-width:100%; height:auto; max-height:300px; border:1px solid #000;">
+                    <p style="font-size: 1.2rem; font-weight:bold; margin-bottom: 15px;">${safeCouponText}</p>
+                    <img src="${couponImg}" alt="Coupon" style="max-width:100%; height:auto; max-height:300px; border:1px solid #000;">
                 </div>
             ` : ""}
         </div>

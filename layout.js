@@ -89,11 +89,15 @@ function renderDirectoryGrid(data) {
         <div class="card ${tierL}" ${clickAction} style="cursor: ${clickAction ? 'pointer' : 'default'}">
             <div class="tier-badge">${biz.Tier}</div> 
             <div class="logo-box">${getSmartLogo(biz.ImageID, biz.Name)}</div>
-            <div class="town-bar ${townClass}-bar">${biz.Town}</div> 
+            
+            <div class="town-bar" style="background-color: #d3d3d3; color: #333; font-weight: bold; border-top: 1px solid #999; border-bottom: 1px solid #999;">
+                ${biz.Town}
+            </div> 
+
             <div class="biz-name">${biz.Name}</div> 
             ${(tierL === 'premium' || tierL === 'plus') ? `<div class="biz-phone">📞 ${biz.Phone}</div>` : ''}
             <div class="cat-text">${catEmojis[biz.Category] || "📁"} ${biz.Category}</div> 
-        </div>`;
+        </div>`;;
     }).join('');
 }
 

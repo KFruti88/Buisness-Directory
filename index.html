@@ -7,10 +7,10 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Clay County Directory | Universal Edition</title>
+    <title>Clay County Directory | Universal Yellow Edition</title>
     
     <style>
-        /* --- UNIVERSAL SCREEN STANDARDS [cite: 2026-01-26] --- */
+        /* UNIVERSAL SCREEN STANDARDS [cite: 2026-01-26] */
         :root {
             --yellow-card: #fff5ba;
             --main-gray: #d1d5db;
@@ -20,7 +20,6 @@
             background-color: var(--main-gray); 
             font-family: 'Times New Roman', Times, serif; 
             margin: 0; padding: 0; 
-            -webkit-font-smoothing: antialiased; /* Safari/Chrome crispness */
         }
 
         .site-wrapper { 
@@ -31,14 +30,13 @@
 
         /* UNIVERSAL GRID: Chrome, Edge, Safari, Brave, Opera, DuckDuckGo */
         #directory-grid { 
-            display: -webkit-grid; /* Safari prefix */
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
             gap: 25px; 
             width: 100%;
         }
 
-        /* YELLOW LAYOUT CARD [cite: 2026-01-26] */
+        /* YELLOW CARD LAYOUT [cite: 2026-01-26] */
         .card { 
             background-color: var(--yellow-card) !important; 
             border: 2px solid #000; 
@@ -48,10 +46,9 @@
             height: 450px; 
             position: relative; 
             overflow: hidden; 
-            box-sizing: border-box;
         }
 
-        /* COLOR LOCK TOWN BAR [cite: 2026-01-28] */
+        /* TOWN BAR: MIDDLE BOX COLOR LOCK [cite: 2026-01-28] */
         .town-bar { 
             height: 40px; 
             display: flex; 
@@ -67,7 +64,7 @@
         /* UNIVERSAL SCREEN STACKING [cite: 2026-01-26] */
         @media (max-width: 600px) {
             .site-wrapper { width: 95%; }
-            #directory-grid { grid-template-columns: 1fr; } /* Stack vertically */
+            #directory-grid { grid-template-columns: 1fr; }
             .card { height: auto; min-height: 400px; }
         }
 
@@ -88,6 +85,6 @@
         </div>
     </div>
 
-    <script type="module" src="layout.js?v=1.49"></script>
+    <script type="module" src="layout.js?v=1.50"></script>
 </body>
 </html>

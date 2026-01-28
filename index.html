@@ -1,60 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clay County Directory | Yellow Layout</title>
+    
+    <title>Clay County Directory | Cross-Browser Edition</title>
     
     <style>
-        /* --- 1. BASE STYLES --- */
+        /* CSS variables for cross-browser consistency */
+        :root {
+            --yellow-bg: #fff5ba;
+            --main-gray: #d1d5db;
+        }
+
         body { 
-            background-color: #d1d5db; 
+            background-color: var(--main-gray); 
             font-family: 'Times New Roman', Times, serif; 
             margin: 0; padding: 0; 
         }
 
-        /* --- 2. NEWSPAPER HEADER --- */
-        .main-title {
-            text-align: center; padding: 20px;
-            background-color: #fff5ba; /* Boss's requested color [cite: 2026-01-26] */
-            border-bottom: 2px solid #000;
+        .main-title { 
+            text-align: center; padding: 20px; 
+            background-color: var(--yellow-bg); 
+            border-bottom: 2px solid #000; 
         }
 
-        /* --- 3. DIRECTORY GRID & YELLOW CARDS --- */
-        .site-wrapper { width: 93%; margin: 0 auto; padding: 20px 0; } /* 93% Standard [cite: 2026-01-26] */
+        .site-wrapper { 
+            width: 90%; /* Your 90% default standard [cite: 2026-01-26] */
+            margin: 0 auto; padding: 20px 0; 
+        }
 
+        /* Cross-browser Grid (Supports Chrome, Safari, Edge, Opera) */
         #directory-grid { 
+            display: -ms-grid; /* Legacy Edge support */
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
             gap: 25px; 
         }
 
         .card { 
-            background-color: #fff5ba !important; /* Yellow Layout [cite: 2026-01-26] */
+            background-color: var(--yellow-bg) !important; 
             border: 2px solid #000; 
             box-shadow: 6px 6px 0px rgba(0,0,0,0.2); 
             text-align: center; 
-            display: flex; flex-direction: column; 
-            height: 450px; position: relative; 
+            display: flex; 
+            flex-direction: column; 
+            height: 450px; 
+            position: relative; 
             overflow: hidden; 
+        }
+
+        /* THE MIDDLE TOWN BAR [cite: 2026-01-28] */
+        .town-bar { 
+            height: 40px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            text-transform: uppercase; 
+            font-weight: 900; 
+            border-top: 2px solid #000; 
+            border-bottom: 2px solid #000; 
+            margin: 10px 0;
+        }
+
+        .biz-name { 
+            font-size: 1.4rem; 
+            font-weight: bold; 
+            padding: 10px; 
+            flex-grow: 1; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
         }
 
         .logo-box { height: 150px; display: flex; align-items: center; justify-content: center; padding: 15px; }
         .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
-
-        /* THE MIDDLE TOWN BAR [cite: 2026-01-28] */
-        .town-bar { 
-            height: 40px; display: flex; align-items: center; justify-content: center; 
-            text-transform: uppercase; font-weight: 900; 
-            border-top: 2px solid #000; border-bottom: 2px solid #000; 
-            margin: 10px 0;
-        }
-
-        .biz-name { font-size: 1.4rem; font-weight: bold; padding: 10px; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
@@ -65,10 +88,10 @@
 
     <div class="site-wrapper">
         <div id="directory-grid">
-            <h2 style="text-align:center; width:100%;">Syncing Directory Data...</h2>
+            <h2 style="text-align:center; width:100%;">Syncing Data...</h2>
         </div>
     </div>
 
-    <script type="module" src="layout.js?v=1.46"></script>
+    <script type="module" src="layout.js?v=1.48"></script>
 </body>
 </html>

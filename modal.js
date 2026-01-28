@@ -5,9 +5,12 @@ function getSmartImage(id) {
     }
 
     const safeId = id.toLowerCase().trim();
+    
+    // This relative path matches the folder structure you just confirmed
     const imagePath = `./assets/logos/${safeId}.jpeg`;
 
     return `<img src="${imagePath}" 
+                 alt="Business Logo" 
                  style="max-height:100%; border-radius:8px;"
                  onerror="this.onerror=null; this.src='./assets/logos/placeholder.png';">`;
 }

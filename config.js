@@ -12,19 +12,22 @@ const placeholderImg = "https://raw.githubusercontent.com/KFruti88/images/main/p
 
 // 3. Category Emojis for the UI
 const catEmojis = {
-    "Automotive": "🚗",
-    "Beauty": "💇‍♀️",
-    "Construction": "🏗️",
-    "Dining": "🍔",
-    "Entertainment": "🍿",
-    "Financial": "💵",
-    "Health": "🏥",
-    "Legal": "⚖️",
-    "Manufacturing": "🏭",
-    "Real Estate": "🏠",
-    "Retail": "🛍️",
-    "Services": "🤝",
-    "Technology": "💻",
+    "Bars": "🍺", 
+    "Emergency": "🚨", 
+    "Church": "⛪", 
+    "Post Office": "📬", 
+    "Restaurants": "🍴", 
+    "Retail": "🛒", 
+    "Shopping": "🛍️", 
+    "Manufacturing": "🏗️", 
+    "Industry": "🏭", 
+    "Financial Services": "💰", 
+    "Healthcare": "🏥", 
+    "Gas Station": "⛽", 
+    "Internet": "🌐", 
+    "Support Services": "🛠️", 
+    "Professional Services": "💼", 
+    "Agriculture": "🚜",
     "Other": "📁"
 };
 

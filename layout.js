@@ -1,7 +1,7 @@
 /**
  * PROJECT: Clay County Directory Engine - Main Layout
  * VERSION: 1.12
- * STANDARDS: A=ImageID, B=Name, G=Address, D=Tier, F=Phone
+ * MAPPING: A=ImageID, B=Name, C=Town, D=Tier, E=Category, F=Phone, G=Address
  */
 
 let masterData = [];
@@ -18,7 +18,7 @@ const catEmojis = {
 
 document.addEventListener("DOMContentLoaded", () => { 
     updateHeaderDate(); 
-    loadCSVData();
+    fetchDirectoryData();
 });
 
 function updateHeaderDate() {
@@ -28,33 +28,49 @@ function updateHeaderDate() {
     if (headerInfo) headerInfo.innerText = `VOL. 1 — NO. ${now.getMonth() + 1} | ${dateStr}`;
 }
 
-function getSmartImage(imageID, bizName) {
+// Business Logos are .jpeg
+function getSmartLogo(imageID, bizName) {
     let fileName = imageID ? imageID.trim() : "";
     if (!fileName && bizName) fileName = bizName.toLowerCase().replace(/['\s]/g, "");
     const placeholder = `https://via.placeholder.com/150?text=Logo+Pending`;
-    return `<img src="${imageRepo}${fileName}.jpeg" class="logo-img" onerror="this.onerror=null; this.src='${imageRepo}${fileName}.png'; this.onerror=function(){this.src='${placeholder}'};">`;
+    return `<img src="${imageRepo}${fileName}.jpeg" class="logo-img" alt="${bizName}" 
+            onerror="this.onerror=null; this.src='${imageRepo}${fileName}.png'; this.onerror=function(){this.src='${placeholder}'};">`;
 }
 
-async function loadCSVData() {
+async function fetchDirectoryData() {
     Papa.parse(csvUrl, {
         download: true, header: false, skipEmptyLines: true,
         complete: function(results) {
             masterData = results.data.slice(1).map(row => {
+                // Address-to-Town Extraction (Fallback if Column C is messy)
                 const addr = row[6] || "";
-                const town = addr.split(',').length >= 2 ? addr.split(',')[1].trim() : "Clay County";
+                const townFromAddr = addr.split(',').length >= 2 ? addr.split(',')[1].trim() : "Clay County";
+                
                 return {
-                    ImageID: row[0], Name: row[1], Town: town, Tier: row[3], Category: row[4],
-                    Phone: row[5], Address: row[6], Hours: row[7], Website: row[8], 
-                    Facebook: row[9], Bio: row[10], Coupon: row[11], Established: row[12], CouponLink: row[13]
+                    ImageID: row[0] || "",    // A
+                    Name: row[1] || "N/A",    // B
+                    Town: row[2] || townFromAddr, // C
+                    Tier: row[3] || "Basic",  // D
+                    Category: row[4] || "N/A",// E
+                    Phone: row[5] || "",      // F
+                    Address: row[6] || "",    // G
+                    Hours: row[7] || "",      // H
+                    Website: row[8] || "",    // I
+                    Facebook: row[9] || "",   // J
+                    Bio: row[10] || "",       // K
+                    CouponText: row[11] || "", // L
+                    Established: row[12] || "",// M
+                    CouponLink: row[13] || ""  // N
                 };
-            }).filter(b => b.Name && b.Name !== "N/A");
-            renderGrid(masterData);
+            }).filter(b => b.Name !== "N/A" && b.Name !== "Name");
+            renderDirectoryGrid(masterData);
         }
     });
 }
 
-function renderGrid(data) {
+function renderDirectoryGrid(data) {
     const grid = document.getElementById('directory-grid');
+    if (!grid) return;
     const tierOrder = { "premium": 1, "plus": 2, "basic": 3 };
 
     grid.innerHTML = data.sort((a, b) => {
@@ -64,19 +80,18 @@ function renderGrid(data) {
     }).map(biz => {
         const tierL = biz.Tier.toLowerCase();
         const townClass = biz.Town.toLowerCase().replace(/\s+/g, '-');
-        const showPhone = (tierL === 'premium' || tierL === 'plus');
         
         // Modal logic: Premium gets full view, others with coupons get coupon view
-        let click = (tierL === 'premium' || (biz.CouponLink && biz.CouponLink !== "N/A")) 
+        let clickAction = (tierL === 'premium' || (biz.CouponLink && biz.CouponLink !== "")) 
                     ? `onclick="openFullModal('${biz.Name.replace(/'/g, "\\'")}')"` : "";
 
         return `
-        <div class="card ${tierL}" ${click} style="cursor: ${click ? 'pointer' : 'default'}">
+        <div class="card ${tierL}" ${clickAction} style="cursor: ${clickAction ? 'pointer' : 'default'}">
             <div class="tier-badge">${biz.Tier}</div> 
-            <div class="logo-box">${getSmartImage(biz.ImageID, biz.Name)}</div>
+            <div class="logo-box">${getSmartLogo(biz.ImageID, biz.Name)}</div>
             <div class="town-bar ${townClass}-bar">${biz.Town}</div> 
             <div class="biz-name">${biz.Name}</div> 
-            ${showPhone ? `<div class="biz-phone">📞 ${biz.Phone}</div>` : ''}
+            ${(tierL === 'premium' || tierL === 'plus') ? `<div class="biz-phone">📞 ${biz.Phone}</div>` : ''}
             <div class="cat-text">${catEmojis[biz.Category] || "📁"} ${biz.Category}</div> 
         </div>`;
     }).join('');
@@ -86,5 +101,5 @@ function applyFilters() {
     const cat = document.getElementById('cat-select').value;
     const town = document.getElementById('town-select').value;
     const filtered = masterData.filter(b => (cat === 'All' || b.Category === cat) && (town === 'All' || b.Town === town));
-    renderGrid(filtered);
+    renderDirectoryGrid(filtered);
 }

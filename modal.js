@@ -1,7 +1,7 @@
 /**
  * MODAL.JS - THE POP-OUT ENGINE
- * VERSION: 1.15
- * FIXED: Clickable phone for Premium/Plus ONLY. Image overlap protection included.
+ * VERSION: 1.16
+ * FEATURES: Newspaper Layout, Clickable Phone (Premium/Plus), Click-Outside-to-Close.
  */
 
 function openFullModal(bizName) {
@@ -10,7 +10,7 @@ function openFullModal(bizName) {
 
     const modal = document.getElementById('premium-modal');
     const body = document.getElementById('modal-body');
-    const tierL = biz.Tier.toLowerCase();
+    const tierL = (biz.Tier || 'basic').toLowerCase();
     
     const rawRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
 
@@ -20,7 +20,7 @@ function openFullModal(bizName) {
         couponImg = fileName.startsWith('http') ? fileName : `${rawRepo}${fileName}.png`;
     }
 
-    // --- PREMIUM & PLUS VIEW (The "Good" Version) ---
+    // --- PREMIUM & PLUS VIEW (The Pro Newspaper Layout) ---
     if (tierL === 'premium' || tierL === 'plus') {
         const mapAddr = encodeURIComponent(`${biz.Address}, ${biz.Town}, IL`);
 
@@ -76,7 +76,7 @@ function openFullModal(bizName) {
                 </div>` : ""}
         `;
     } 
-    // --- BASIC VIEW (Keep it Basic) ---
+    // --- BASIC VIEW ---
     else {
         body.innerHTML = `
             <div style="text-align:center; padding:10px;">
@@ -91,4 +91,12 @@ function openFullModal(bizName) {
     }
 
     modal.style.display = "flex";
+}
+
+// --- NEW CLOSING LOGIC (CLICK OUTSIDE) ---
+window.onclick = function(event) {
+    const modal = document.getElementById('premium-modal');
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
 }

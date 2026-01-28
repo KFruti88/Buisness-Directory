@@ -1,0 +1,41 @@
+/**
+ * CONFIG.JS - Global Settings & Data
+ */
+
+// 1. Your Google Sheet CSV link (Business Cards Tab)
+const baseCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
+
+// 2. Local images folder path
+const placeholderImg = "images/placeholder.png";
+
+// 3. GitHub Media Repository Path
+const mediaRepoBase = "https://raw.githubusercontent.com/KFruti88/images/main/";
+
+// 4. Category Emojis & Mapping
+const catEmojis = {
+    "Agriculture": "🚜",
+    "Automotive": "🚗",
+    "Beauty": "💇‍♀️",
+    "Construction": "🏗️",
+    "Church": "⛪",
+    "Education": "🎓",   
+    "Entertainment": "🍿",
+    "Financial": "💵",
+    "Government": "🏛️",
+    "Healthcare": "🏥",
+    "Legal": "⚖️",
+    "Manufacturing": "🏭",
+    "Real Estate": "🏠",
+    "Retail": "🛍️",
+    "Restaurant": "🍴",
+    "Services": "🛠️",
+    "Technology": "💻",
+    "Other": "📁"
+};
+
+// 5. Helper Function
+function mapCategory(cat) {
+    if (!cat) return "Other";
+    const clean = cat.trim();
+    return catEmojis[clean] ? clean : "Other";
+}

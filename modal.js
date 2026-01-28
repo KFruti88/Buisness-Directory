@@ -1,6 +1,7 @@
 /**
  * MODAL.JS - THE POP-OUT ENGINE
- * Handles scenario: Premium = Full Info | Basic/Plus with Coupon = Coupon Only.
+ * VERSION: 1.12
+ * UPDATES: Removed Town Bar and redundant Town text for a cleaner look.
  */
 
 function openFullModal(bizName) {
@@ -11,60 +12,73 @@ function openFullModal(bizName) {
     const body = document.getElementById('modal-body');
     const tierL = biz.Tier.toLowerCase();
     
-    // Coupons are .png specifically per your requirement
+    // Coupon Image (.png) logic
     let couponImg = "";
-    if (biz.CouponLink && biz.CouponLink !== "") {
+    if (biz.CouponLink && biz.CouponLink !== "" && biz.CouponLink !== "N/A") {
         const fileName = biz.CouponLink.trim();
-        // If it's just a file name, add path and .png. If it's a URL, use it.
         couponImg = fileName.startsWith('http') ? fileName : `${imageRepo}${fileName}.png`;
     }
 
     if (tierL === 'premium') {
         const mapAddr = encodeURIComponent(`${biz.Address}, ${biz.Town}, IL`);
+
         body.innerHTML = `
-            <div style="text-align:center;">
-                <div style="height:120px; margin-bottom:10px;">${getSmartLogo(biz.ImageID, biz.Name)}</div>
-                <h1 style="font-family:'Times New Roman', serif; margin:0;">${biz.Name}</h1>
-                <p style="color:#666;">${biz.Category} | ${biz.Town} | Est. ${biz.Established || 'N/A'}</p>
+            <div style="text-align:center; padding-bottom: 20px; border-bottom: 2px solid #000; margin-bottom: 25px;">
+                <div style="height:150px; margin-bottom:15px; display:flex; justify-content:center; align-items:center;">
+                    ${getSmartLogo(biz.ImageID, biz.Name)}
+                </div>
+                <h1 style="font-family:'Times New Roman', serif; margin:0; font-size: 2.8rem;">${biz.Name}</h1>
+                <p style="color:#666; font-style:italic; font-size: 1.2rem;">${biz.Category} | Est. ${biz.Established || 'N/A'}</p>
             </div>
 
-            <div class="town-bar ${biz.Town.toLowerCase().replace(/\s+/g, '-')}-bar" style="margin: 15px -30px; border-radius:0;">${biz.Town}</div>
-
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:25px;">
-                <div>
-                    <h3 style="border-bottom: 2px solid #000; padding-bottom: 5px;">Contact Details</h3>
-                    <p><strong>📞 Phone:</strong> <a href="tel:${biz.Phone}">${biz.Phone}</a></p>
-                    <p><strong>📍 Address:</strong> ${biz.Address}</p>
-                    <p><strong>⏰ Hours:</strong> ${biz.Hours || 'N/A'}</p>
-                    <div style="margin-top:20px; display:flex; gap:10px;">
-                        ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" style="background:#0c30f0; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; font-weight:bold;">Website</a>` : ""}
-                        ${biz.Facebook && biz.Facebook !== "N/A" ? `<a href="${biz.Facebook}" target="_blank" style="background:#3b5998; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; font-weight:bold;">Facebook</a>` : ""}
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:30px;">
+                
+                <div style="padding: 10px;">
+                    <h3 style="border-bottom: 2px solid #000; padding-bottom: 8px; margin-top:0; text-transform: uppercase;">Business Details</h3>
+                    <div style="font-size: 1.15rem; line-height: 1.8;">
+                        <p><strong>📞 Phone:</strong> <a href="tel:${biz.Phone}" style="color:#000; text-decoration:none;">${biz.Phone}</a></p>
+                        <p><strong>📍 Address:</strong> ${biz.Address}</p>
+                        <p><strong>⏰ Hours:</strong> ${biz.Hours || 'N/A'}</p>
+                    </div>
+                    
+                    <div style="margin-top:25px; display:flex; gap:12px; flex-wrap: wrap;">
+                        ${biz.Website && biz.Website !== "N/A" ? `<a href="${biz.Website}" target="_blank" class="action-btn" style="background:#0c30f0;">🌐 Website</a>` : ""}
+                        ${biz.Facebook && biz.Facebook !== "N/A" ? `<a href="${biz.Facebook}" target="_blank" class="action-btn" style="background:#3b5998;">f Facebook</a>` : ""}
                     </div>
                 </div>
-                <div>
-                    <h3 style="border-bottom: 2px solid #000; padding-bottom: 5px;">Location</h3>
-                    <iframe width="100%" height="250" frameborder="0" src="https://maps.google.com/maps?q=${mapAddr}&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+
+                <div style="padding: 10px;">
+                    <h3 style="border-bottom: 2px solid #000; padding-bottom: 8px; margin-top:0; text-transform: uppercase;">Location</h3>
+                    <div style="border: 2px solid #000; height: 280px; background:#eee; box-shadow: 4px 4px 0px rgba(0,0,0,0.1);">
+                        <iframe width="100%" height="100%" frameborder="0" style="border:0;" 
+                            src="https://maps.google.com/maps?q=${mapAddr}&t=&z=14&ie=UTF8&iwloc=&output=embed">
+                        </iframe>
+                    </div>
                 </div>
             </div>
 
-            ${biz.Bio ? `<div style="margin-top:20px; padding-top:10px; border-top:1px solid #000;"><h3>Our Story</h3><p>${biz.Bio}</p></div>` : ""}
+            ${biz.Bio && biz.Bio !== "N/A" ? `
+            <div style="margin-top:30px; padding-top:20px; border-top:2.5px double #000;">
+                <h3 style="text-transform:uppercase; margin-top:0;">Our Story</h3>
+                <p style="line-height:1.7; font-size: 1.15rem; color:#222;">${biz.Bio}</p>
+            </div>` : ""}
             
             ${couponImg ? `
-                <div style="margin-top:20px; border:3px dashed #d4af37; background:#fffbe6; padding:20px; text-align:center;">
-                    <h2 style="color:#d4af37; margin:0 0 10px 0;">🎟️ EXCLUSIVE DEAL</h2>
-                    <p>${biz.CouponText}</p>
-                    <img src="${couponImg}" style="max-width:250px; border:1px solid #000;">
+                <div style="margin-top:30px; border:4px dashed #d4af37; background:#fffbe6; padding:25px; text-align:center;">
+                    <h2 style="color:#d4af37; margin:0 0 15px 0; font-size: 1.8rem;">🎟️ EXCLUSIVE COMMUNITY DEAL</h2>
+                    <p style="font-size: 1.2rem; font-weight:bold; margin-bottom: 15px;">${biz.CouponText}</p>
+                    <img src="${couponImg}" style="max-width:300px; border:1px solid #000; box-shadow: 4px 4px 0px rgba(0,0,0,0.1);">
                 </div>` : ""}
         `;
     } else {
-        // Coupon Only View for non-premium members
+        // Simple Coupon View for Basic/Plus
         body.innerHTML = `
-            <div style="text-align:center; padding:20px;">
-                <h2 style="font-family:'Times New Roman', serif;">${biz.Name} Special Offer</h2>
-                <div style="border:4px dashed #000; padding:20px; background:#fff;">
-                    <p style="font-size:1.2rem; font-weight:bold;">${biz.CouponText}</p>
+            <div style="text-align:center; padding:10px;">
+                <h2 style="font-family:'Times New Roman', serif; font-size: 2.2rem; margin-bottom: 10px;">${biz.Name}</h2>
+                <div style="border:5px dashed #000; padding:30px; background:#fff; margin-top:15px; box-shadow: 8px 8px 0px rgba(0,0,0,0.1);">
+                    <p style="font-size:1.4rem; font-weight:bold; margin-bottom:20px;">${biz.CouponText}</p>
                     <img src="${couponImg}" style="max-width:100%; height:auto;">
-                    <p style="margin-top:15px; font-style:italic;">Scan or show this image at checkout.</p>
+                    <p style="margin-top:20px; font-style:italic; color:#555;">Scan or show this image at the register.</p>
                 </div>
             </div>
         `;
@@ -72,13 +86,3 @@ function openFullModal(bizName) {
 
     modal.style.display = "flex";
 }
-
-function closeModal() {
-    document.getElementById('premium-modal').style.display = "none";
-}
-
-// Close modal when clicking outside of it
-window.onclick = function(event) {
-    const modal = document.getElementById('premium-modal');
-    if (event.target == modal) closeModal();
-};

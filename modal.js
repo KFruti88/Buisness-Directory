@@ -1,16 +1,16 @@
 /** * MODAL.JS - THE POP-OUT ENGINE */
 function getSmartImage(id) {
-    // Fallback if ID is missing
     if (!id || id === "" || id === "N/A") {
         return `<img src="https://raw.githubusercontent.com/KFruti88/images/main/placeholder.png" 
-                     alt="Placeholder" style="max-height:100%; border-radius:8px;">`;
+                     style="max-height:100%; border-radius:8px;">`;
     }
 
-    // Convert ID to lowercase to match GitHub's strict file system
-    const safeId = id.toLowerCase().trim();
+    // This builds the path to your specific "images" repository
+    // We use .jpeg based on your example
+    const baseUrl = "https://raw.githubusercontent.com/KFruti88/images/refs/heads/main/";
+    const imagePath = `${baseUrl}${id.toLowerCase().trim()}.jpeg`;
 
-    // The "./" is critical for GitHub Project Pages
-    return `<img src="./assets/logos/${safeId}.png" 
+    return `<img src="${imagePath}" 
                  alt="Business Logo" 
                  style="max-height:100%; border-radius:8px;"
                  onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/KFruti88/images/main/placeholder.png';">`;

@@ -1,3 +1,16 @@
+/* --- GLOBAL STYLES --- */
+:root {
+    --paper-bg: #fffdf5;
+    --smlc-blue: #222222;
+}
+
+body {
+    background-color: #e5e5e5;
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0;
+    padding: 0;
+}
+
 /* --- DIRECTORY GRID & NEWSPAPER CARDS --- */
 .site-wrapper { 
     width: 93%; /* Your standard width [cite: 2026-01-26] */
@@ -10,6 +23,99 @@
     gap: 25px; 
 }
 
+/* --- NAVIGATION --- */
+.nav-header {
+    display: block !important;
+    background-color: #e5e5e5 !important;
+    padding: 15px 0;
+    text-align: center;
+    border-bottom: 2px solid #222222;
+    width: 100%;
+    position: relative;
+    z-index: 999;
+}
+
+.nav-header a {
+    color: #222222 !important;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 15px;
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* --- NEWSPAPER HEADER & META --- */
+.main-title h1 {
+    text-align: center;
+    font-family: 'Times New Roman', serif;
+    font-size: clamp(2rem, 8vw, 4.5rem);
+    margin: 20px 0 5px 0;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    color: #222222;
+}
+
+.newspaper-meta {
+   width: 100%;             /* Stretches to both edges of the screen */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 3px solid #222222;    /* Single solid line on top */
+    border-bottom: 3px solid #222222; /* Single solid line on bottom */
+    padding: 15px 0;                  /* Space between the lines */
+    background-color: #e5e5e5;        /* Your light gray background */
+    margin-bottom: 40px;
+}
+
+.meta-item {
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-family: Arial, sans-serif;
+    padding: 0 20px; 
+    color: #222222;
+}
+
+.left-meta { text-align: left; }
+.right-meta { text-align: right; }
+.center-header { text-align: center; flex: 1.5; }
+
+
+.directory-pages {
+    /* border: 2px solid #222222;  Fixed the extra '2' here */
+    padding: 4px 15px;
+    font-size: 1.1rem;
+    display: inline-block;
+}
+
+/* -- Count pages text--"/
+.count-text {
+    font-family: Times New Roman, sans-serif;
+    font-size: 0.75rem;
+    color: #222222;
+    margin-top: 5px;
+    font-style: italic;
+    text-transform: none; /* Keeps it from being all caps */
+    letter-spacing: 0.5px;
+}
+
+/* --- DIRECTORY GRID --- */
+.site-wrapper {
+    padding: 0 20px 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#directory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* --- CARD STYLING --- */
 .card { 
     background-color: #fff5ba !important; /* Yellow Layout Background [cite: 2026-01-26] */
     border: 2px solid #000; 

@@ -1,20 +1,4 @@
 /** * MODAL.JS - THE POP-OUT ENGINE */
-function getSmartImage(id) {
-    if (!id || id === "" || id === "N/A") {
-        return `<img src="./assets/logos/placeholder.png" style="max-height:100%; border-radius:8px;">`;
-    }
-
-    const safeId = id.toLowerCase().trim();
-    
-    // This relative path matches the folder structure you just confirmed
-    const imagePath = `./assets/logos/${safeId}.jpeg`;
-
-    return `<img src="${imagePath}" 
-                 alt="Business Logo" 
-                 style="max-height:100%; border-radius:8px;"
-                 onerror="this.onerror=null; this.src='./assets/logos/placeholder.png';">`;
-}
-
 function openFullModal(bizName) {
     const biz = masterData.find(b => b.name === bizName);
     if (!biz) return;
@@ -29,7 +13,7 @@ function openFullModal(bizName) {
     
     content.innerHTML = `
         <div style="text-align:center;">
-            <div style="height:120px; margin-bottom:10px;">${getSmartImage(biz.imageid)}</div>
+            <div style="height:120px; margin-bottom:10px;">${getSmartImage(biz.imageid, biz.name)}</div>
             <h1 style="font-family:'Times New Roman', serif; margin:0;">${biz.name}</h1>
             <p style="color:#666;">${biz.category} | ${town}</p>
         </div>

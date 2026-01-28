@@ -1,7 +1,6 @@
 /**
  * MODAL.JS - THE POP-OUT ENGINE
- * VERSION: 1.20
- * UPDATES: Forced centering for Business Name, fixed Story/Coupon flow.
+ * VERSION: 1.21
  */
 
 function openFullModal(bizName) {
@@ -83,7 +82,6 @@ function openFullModal(bizName) {
                 </div>` : ""}
         `;
     } else {
-        // BASIC VIEW
         body.innerHTML = `
             <div style="text-align:center; padding:10px;">
                 <h2 style="font-family:'Times New Roman', serif; font-size: 2.2rem; margin-bottom: 10px;">${biz.Name}</h2>
@@ -98,7 +96,6 @@ function openFullModal(bizName) {
     modal.style.display = "flex";
 }
 
-// UNIVERSAL CLOSING LOGIC
 window.onclick = function(event) {
     const modal = document.getElementById('premium-modal');
     if (event.target == modal || event.target.classList.contains('close-btn') || event.target.innerHTML === '×') {

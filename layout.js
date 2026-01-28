@@ -1,7 +1,7 @@
 /**
  * PROJECT: Clay County Directory Engine - Main Layout
- * VERSION: 1.24 (Sandbox Optimized)
- * UPDATES: Expanded Categories/Emojis, Custom Town Colors, Live Cache Buster, Heartbeat.
+ * VERSION: 1.25
+ * FEATURES: Full Category/Emoji Set, Custom Town Palette, Live Cache Buster, Heartbeat.
  */
 
 let masterData = [];
@@ -14,7 +14,7 @@ function getLiveCsvUrl() {
     return `${baseCsvUrl}&t=${new Date().getTime()}`;
 }
 
-// --- TOWN COLOR PALETTE ---
+// --- MASTER TOWN COLOR PALETTE ---
 const townStyles = {
     "Flora": { bg: "#0c0b82", text: "#fe4f00" },
     "Louisville": { bg: "#010101", text: "#eb1c24" },
@@ -25,47 +25,26 @@ const townStyles = {
     "Clay County": { bg: "#333333", text: "#ffffff" }
 };
 
-// --- EXPANDED CATEGORIES & EMOJIS ---
+// --- MASTER CATEGORY LIST ---
 const catEmojis = {
-    "Bars": "🍺", 
-    "Emergency": "🚨", 
-    "Church": "⛪", 
-    "Post Office": "📬", 
-    "Restaurants": "🍴", 
-    "Retail": "🛒", 
-    "Shopping": "🛍️", 
-    "Manufacturing": "🏗️", 
-    "Industry": "🏭", 
-    "Financial Services": "💰", 
-    "Healthcare": "🏥", 
-    "Gas Station": "⛽", 
-    "Internet": "🌐", 
-    "Support Services": "🛠️", 
-    "Professional Services": "💼", 
-    "Agriculture": "🚜",
-    "Education": "🎓",
-    "Beauty & Hair": "✂️",
-    "Automotive": "🚗",
-    "Construction": "🔨",
-    "Real Estate": "🏠",
-    "Legal": "⚖️",
-    "Lodging": "🏨",
-    "Parks & Rec": "🌳",
-    "Non-Profit": "🤝",
-    "Cleaning Services": "🧹",
-    "Entertainment": "🍿",
-    "Fitness": "💪",
-    "Insurance": "📄",
-    "Technology": "💻"
+    "Bars": "🍺", "Emergency": "🚨", "Church": "⛪", "Post Office": "📬", 
+    "Restaurants": "🍴", "Retail": "🛒", "Shopping": "🛍️", "Manufacturing": "🏗️", 
+    "Industry": "🏭", "Financial Services": "💰", "Healthcare": "🏥", 
+    "Gas Station": "⛽", "Internet": "🌐", "Support Services": "🛠️", 
+    "Professional Services": "💼", "Agriculture": "🚜", "Education": "🎓",
+    "Beauty & Hair": "✂️", "Automotive": "🚗", "Construction": "🔨",
+    "Real Estate": "🏠", "Legal": "⚖️", "Lodging": "🏨", "Parks & Rec": "🌳",
+    "Non-Profit": "🤝", "Cleaning Services": "🧹", "Entertainment": "🍿",
+    "Fitness": "💪", "Insurance": "📄", "Technology": "💻"
 };
 
 document.addEventListener("DOMContentLoaded", () => { 
     updateHeaderDate(); 
     fetchDirectoryData();
     
-    // HEARTBEAT: Auto-refresh data every 5 minutes
+    // Heartbeat: Check for live changes every 5 minutes
     setInterval(() => {
-        console.log("Heartbeat: Fetching latest CSV data...");
+        console.log("Heartbeat Sync: Fetching latest CSV data...");
         fetchDirectoryData();
     }, 300000); 
 });
@@ -92,22 +71,12 @@ async function fetchDirectoryData() {
             masterData = results.data.slice(1).map(row => {
                 const addr = row[6] || "";
                 const townFromAddr = addr.split(',').length >= 2 ? addr.split(',')[1].trim() : "Clay County";
-                
                 return {
-                    ImageID: row[0] || "",
-                    Name: row[1] || "N/A",
-                    Town: row[2] || townFromAddr,
-                    Tier: row[3] || "Basic",
-                    Category: row[4] || "N/A",
-                    Phone: row[5] || "",
-                    Address: row[6] || "",
-                    Hours: row[7] || "",
-                    Website: row[8] || "",
-                    Facebook: row[9] || "",
-                    Bio: row[10] || "",
-                    CouponText: row[11] || "",
-                    Established: row[12] || "",
-                    CouponLink: row[13] || ""
+                    ImageID: row[0] || "", Name: row[1] || "N/A", Town: row[2] || townFromAddr,
+                    Tier: row[3] || "Basic", Category: row[4] || "N/A", Phone: row[5] || "",
+                    Address: row[6] || "", Hours: row[7] || "", Website: row[8] || "",
+                    Facebook: row[9] || "", Bio: row[10] || "", CouponText: row[11] || "",
+                    Established: row[12] || "", CouponLink: row[13] || ""
                 };
             }).filter(b => b.Name !== "N/A" && b.Name !== "Name");
             renderDirectoryGrid(masterData);
@@ -127,8 +96,6 @@ function renderDirectoryGrid(data) {
     }).map(biz => {
         const tierL = biz.Tier.toLowerCase();
         const townName = biz.Town.trim();
-        
-        // Match town to style or fallback to gray
         const style = townStyles[townName] || { bg: "#d3d3d3", text: "#1a1a1a" };
         const inlineStyle = `style="background-color: ${style.bg}; color: ${style.text}; font-weight: bold; text-align: center; border-top: 1px solid #999; border-bottom: 1px solid #999;"`;
 
@@ -139,11 +106,7 @@ function renderDirectoryGrid(data) {
         <div class="card ${tierL}" ${clickAction} style="cursor: ${clickAction ? 'pointer' : 'default'}">
             <div class="tier-badge">${biz.Tier}</div> 
             <div class="logo-box">${getSmartLogo(biz.ImageID, biz.Name)}</div>
-            
-            <div class="town-bar" ${inlineStyle}>
-                ${biz.Town}
-            </div> 
-
+            <div class="town-bar" ${inlineStyle}>${biz.Town}</div> 
             <div class="biz-name">${biz.Name}</div> 
             ${(tierL === 'premium' || tierL === 'plus') ? `<div class="biz-phone">📞 ${biz.Phone}</div>` : ''}
             <div class="cat-text">${catEmojis[biz.Category] || "📁"} ${biz.Category}</div> 

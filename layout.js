@@ -140,3 +140,16 @@ function renderDirectoryGrid(data) {
         </div>`;
     }).join('');
 }
+
+// 7. WEATHER WIDGET
+async function getLocalWeather() {
+    const weatherBox = document.getElementById('weather-box');
+    if (!weatherBox) return;
+    try {
+        const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.66&longitude=-88.48&current_weather=true');
+        const data = await response.json();
+        if (data.current_weather) {
+            weatherBox.innerHTML = ` | 🌡️ Flora: ${Math.round((data.current_weather.temperature * 9/5) + 32)}°F`;
+        }
+    } catch (e) { console.log("Weather failed"); }
+}

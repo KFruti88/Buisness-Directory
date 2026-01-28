@@ -1,51 +1,63 @@
 /**
  * PROJECT: Clay County Directory Engine
- * VERSION: 1.52 (Phone, Tier, and Coupon Alignment)
+ * VERSION: 1.54 (Scott's Priority Layout)
  */
+let masterData = [];
+const imageRepo = "https://raw.githubusercontent.com/KFruti88/images/main/";
+const couponIcon = "https://raw.githubusercontent.com/KFruti88/images/main/Coupon.png";
+
+const townStyles = {
+    "Flora": { bar: "flora-bar" },
+    "Louisville": { bar: "louisville-bar" },
+    "North Clay": { bar: "louisville-bar" },
+    "Clay City": { bar: "clay-city-bar" },
+    "Xenia": { bar: "xenia-bar" },
+    "Sailor Springs": { bar: "sailor-springs-bar" }
+};
+
+document.addEventListener("DOMContentLoaded", () => { 
+    fetchDirectoryData();
+    setInterval(fetchDirectoryData, 300000); 
+});
+
+async function fetchDirectoryData() {
+    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv";
+    Papa.parse(`${csvUrl}&t=${new Date().getTime()}`, {
+        download: true, header: false, skipEmptyLines: true,
+        complete: function(results) {
+            masterData = results.data.slice(1).map(row => ({
+                ImageID: row[0], Name: row[1], Tier: row[2], Category: row[3],
+                Phone: row[4], Address: row[5], Town: row[6], StateZip: row[7],
+                Established: row[12], CouponLink: row[13]
+            })).filter(b => b.Name);
+            renderDirectoryGrid(masterData);
+        }
+    });
+}
 
 function renderDirectoryGrid(data) {
     const grid = document.getElementById('directory-grid');
-    if (!grid) return;
-
     grid.innerHTML = data.map(biz => {
-        const tierL = biz.Tier.toLowerCase();
-        const style = townStyles[biz.Town.trim()] || townStyles["Clay County"];
-        
-        // 1. Logic for Coupon Visibility [cite: 2026-01-28]
-        const hasCoupon = (biz.CouponLink && biz.CouponLink.toLowerCase() !== "n/a" && biz.CouponLink !== "");
-        const couponBadge = hasCoupon ? `<img src="${couponIcon}" style="position:absolute; top:8px; right:8px; width:32px; height:auto; z-index:20;" alt="Coupon">` : "";
-
-        // 2. Tier Badge in Top-Left Corner [cite: 2026-01-26]
-        const tierTag = `<div style="position:absolute; top:10px; left:10px; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; border: 1px solid #000; padding: 2px 6px; background: #fff; z-index: 20;">${biz.Tier}</div>`;
-
-        const clickAction = (tierL === 'premium' || biz.CouponLink) ? `onclick="openFullModal('${biz.Name.replace(/'/g, "\\'")}')"` : "";
+        const tierL = (biz.Tier || 'basic').toLowerCase();
+        const townClass = townStyles[biz.Town.trim()]?.bar || "";
+        const hasCoupon = (biz.CouponLink && biz.CouponLink !== "N/A");
 
         return `
-        <div class="card ${tierL}" ${clickAction} style="cursor: ${clickAction ? 'pointer' : 'default'}; height: 450px; display: flex; flex-direction: column; overflow: hidden; border: 2px solid #000; background: #fff; position: relative;">
-            
-            ${tierTag}
-            ${couponBadge}
+        <div class="card ${tierL}" onclick="openFullModal('${biz.Name}')" style="background-color: #fff5ba !important;">
+            <div class="tier-badge">${biz.Tier}</div>
+            ${hasCoupon ? `<img src="${couponIcon}" style="position:absolute; top:8px; right:8px; width:30px; z-index:20;">` : ""}
 
-            <div class="logo-box" style="height: 120px; display: flex; align-items: center; justify-content: center; padding: 15px;">
-                ${getSmartLogo(biz.ImageID, biz.Name)}
+            <div class="logo-box">
+                <img src="${imageRepo}${biz.ImageID}.jpeg" onerror="this.src='https://via.placeholder.com/150'">
             </div>
 
-            <div class="town-bar ${townStyles[biz.Town.trim()]?.bar || ''}" style="background-color: ${style.bg || ''}; color: ${style.text || ''};">
-                ${biz.Town}
-            </div> 
+            <div class="town-bar ${townClass}">${biz.Town}</div> 
 
-            <div class="biz-name" style="height: 90px; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 800; padding: 10px; font-family: 'Times New Roman', serif;">
-                ${biz.Name}
-            </div> 
+            <div class="biz-name">${biz.Name}</div> 
             
-            <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; text-align: center;">
-                
-                ${(tierL === 'premium' || tierL === 'plus') ? 
-                    `<div class="biz-phone" style="font-weight:bold; font-size: 1.2rem; color: #0c30f0; margin-bottom: 5px;">📞 ${biz.Phone}</div>` : ''}
-                
-                <div class="cat-text" style="font-size: 1rem; color: #444; font-weight: bold;">
-                    ${catEmojis[biz.Category] || "📁"} ${biz.Category}
-                </div> 
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding-bottom:15px; text-align:center;">
+                ${(tierL === 'premium' || tierL === 'plus') ? `<div style="color:#0c30f0; font-weight:bold; font-size:1.15rem; margin-bottom:5px;">📞 ${biz.Phone}</div>` : ''}
+                <div style="font-size:0.9rem; color:#444; font-weight:bold;">📁 ${biz.Category}</div>
             </div>
         </div>`;
     }).join('');

@@ -1,14 +1,14 @@
 /* --- 1. BASE STYLES --- */
 body { 
-    background-color: #d1d5db; /* Light gray background behind the boxes */
+    background-color: #e5e5e5; /* Light gray background behind the boxes */
     font-family: 'Times New Roman', Times, serif; 
     margin: 0; 
     padding: 0; 
 }
 
 .nav-header { 
-    background-color: #38b6ff; 
-    color: white; 
+    background-color: #e5e5e5; 
+    color: #222222; 
     padding: 12px 0; 
     text-align: center; 
     font-size: 0.9rem; 
@@ -16,33 +16,43 @@ body {
     width: 100%; 
     position: relative; 
     z-index: 100;
+    border-bottom: 2px solid #222222;
 }
-.nav-header a { color: white; text-decoration: none; margin: 0 15px; }
+.nav-header a { color: #222222; text-decoration: none; margin: 0 15px; }
 
 /* --- 2. NEWSPAPER HEADER --- */
 .main-title {
     text-align: center; 
     padding: 20px 20px;
-    background-color: #fff5ba; /* Boss's requested color */
-    border-bottom: 2px solid #000;
+    background-color: #222222; /* Boss's requested color */
+    border-bottom: 2px solid #222222;
+    font-family: 'Times New Roman', serif;
+    font-size: clamp(2rem, 8vw, 4.5rem);
+    color: #222222;
+    text-transform: uppercase;
+    letter-spacing: -2px;
 }
 .main-title h1 { 
-    font-size: 4rem; 
-    margin: 0 0 10px 0; 
-    color: #000; 
+     text-align: center;
+    font-family: 'Times New Roman', serif;
+    font-size: clamp(2rem, 8vw, 4.5rem);
+    margin: 20px 0 5px 0;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    color: #222222;
 }
 
 .single-row {
     display: flex; 
     justify-content: space-between; 
     align-items: center;
-    border-top: 2px solid #000; 
-    border-bottom: 1px solid #000;
+    border-top: 2px solid #222222; 
+    border-bottom: 1px solid #222222;
     padding: 10px 0; 
     font-family: 'Times New Roman', serif;
     font-weight: bold; 
     gap: 10px; 
-    background-color: #fff5ba;
+    background-color: #e5e5e5;
 }
 
 .directory-pages { 
@@ -63,8 +73,8 @@ body {
 
 .single-row select {
     padding: 5px 10px; 
-    border: 1px solid #000; 
-    background: #fff; 
+    border: 1px solid #222222; 
+    background: #e5e5e5; 
     cursor: pointer;
 }
 

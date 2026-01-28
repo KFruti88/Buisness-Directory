@@ -4,87 +4,39 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Clay County Directory | Universal Yellow Edition</title>
-    
-    <style>
-        /* UNIVERSAL SCREEN STANDARDS [cite: 2026-01-26] */
-        :root {
-            --yellow-card: #fff5ba;
-            --main-gray: #d1d5db;
-        }
-
-        body { 
-            background-color: var(--main-gray); 
-            font-family: 'Times New Roman', Times, serif; 
-            margin: 0; padding: 0; 
-        }
-
-        .site-wrapper { 
-            width: 90%; /* Default 90% Standard [cite: 2026-01-26] */
-            margin: 0 auto; 
-            padding: 20px 0; 
-        }
-
-        /* UNIVERSAL GRID: Chrome, Edge, Safari, Brave, Opera, DuckDuckGo */
-        #directory-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
-            gap: 25px; 
-            width: 100%;
-        }
-
-        /* YELLOW CARD LAYOUT [cite: 2026-01-26] */
-        .card { 
-            background-color: var(--yellow-card) !important; 
-            border: 2px solid #000; 
-            box-shadow: 6px 6px 0px rgba(0,0,0,0.2); 
-            display: flex; 
-            flex-direction: column; 
-            height: 450px; 
-            position: relative; 
-            overflow: hidden; 
-        }
-
-        /* TOWN BAR: MIDDLE BOX COLOR LOCK [cite: 2026-01-28] */
-        .town-bar { 
-            height: 40px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            text-transform: uppercase; 
-            font-weight: 900; 
-            border-top: 2px solid #000; 
-            border-bottom: 2px solid #000; 
-            margin: 10px 0;
-        }
-
-        /* UNIVERSAL SCREEN STACKING [cite: 2026-01-26] */
-        @media (max-width: 600px) {
-            .site-wrapper { width: 95%; }
-            #directory-grid { grid-template-columns: 1fr; }
-            .card { height: auto; min-height: 400px; }
-        }
-
-        .logo-box { height: 150px; display: flex; align-items: center; justify-content: center; padding: 15px; }
-        .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
-        .biz-name { font-size: 1.4rem; font-weight: bold; padding: 10px; flex-grow: 1; display: flex; align-items: center; justify-content: center; text-align: center; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clay County Directory | SMLC</title>
+    <link rel="stylesheet" href="style.css?v=1.53">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 </head>
 <body>
+    <div class="nav-header">
+        <a href="https://supportmylocalcommunity.com/">Home</a>
+        <a href="https://ourflora.com/">Flora</a>
+        <a href="https://supportmylocalcommunity.com/louisville/">Louisville</a>
+    </div>
 
-    <header style="text-align: center; padding: 20px; background-color: var(--yellow-card); border-bottom: 2px solid #000;">
-        <h1 style="margin:0; font-size: clamp(2rem, 8vw, 4rem);">CLAY COUNTY DIRECTORY</h1>
+    <header class="main-title">
+        <h1>Clay County Directory</h1>
+        <div class="newspaper-meta single-row">
+            <div class="meta-item left-meta" id="header-info">VOL. 1 — NO. 1 | LOADING...</div>
+            <div class="meta-item right-meta"><span id="weather-box" class="weather-text"></span></div>
+        </div>
     </header>
 
     <div class="site-wrapper">
-        <div id="directory-grid">
-            <h2 style="text-align:center; width:100%;">Syncing Universal Data...</h2>
+        <div id="directory-grid"></div>
+    </div>
+
+    <div id="premium-modal">
+        <div class="modal-container">
+            <span class="close-modal" onclick="closeModal()">×</span>
+            <div id="modal-body"></div>
         </div>
     </div>
 
-    <script type="module" src="layout.js?v=1.50"></script>
+    <script type="module" src="layout.js?v=1.53"></script>
+    <script src="modal.js?v=1.53"></script>
 </body>
 </html>

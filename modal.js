@@ -1,19 +1,21 @@
 /** * MODAL.JS - THE POP-OUT ENGINE */
 function getSmartImage(id) {
+    // 1. Handle missing IDs
     if (!id || id === "" || id === "N/A") {
-        return `<img src="https://cdn.statically.io/gh/KFruti88/images/main/placeholder.png" 
+        return `<img src="https://cdn.jsdelivr.net/gh/KFruti88/images@main/placeholder.png" 
                      style="max-height:100%; border-radius:8px;">`;
     }
 
     const safeId = id.toLowerCase().trim();
     
-    // Using Statically CDN to bypass ORB/CORS blocking
-    const imagePath = `https://cdn.statically.io/gh/KFruti88/images/main/${safeId}.jpeg`;
+    // 2. Use jsDelivr CDN to bypass ORB/Blocking
+    // This looks into your 'images' repo, 'main' branch, for the '.jpeg' file
+    const imagePath = `https://cdn.jsdelivr.net/gh/KFruti88/images@main/${safeId}.jpeg`;
 
     return `<img src="${imagePath}" 
                  alt="Business Logo" 
                  style="max-height:100%; border-radius:8px;"
-                 onerror="this.onerror=null; this.src='https://cdn.statically.io/gh/KFruti88/images/main/placeholder.png';">`;
+                 onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/gh/KFruti88/images@main/placeholder.png';">`;
 }
 
 function openFullModal(bizName) {

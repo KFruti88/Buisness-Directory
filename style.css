@@ -1,245 +1,50 @@
-/* --- 1. BASE STYLES --- */
-body { 
-    background-color: #e5e5e5; /* Light gray background behind the boxes */
-    font-family: 'Times New Roman', Times, serif; 
-    margin: 0; 
-    padding: 0; 
-}
-
-.nav-header { 
-    background-color: #e5e5e5; 
-    color: #222222; 
-    padding: 12px 0; 
-    text-align: center; 
-    font-size: 0.9rem; 
-    font-weight: bold; 
-    width: 100%; 
-    position: relative; 
-    z-index: 100;
-    border-bottom: 2px solid #222222;
-}
-.nav-header a { color: #222222; text-decoration: none; margin: 0 15px; }
-
-/* --- 2. NEWSPAPER HEADER --- */
-.main-title {
-    text-align: center; 
-    padding: 20px 20px;
-    background-color: #e5e5e5; /* Boss's requested color */
-    border-bottom: 2px solid #222222;
-    font-family: 'Times New Roman', serif;
-    font-size: clamp(2rem, 8vw, 4.5rem);
-    color: #222222;
-    text-transform: uppercase;
-    letter-spacing: -2px;
-}
-.main-title h1 { 
-     text-align: center;
-    font-family: 'Times New Roman', serif;
-    font-size: clamp(2rem, 8vw, 4.5rem);
-    margin: 20px 0 5px 0;
-    text-transform: uppercase;
-    letter-spacing: -2px;
-    color: #222222;
-}
-
-.single-row {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    border-top: 2px solid #222222; 
-    border-bottom: 1px solid #222222;
-    padding: 10px 0; 
-    font-family: 'Times New Roman', serif;
-    font-weight: bold; 
-    gap: 10px; 
-    background-color: #e5e5e5;
-}
-
-.directory-pages { 
-    text-decoration: underline; 
-    font-size: 1.2rem; 
-    text-transform: uppercase; 
-}
-
-.meta-item { 
-    flex: 1; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    white-space: nowrap; 
-}
-.left-meta { justify-content: flex-start; text-transform: uppercase; font-size: 0.9rem; }
-.right-meta { justify-content: flex-end; }
-
-.single-row select {
-    padding: 5px 10px; 
-    border: 1px solid #222222; 
-    background: #e5e5e5; 
-    cursor: pointer;
-}
-
-/* --- 3. DIRECTORY GRID & CARDS --- */
+/* --- DIRECTORY GRID & NEWSPAPER CARDS --- */
 .site-wrapper { 
-    width: 95%; 
-    max-width: 1800px; 
-    margin: 0 auto; 
-    padding: 20px 0; 
+    width: 93%; /* Your standard width [cite: 2026-01-26] */
+    margin: 0 auto; padding: 20px 0; 
 }
+
 #directory-grid { 
     display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
     gap: 25px; 
 }
 
 .card { 
-    background-color: #fff5ba !important; /* Inside box color */
+    background-color: #fff5ba !important; /* Yellow Layout Background [cite: 2026-01-26] */
     border: 2px solid #000; 
     box-shadow: 6px 6px 0px rgba(0,0,0,0.2); 
-    padding: 20px; 
+    padding: 0; /* Remove padding to let town bar stretch */
     text-align: center; 
     display: flex; 
     flex-direction: column; 
-    justify-content: space-between;
-    height: 400px; 
+    height: 450px; 
     position: relative; 
-    box-sizing: border-box; 
-    transition: all 0.3s ease;
-    
-    /* CRITICAL: This stops the shine from bleeding across the screen */
     overflow: hidden; 
 }
 
-.logo-box { height: 120px; display: flex; align-items: center; justify-content: center; }
-.logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
-
+/* THE TOWN BAR - Dynamic Middle Box */
 .town-bar { 
-    color: white; 
-    font-weight: 900; 
-    padding: 10px 0; 
-    text-transform: uppercase; 
-    border: 2px solid #000; 
-    margin: 10px 0; 
-}
-.biz-name { font-size: 1.6rem; font-weight: bold; margin: 5px 0; }
-.cat-text { 
-    font-size: 1rem; 
-    color: #444; 
+    height: 40px; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    gap: 8px; 
+    text-transform: uppercase; 
+    font-weight: 900; 
+    font-size: 1.1rem; 
+    border-top: 2px solid #000; 
+    border-bottom: 2px solid #000;
+    margin: 10px 0;
 }
 
-/* Town Bar Colors */
-.flora-bar { background-color: #fe4f00 !important; }
-.louisville-bar { background-color: #eb1c24 !important; }
-.clay-city-bar { background-color: #0c30f0 !important; }
-.xenia-bar { background-color: #000000 !important; }
-.sailor-springs-bar { background-color: #a020f0 !important; }
-
-/* --- 4. SHINE EFFECT (STRICTLY PREMIUM ONLY) --- */
-.card.premium { 
-    cursor: pointer; 
-}
-
-/* Targets only cards with the 'premium' class */
-.card.premium::after {
-    content: ""; 
-    position: absolute; 
-    top: -50%; 
-    left: -100%; 
-    width: 30%; 
-    height: 200%;
-    background: rgba(255, 255, 255, 0.4); 
-    transform: rotate(30deg);
-    animation: infiniteShine 4s infinite linear; 
-    pointer-events: none;
-    z-index: 5;
-}
-
-@keyframes infiniteShine { 
-    0% { left: -100%; } 
-    20% { left: 150%; } 
-    100% { left: 150%; } 
-}
-
-.tier-badge { 
-    position: absolute; 
-    top: 5px; 
-    right: 5px; 
-    font-size: 0.6rem; 
-    padding: 2px 8px; 
+.biz-name { 
+    font-size: 1.4rem; 
     font-weight: bold; 
-    border: 1px solid #000; 
-    background: #fff; 
-    z-index: 10;
+    padding: 10px; 
+    flex-grow: 1; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
 }
 
-
-/* Weather*/
-.weather-text {
-    color: #222222;
-    font-weight: bold;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    margin-left: 20px;
-}
-
-/* Hide weather on mobile so the menu stays clean */
-@media (max-width: 768px) {
-    .weather-text {
-        display: none;
-    }
-}
-
-/* --- MOBILE RESPONSIVENESS (Screens smaller than 768px) --- */
-@media (max-width: 768px) {
-    
-    .nav-header {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 10px;
-    }
-    
-    .nav-header a {
-        margin: 5px 10px;
-        font-size: 0.8rem;
-    }
-
-    .main-title h1 {
-        font-size: 2.5rem;
-        margin-top: 15px;
-    }
-
-    .newspaper-meta {
-        flex-direction: column;
-        margin: 10px;
-        padding: 15px 0;
-        gap: 15px;
-    }
-
-    .meta-item {
-        width: 100%;
-        text-align: center !important;
-        padding: 0;
-    }
-
-    .left-meta, .right-meta { text-align: center; }
-
-    select {
-        width: 90%;
-        max-width: 300px;
-        font-size: 1rem;
-        padding: 10px;
-    }
-
-    #directory-grid {
-        grid-template-columns: 1fr; /* This now ONLY applies to mobile */
-        padding: 0 10px;
-    }
-
-    .card {
-        margin-bottom: 10px;
-    }
-}
+.logo-box { height: 150px; padding: 15px; display: flex; align-items: center; justify-content: center; }

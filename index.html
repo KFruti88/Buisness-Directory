@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Clay County Directory | Cross-Browser Edition</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Clay County Directory | Universal Edition</title>
     
     <style>
-        /* CSS variables for cross-browser consistency */
+        /* --- UNIVERSAL SCREEN STANDARDS [cite: 2026-01-26] --- */
         :root {
-            --yellow-bg: #fff5ba;
+            --yellow-card: #fff5ba;
             --main-gray: #d1d5db;
         }
 
@@ -20,40 +20,38 @@
             background-color: var(--main-gray); 
             font-family: 'Times New Roman', Times, serif; 
             margin: 0; padding: 0; 
-        }
-
-        .main-title { 
-            text-align: center; padding: 20px; 
-            background-color: var(--yellow-bg); 
-            border-bottom: 2px solid #000; 
+            -webkit-font-smoothing: antialiased; /* Safari/Chrome crispness */
         }
 
         .site-wrapper { 
-            width: 90%; /* Your 90% default standard [cite: 2026-01-26] */
-            margin: 0 auto; padding: 20px 0; 
+            width: 90%; /* Default 90% Standard [cite: 2026-01-26] */
+            margin: 0 auto; 
+            padding: 20px 0; 
         }
 
-        /* Cross-browser Grid (Supports Chrome, Safari, Edge, Opera) */
+        /* UNIVERSAL GRID: Chrome, Edge, Safari, Brave, Opera, DuckDuckGo */
         #directory-grid { 
-            display: -ms-grid; /* Legacy Edge support */
+            display: -webkit-grid; /* Safari prefix */
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
             gap: 25px; 
+            width: 100%;
         }
 
+        /* YELLOW LAYOUT CARD [cite: 2026-01-26] */
         .card { 
-            background-color: var(--yellow-bg) !important; 
+            background-color: var(--yellow-card) !important; 
             border: 2px solid #000; 
             box-shadow: 6px 6px 0px rgba(0,0,0,0.2); 
-            text-align: center; 
             display: flex; 
             flex-direction: column; 
             height: 450px; 
             position: relative; 
             overflow: hidden; 
+            box-sizing: border-box;
         }
 
-        /* THE MIDDLE TOWN BAR [cite: 2026-01-28] */
+        /* COLOR LOCK TOWN BAR [cite: 2026-01-28] */
         .town-bar { 
             height: 40px; 
             display: flex; 
@@ -66,32 +64,30 @@
             margin: 10px 0;
         }
 
-        .biz-name { 
-            font-size: 1.4rem; 
-            font-weight: bold; 
-            padding: 10px; 
-            flex-grow: 1; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
+        /* UNIVERSAL SCREEN STACKING [cite: 2026-01-26] */
+        @media (max-width: 600px) {
+            .site-wrapper { width: 95%; }
+            #directory-grid { grid-template-columns: 1fr; } /* Stack vertically */
+            .card { height: auto; min-height: 400px; }
         }
 
         .logo-box { height: 150px; display: flex; align-items: center; justify-content: center; padding: 15px; }
         .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
+        .biz-name { font-size: 1.4rem; font-weight: bold; padding: 10px; flex-grow: 1; display: flex; align-items: center; justify-content: center; text-align: center; }
     </style>
 </head>
 <body>
 
-    <header class="main-title">
-        <h1>CLAY COUNTY DIRECTORY</h1>
+    <header style="text-align: center; padding: 20px; background-color: var(--yellow-card); border-bottom: 2px solid #000;">
+        <h1 style="margin:0; font-size: clamp(2rem, 8vw, 4rem);">CLAY COUNTY DIRECTORY</h1>
     </header>
 
     <div class="site-wrapper">
         <div id="directory-grid">
-            <h2 style="text-align:center; width:100%;">Syncing Data...</h2>
+            <h2 style="text-align:center; width:100%;">Syncing Universal Data...</h2>
         </div>
     </div>
 
-    <script type="module" src="layout.js?v=1.48"></script>
+    <script type="module" src="layout.js?v=1.49"></script>
 </body>
 </html>

@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clay County Business Directory | SMLC</title>
-    
-    <link rel="stylesheet" href="style.css?v=1.12">
-    
-    <style>
-        /* Modal Style for Pop-out Engine */<!DOCTYPE html>
-<html lang="en">
-<head>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -23,20 +10,50 @@
     <title>Clay County Directory | Yellow Layout</title>
     
     <style>
-        body { background-color: #d1d5db; font-family: 'Times New Roman', Times, serif; margin: 0; padding: 0; }
-        .main-title { text-align: center; padding: 20px; background-color: #fff5ba; border-bottom: 2px solid #000; }
-        .site-wrapper { width: 93%; margin: 0 auto; padding: 20px 0; } /* 93% Standard [cite: 2026-01-26] */
-        #directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 25px; }
-        
-        /* Yellow Card Styling */
-        .card { 
-            background-color: #fff5ba !important; border: 2px solid #000; 
-            box-shadow: 6px 6px 0px rgba(0,0,0,0.2); text-align: center; 
-            display: flex; flex-direction: column; height: 450px; 
-            position: relative; overflow: hidden; 
+        /* --- 1. BASE STYLES --- */
+        body { 
+            background-color: #d1d5db; 
+            font-family: 'Times New Roman', Times, serif; 
+            margin: 0; padding: 0; 
         }
+
+        /* --- 2. NEWSPAPER HEADER --- */
+        .main-title {
+            text-align: center; padding: 20px;
+            background-color: #fff5ba; /* Boss's requested color [cite: 2026-01-26] */
+            border-bottom: 2px solid #000;
+        }
+
+        /* --- 3. DIRECTORY GRID & YELLOW CARDS --- */
+        .site-wrapper { width: 93%; margin: 0 auto; padding: 20px 0; } /* 93% Standard [cite: 2026-01-26] */
+
+        #directory-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
+            gap: 25px; 
+        }
+
+        .card { 
+            background-color: #fff5ba !important; /* Yellow Layout [cite: 2026-01-26] */
+            border: 2px solid #000; 
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.2); 
+            text-align: center; 
+            display: flex; flex-direction: column; 
+            height: 450px; position: relative; 
+            overflow: hidden; 
+        }
+
         .logo-box { height: 150px; display: flex; align-items: center; justify-content: center; padding: 15px; }
-        .town-bar { height: 40px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; border-top: 2px solid #000; border-bottom: 2px solid #000; }
+        .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
+
+        /* THE MIDDLE TOWN BAR [cite: 2026-01-28] */
+        .town-bar { 
+            height: 40px; display: flex; align-items: center; justify-content: center; 
+            text-transform: uppercase; font-weight: 900; 
+            border-top: 2px solid #000; border-bottom: 2px solid #000; 
+            margin: 10px 0;
+        }
+
         .biz-name { font-size: 1.4rem; font-weight: bold; padding: 10px; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
@@ -52,167 +69,6 @@
         </div>
     </div>
 
-    <script type="module" src="layout.js?v=1.45"></script>
-</body>
-</html>
-        #premium-modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.85);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-container {
-            background-color: #fff5ba;
-            width: 90%;
-            max-width: 850px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 4px solid #000;
-            padding: 30px;
-            position: relative;
-            box-shadow: 10px 10px 0px rgba(0,0,0,0.5);
-        }
-        .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 35px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        /* 90% Container Standard */
-        .site-wrapper { width: 90%; margin: auto; }
-    </style>
-</head>
-<body>
-
-    <div class="nav-header">
-        <a href="https://supportmylocalcommunity.com/">Home</a>
-        <a href="https://supportmylocalcommunity.com/clay-city/">Clay City</a>
-        <a href="https://ourflora.com/">Flora</a>
-        <a href="https://supportmylocalcommunity.com/louisville/">Louisville</a>
-        <a href="https://supportmylocalcommunity.com/sail-springs/">Sailor Springs</a>
-        <a href="https://supportmylocalcommunity.com/xenia/">Xenia</a>
-    </div>
-
-    <header class="main-title">
-        <h1>Clay County Directory</h1>
-        
-        <div class="newspaper-meta single-row">
-            <div class="meta-item left-meta" id="header-info">VOL. 1 — NO. 1 | CLAY COUNTY, IL</div>
-
-            <div class="meta-item">
-                <select id="town-select" onchange="applyFilters()">
-                    <option value="All">📍 All Towns</option>
-                    <option value="Flora">Flora</option>
-                    <option value="Louisville">Louisville</option>
-                    <option value="Clay City">Clay City</option>
-                    <option value="Xenia">Xenia</option>
-                    <option value="Sailor Springs">Sailor Springs</option>
-                </select>
-            </div>
-
-            <div class="meta-item center-header">
-                <span class="directory-pages">BUSINESS DIRECTORY PAGES</span>
-            </div>
-
-            <div class="meta-item">
-                <select id="cat-select" onchange="applyFilters()">
-                    <option value="All">📂 All Industries</option>
-                    <option value="Emergency">🚨 Emergency Services</option> 
-                    <option value="Manufacturing">🏗️ Manufacturing</option>
-                    <option value="Bars">🍺 Bars & Taverns</option>
-                    <option value="Retail">🛒 Retail</option>
-                    <option value="Restaurants">🍴 Restaurants</option>
-                    <option value="Church">⛪ Church</option>
-                    <option value="Healthcare">🏥 Healthcare</option>
-                </select>
-            </div>
-
-            <div class="meta-item right-meta">
-                 <span id="weather-box" class="weather-text">WEATHER LOADING...</span>
-            </div>
-        </div>
-    </header>
-
-    <div class="site-wrapper">
-        <div id="directory-grid" class="grid-container"></div>
-    </div>
-
-    <div id="premium-modal">
-        <div class="modal-container">
-            <span class="close-modal" onclick="closeModal()">×</span>
-            <div id="modal-body"></div>
-        </div>
-    </div>
-
-    <script>
-        // Color Lock Mapping for Towns
-        const townColors = { 
-            "Flora": { bg: "#0c0b82", text: "#fe4f00" }, 
-            "Louisville": { bg: "#010101", text: "#eb1c24" }, 
-            "North Clay": { bg: "#010101", text: "#eb1c24" }, 
-            "Clay City": { bg: "#0c30f0", text: "#8a8a88" }, 
-            "Xenia": { bg: "#000000", text: "#fdb813" }, 
-            "Sailor Springs": { bg: "#000000", text: "#a020f0" }, 
-            "Clay County": { bg: "#333333", text: "#ffffff" } 
-        };
-
-        let allData = [];
-
-        async function loadDirectory() {
-            try {
-                // Fetch JSON generated from A-M Mapping
-                const response = await fetch('directory.json?v=' + new Date().getTime());
-                allData = await response.json();
-                renderCards(allData);
-            } catch (error) {
-                console.error("Error sync data:", error);
-                document.getElementById('directory-grid').innerHTML = "<h2>Directory Syncing... Please Refresh.</h2>";
-            }
-        }
-
-        function renderCards(data) {
-            const grid = document.getElementById('directory-grid');
-            grid.innerHTML = data.map(biz => {
-                const colors = townColors[biz.town] || townColors["Clay County"];
-                const profileUrl = `profile.html?biz=${biz.name.replace(/\s+/g, '-').toLowerCase()}`;
-                
-                return `
-                    <div class="biz-card" onclick="location.href='${profileUrl}'" style="background-color: ${colors.bg}; color: ${colors.text}; cursor: pointer; border: 2px solid #fff; padding: 20px; border-radius: 8px;">
-                        <h2 style="margin: 0;">${biz.name}</h2>
-                        <p><strong>Town:</strong> ${biz.town}</p>
-                        <p><strong>Industry:</strong> ${biz.category}</p>
-                        <p style="font-size: 0.9rem; border-top: 1px solid ${colors.text}; padding-top: 10px;">
-                            ${biz.bio.substring(0, 75)}...
-                        </p>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function applyFilters() {
-            const town = document.getElementById('town-select').value;
-            const cat = document.getElementById('cat-select').value;
-
-            let filtered = allData;
-            if (town !== "All") filtered = filtered.filter(b => b.town === town);
-            if (cat !== "All") filtered = filtered.filter(b => b.category.includes(cat));
-
-            renderCards(filtered);
-        }
-
-        // Initialize
-        window.onload = loadDirectory;
-
-        // Maintain Weather Widget Logic
-        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
-    </script>
+    <script type="module" src="layout.js?v=1.46"></script>
 </body>
 </html>

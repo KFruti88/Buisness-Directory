@@ -72,9 +72,9 @@
         "name": "Agpro Inc (John Deere)",
         "tier": "basic",
         "category": "14545 US-45, Louisville, IL 62858",
-        "phone": "",
+        "phone": "Louisville",
         "address": "590 S Main St",
-        "town": "Louisville",
+        "town": "N/A",
         "state_zip": "IL 62858",
         "hours": "N/A",
         "website": "N/A",
@@ -82,7 +82,7 @@
         "bio": "N/A",
         "established": "https://www.facebook.com/AgProLouisville/",
         "amazon_tag": "werewolf3788-20",
-        "full_location": "590 S Main St, Louisville, IL 62858"
+        "full_location": "590 S Main St, N/A, IL 62858"
     },
     {
         "image_id": "louisville-american-leagion",
@@ -106,8 +106,8 @@
         "name": "American Legion Post 914",
         "tier": "basic",
         "category": "N/A",
-        "phone": "",
-        "address": "2",
+        "phone": "N/A",
+        "address": "N/A",
         "town": "N/A",
         "state_zip": "N/A",
         "hours": "N/A",
@@ -116,7 +116,7 @@
         "bio": "N/A",
         "established": "N/A",
         "amazon_tag": "werewolf3788-20",
-        "full_location": "2, N/A, N/A"
+        "full_location": "N/A, N/A, N/A"
     },
     {
         "image_id": "N/A",
@@ -125,7 +125,7 @@
         "category": "N/A",
         "phone": "",
         "address": "201 E 2nd St",
-        "town": "Flora",
+        "town": "N/A",
         "state_zip": "IL 62839",
         "hours": "N/A",
         "website": "http://www.amyleerealty.com/",
@@ -133,7 +133,7 @@
         "bio": "N/A",
         "established": "N/A",
         "amazon_tag": "werewolf3788-20",
-        "full_location": "201 E 2nd St, Flora, IL 62839"
+        "full_location": "201 E 2nd St, N/A, IL 62839"
     },
     {
         "image_id": "Amy-Lee-Realty",
@@ -378,9 +378,9 @@
         "name": "Bargain Barn",
         "tier": "basic",
         "category": "8152 Old Hwy 50, Flora, IL 62839",
-        "phone": "",
+        "phone": "6186623011",
         "address": "1508 N State Rd, Flora, IL 62839",
-        "town": "(618) 662-3011",
+        "town": "N/A",
         "state_zip": "Lodging",
         "hours": "N/A",
         "website": "N/A",
@@ -388,7 +388,7 @@
         "bio": "N/A",
         "established": "N/A",
         "amazon_tag": "werewolf3788-20",
-        "full_location": "1508 N State Rd, Flora, IL 62839, (618) 662-3011, Lodging"
+        "full_location": "1508 N State Rd, Flora, IL 62839, N/A, Lodging"
     },
     {
         "image_id": "N/A",
@@ -497,9 +497,9 @@
         "name": "Biblical Baptist Church",
         "tier": "basic",
         "category": "101 S Main St, Clay City, IL 62824",
-        "phone": "",
+        "phone": "6186761222",
         "address": "910 S Main St, Clay City, IL 62824",
-        "town": "(618) 676-1222",
+        "town": "N/A",
         "state_zip": "Services",
         "hours": "N/A",
         "website": "N/A",
@@ -507,7 +507,7 @@
         "bio": "N/A",
         "established": "N/A",
         "amazon_tag": "werewolf3788-20",
-        "full_location": "910 S Main St, Clay City, IL 62824, (618) 676-1222, Services"
+        "full_location": "910 S Main St, Clay City, IL 62824, N/A, Services"
     },
     {
         "image_id": "big-4-propane",
@@ -752,9 +752,9 @@
         "name": "Bryan R Land Farming",
         "tier": "basic",
         "category": "Flora, IL 62839",
-        "phone": "",
+        "phone": "6186624411",
         "address": "1401 N State Rd, Flora, IL 62839",
-        "town": "(618) 662-4411",
+        "town": "N/A",
         "state_zip": "Automotive",
         "hours": "N/A",
         "website": "N/A",
@@ -762,7 +762,7 @@
         "bio": "N/A",
         "established": "N/A",
         "amazon_tag": "werewolf3788-20",
-        "full_location": "1401 N State Rd, Flora, IL 62839, (618) 662-4411, Automotive"
+        "full_location": "1401 N State Rd, Flora, IL 62839, N/A, Automotive"
     },
     {
         "image_id": "N/A",
@@ -854,9 +854,9 @@
         "name": "Calvary Apostolic Tabernacle",
         "tier": "basic",
         "category": "Church",
-        "phone": "6182452250",
+        "phone": "",
         "address": "211 W Broadway",
-        "town": "Iola",
+        "town": "N/A",
         "state_zip": "IL 62838",
         "hours": "Wednesday, 7\u00e2\u0080\u00938:30\u00e2\u0080\u00afPM Sunday, 10\u00e2\u0080\u00afAM\u00e2\u0080\u009312\u00e2\u0080\u00afPM",
         "website": "https://www.calvaryapostolictabiola.org/",
@@ -864,7 +864,7 @@
         "bio": "N/A",
         "established": "N/A",
         "amazon_tag": "werewolf3788-20",
-        "full_location": "211 W Broadway, Iola, IL 62838"
+        "full_location": "211 W Broadway, N/A, IL 62838"
     },
     {
         "image_id": "N/A",
@@ -939,9 +939,9 @@
         "name": "Carol's Bridge Inn",
         "tier": "basic",
         "category": "Louisville, IL 62858",
-        "phone": "",
+        "phone": "6183561699",
         "address": "300 Route 45 S, Louisville, IL 62858",
-        "town": "(618) 356-1699",
+        "town": "N/A",
         "state_zip": "Gas Station",
         "hours": "N/A",
         "website": "N/A",
@@ -949,7 +949,7 @@
         "bio": "N/A",
         "established": "N/A",
         "amazon_tag": "werewolf3788-20",
-        "full_location": "300 Route 45 S, Louisville, IL 62858, (618) 356-1699, Gas Station"
+        "full_location": "300 Route 45 S, Louisville, IL 62858, N/A, Gas Station"
     },
     {
         "image_id": "caseys",
@@ -1279,7 +1279,7 @@
         "name": "Clay City Car Wash & Laundromate",
         "tier": "basic",
         "category": "Services",
-        "phone": "",
+        "phone": "N/A",
         "address": "910 S Main St, Clay City, IL 62824",
         "town": "N/A",
         "state_zip": "Automotive",
@@ -1942,9 +1942,9 @@
         "name": "Clay County Rehab",
         "tier": "basic",
         "category": "1 Commercial Dr, Flora, IL62839",
-        "phone": "",
+        "phone": "6186626607",
         "address": "1 Commercial Dr, Flora, IL62839",
-        "town": "618-6626607",
+        "town": "N/A",
         "state_zip": "Industries",
         "hours": "N/A",
         "website": "N/A",
@@ -1952,16 +1952,16 @@
         "bio": "N/A",
         "established": "https://www.facebook.com/ClayCountyRehab/",
         "amazon_tag": "werewolf3788-20",
-        "full_location": "1 Commercial Dr, Flora, IL62839, 618-6626607, Industries"
+        "full_location": "1 Commercial Dr, Flora, IL62839, N/A, Industries"
     },
     {
         "image_id": "N/A",
         "name": "Clay County Rehab",
         "tier": "basic",
         "category": "1 Commercial Dr, Flora, IL62839",
-        "phone": "",
+        "phone": "6186653316",
         "address": "14450 US-45, Louisville, IL 62858",
-        "town": "(618) 665-3316",
+        "town": "N/A",
         "state_zip": "Emergency",
         "hours": "N/A",
         "website": "N/A",
@@ -1969,7 +1969,7 @@
         "bio": "N/A",
         "established": "https://www.facebook.com/ClayCountyRehab/",
         "amazon_tag": "werewolf3788-20",
-        "full_location": "14450 US-45, Louisville, IL 62858, (618) 665-3316, Emergency"
+        "full_location": "14450 US-45, Louisville, IL 62858, N/A, Emergency"
     },
     {
         "image_id": "N/A",
@@ -3761,7 +3761,7 @@
         "name": "Hella Electronics Corp",
         "tier": "basic",
         "category": "1101 Vincennes Ave, Flora, IL 62839",
-        "phone": "",
+        "phone": "N/A",
         "address": "Flora, IL 62839",
         "town": "N/A",
         "state_zip": "Agriculture",

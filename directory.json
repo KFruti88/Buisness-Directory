@@ -107,7 +107,7 @@
         "tier": "basic",
         "category": "N/A",
         "phone": "",
-        "address": "N/A",
+        "address": "2",
         "town": "N/A",
         "state_zip": "N/A",
         "hours": "N/A",
@@ -116,7 +116,24 @@
         "bio": "N/A",
         "established": "N/A",
         "amazon_tag": "werewolf3788-20",
-        "full_location": "N/A, N/A, N/A"
+        "full_location": "2, N/A, N/A"
+    },
+    {
+        "image_id": "N/A",
+        "name": "1",
+        "tier": "basic",
+        "category": "N/A",
+        "phone": "",
+        "address": "201 E 2nd St",
+        "town": "Flora",
+        "state_zip": "IL 62839",
+        "hours": "N/A",
+        "website": "http://www.amyleerealty.com/",
+        "facebook": "https://www.facebook.com/amyleerealtyflora",
+        "bio": "N/A",
+        "established": "N/A",
+        "amazon_tag": "werewolf3788-20",
+        "full_location": "201 E 2nd St, Flora, IL 62839"
     },
     {
         "image_id": "Amy-Lee-Realty",

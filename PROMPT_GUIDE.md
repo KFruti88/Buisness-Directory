@@ -29,7 +29,7 @@ Use these exact numbers when writing JavaScript for the data array:
 The UI colors must change automatically based on the value in **Index 7**:
 - **Flora:** Background: `#0c0b82`, Text: `#fe4f00`.
 - **Louisville:** Background: `#010101`, Text: `#eb1c24`.
-- **Default:** Charcoal `#333333` with White text.
+- **Default:** Charcoal `#333333` with #0c30f0 text.
 
 ### ⚙️ UI Development Standards
 1. **Address Fusion:** On the card, display the address by joining indices: `[6] [7], [8]`.

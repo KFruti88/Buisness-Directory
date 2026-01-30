@@ -1,13 +1,13 @@
 /**
- * PROJECT: Clay County Directory Engine v7.02
- * STATUS: Premium Click Handshake & Stable Layout Locked [cite: 2026-01-30]
+ * PROJECT: Clay County Directory Engine v7.03
+ * STATUS: Transparent Filters & Stable Layout Locked [cite: 2026-01-30]
  * LOCK: A-P Spreadsheet Mapping (Indices 0-13)
  */
 const CONFIG = {
     CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv",
     IMAGE_REPO: "https://raw.githubusercontent.com/KFruti88/images/main/",
     
-    // [cite: 2026-01-28] HARD-LOCKED A-P MAPPING
+    // HARD-LOCKED INDICES [cite: 2026-01-28]
     MAP: { IMG: 0, NAME: 1, TOWN: 2, TIER: 3, CAT: 4, PHONE: 5, ADDR: 6, HOURS: 7, WEB: 8, FB: 9, BIO: 10, EST: 12, COUPON: 13 },
     
     TOWN_COLORS: {
@@ -21,7 +21,6 @@ const CONFIG = {
     }
 };
 
-// [cite: 2026-01-26] Global Data Store for Modal Handshake
 window.allData = []; 
 
 function fetchData() {
@@ -29,7 +28,7 @@ function fetchData() {
     Papa.parse(`${CONFIG.CSV_URL}&v=${v}`, {
         download: true, header: false, skipEmptyLines: true,
         complete: function(results) {
-            // Mapping CSV to Global Object using A-P mapping [cite: 2026-01-29]
+            // [cite: 2026-01-29] Build global store for Modal Brain
             window.allData = results.data.slice(1).map(row => ({
                 ImageID: row[CONFIG.MAP.IMG] || "",
                 name: row[CONFIG.MAP.NAME] || "",
@@ -57,7 +56,7 @@ function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    // Standard Tier Sorting: Premium -> Gold -> Plus -> Basic
+    // Standard Tier Sorting [cite: 2026-01-28]
     const tierWeight = { "premium": 1, "gold": 2, "plus": 3, "basic": 4 };
     const sorted = data.sort((a, b) => 
         (tierWeight[a.tier.toLowerCase()] || 5) - (tierWeight[b.tier.toLowerCase()] || 5) || a.name.localeCompare(b.name)
@@ -67,7 +66,6 @@ function renderCards(data) {
         const style = CONFIG.TOWN_COLORS[biz.town] || CONFIG.TOWN_COLORS["Clay County"];
         const tierL = biz.tier.toLowerCase();
         
-        // [cite: 2026-01-30] Entire card triggers the modal handshake
         return `
         <div class="card ${tierL}" onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')">
             <div class="tier-badge">${biz.tier}</div>
@@ -77,19 +75,16 @@ function renderCards(data) {
             <div class="town-bar" style="background-color: ${style.bg}; color: ${style.text};">
                 ${biz.town}
             </div>
-            <div class="biz-name">${biz.name}</div>
-            <div class="card-content">
+            <div class="biz-name" style="height:80px; font-weight:bold; text-align:center; display:flex; align-items:center; justify-content:center; padding:10px;">${biz.name}</div>
+            <div class="card-content" style="text-align:center; padding-bottom:15px;">
                 <div class="biz-cat">📁 ${biz.category}</div>
-                ${tierL === 'premium' ? `<div class="premium-cta">⚡ CLICK FOR DETAILS</div>` : ''}
+                ${tierL === 'premium' ? `<div style="color:#fe4f00; font-weight:900; font-size:0.75rem; margin-top:10px;">⚡ CLICK FOR DETAILS</div>` : ''}
             </div>
         </div>`;
     }).join('');
     updateHeader();
 }
 
-/**
- * 🛠️ NAVIGATION & FILTER LOGIC [cite: 2026-01-28]
- */
 function populateFilters(data) {
     const citySelect = document.getElementById('city-filter');
     const catSelect = document.getElementById('cat-filter');

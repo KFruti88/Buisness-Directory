@@ -251,6 +251,40 @@ document.addEventListener("DOMContentLoaded", fetchData);
 📍 Why this is your "Safety Net":
 Logical Isolation: If you add a new feature later and the town colors disappear, you can look at this layout.js and see exactly how the TOWN_COLORS object was injected into the town-bar div.
 
+🛠️ PROMPT_GUIDE.md: Clay County Directory Standards
+1. The "Safety Wall" Modal Protocol
+To prevent the directory layout from breaking when a pop-out is opened, always use Fixed Layering.
+
+The Rule: The modal must exist outside the site-wrapper and be positioned at the bottom of the <body>.
+
+The CSS Lock: Use position: fixed and a z-index higher than 9999. This removes the modal from the document flow so it cannot "push" or move the business cards.
+
+Constraint: The modal width is hard-locked to 75% of the screen [cite: 2026-01-28].
+
+2. Global Styling & Contrast Locks
+Background: The default site background is Slate Gray (#333333).
+
+Header Readability: The navigation labels ("Select City", "Select Category") must be forced to Solid Black (#000000 !important) with a font-weight of 900 to remain readable against the yellow glossy header [cite: 2026-01-30].
+
+Card Uniformity: Business cards are hard-locked to a height of 480px with a uniform yellow background (#fff5ba).
+
+3. The Newspaper Handshake (Logic)
+Volume (VOL): Dynamically set to the current Month (e.g., January = 1).
+
+Number (NO): Dynamically set to the current Day of the Month.
+
+Constraint: Do not include the year or redundant date strings in the masthead meta [cite: 2026-01-30].
+
+4. A–N Spreadsheet Mapping
+Never guess column headers. Always use the following mapping for JavaScript data processing: | Key | Column Index | Description | | :--- | :--- | :--- | | IMG | 0 (A) | Image ID (ASIN or custom) | | NAME | 1 (B) | Business Name | | TOWN | 3 (D) | City/Town | | PHONE | 5 (F) | 10-digit Phone | | CAT | 8 (I) | Business Category | | TIER | 11 (L) | Premium, Plus, or Basic | | CPN_TXT| 13 (N) | Coupon text |
+
+5. Development & Caching
+Cache Busting: All index.html files must include "No-Cache" meta tags.
+
+Asset Versioning: Append version strings to all file links (e.g., style.css?v=9.3) to force browsers to fetch the latest code after a GitHub push [cite: 2026-01-26].
+
+Zero Snippet Policy: Always provide the full file contents to ensure logic doesn't leak or break between projects.
+
 Structural Guarantee: The CSS uses absolute positioning for the bottom stack and top badges. This means the layout is physically incapable of shifting even if you change other elements [cite: 2026-01-30].
 
 No-Cache Mandate: The meta tags and script versions ensure that when you revert, the browser doesn't keep showing you the "fucked up" version [cite: 2026-01-26].

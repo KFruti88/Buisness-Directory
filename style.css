@@ -1,6 +1,6 @@
 /* --- 1. GLOBAL SLATE THEME [cite: 2026-01-30] --- */
 body { 
-    background-color: #333333; /* Dark Gray Site Background - BYE BYE WHITE */
+    background-color: #333333; /* Dark Gray Site Background */
     margin: 0; 
     font-family: 'Times New Roman', serif; 
     color: #eeeeee;
@@ -23,25 +23,36 @@ body {
     letter-spacing: 2px; color: #000;
 }
 
+/* --- 3. NEWSPAPER META LOCK (VOL=Month, NO=Date) --- */
 .newspaper-meta {
     display: flex; justify-content: space-between; align-items: center;
     border-top: 2px solid #222; margin-top: 15px; padding: 10px 5%; 
-    font-weight: 900; font-size: 0.95rem; text-transform: uppercase;
-    background: rgba(0,0,0,0.05); color: #000;
+    font-weight: 900; font-size: 1.1rem; text-transform: uppercase;
+    background: rgba(0,0,0,0.05); 
+    color: #000000 !important; /* Force black for contrast [cite: 2026-01-30] */
 }
 
-/* --- 3. DYNAMIC FILTER NAV --- */
+/* --- 4. DYNAMIC FILTER NAV (High Contrast Fix) --- */
 .filter-nav {
-    display: flex; justify-content: center; gap: 25px; padding: 30px 0;
+    display: flex; justify-content: center; gap: 30px; padding: 20px 0;
+    background: transparent;
+}
+
+.filter-group {
+    display: flex; align-items: center; gap: 10px;
+    /* Kill white font - Force Black */
+    color: #000000 !important; 
+    font-weight: 900;
+    font-size: 1.1rem;
+    text-transform: uppercase;
 }
 
 .filter-group select {
-    padding: 10px 15px; border: 2px solid #fff5ba; border-radius: 4px;
+    padding: 10px 15px; border: 2px solid #000000; border-radius: 4px;
     background: #222; color: #fff5ba; font-weight: bold; cursor: pointer;
-    font-family: 'Times New Roman', serif;
 }
 
-/* --- 4. UNIFORM YELLOW CARD LOCK --- */
+/* --- 5. UNIFORM YELLOW CARD LOCK --- */
 #directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 25px; width: 93%; margin: 0 auto; padding: 20px 0; }
 
 .card { 
@@ -52,17 +63,16 @@ body {
 }
 
 .logo-box { height: 160px; display: flex; align-items: center; justify-content: center; background: transparent !important; padding: 15px; }
-.logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-/* Middle Town Bar Branded via JS */
+/* Middle Town Bar Branded via JS Mapping */
 .town-bar { 
     height: 38px; display: flex; align-items: center; justify-content: center; 
     text-transform: uppercase; font-weight: 900; border-top: 2px solid #000; border-bottom: 2px solid #000;
-    width: 100%;
 }
 
 .biz-name { height: 80px; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: bold; font-size: 1.4rem; padding: 10px; margin-bottom: 80px; }
 
+/* --- 6. CENTERED BOTTOM STACK LOCK --- */
 .bottom-stack {
     position: absolute; bottom: 20px; left: 0; right: 0;
     display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -72,7 +82,7 @@ body {
 .biz-phone, .category-locked { font-size: 1.25rem; font-weight: bold; }
 .premium-cta { color: #fe4f00; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; }
 
-/* --- 5. ASSET LOCKS --- */
+/* --- 7. ASSET LOCKS (5% MARGINS) --- */
 .coupon-container { position: absolute; top: 5%; left: 5%; z-index: 15; }
 .coupon-img-top { width: 45px; height: auto; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2)); }
 .tier-badge-top { position: absolute; top: 5%; right: 5%; font-size: 0.75rem; font-weight: 900; background: #fff; border: 1.5px solid #000; padding: 2px 6px; z-index: 10; text-transform: uppercase; }

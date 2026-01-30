@@ -1,95 +1,141 @@
-/* --- 1. UNIVERSAL & GRID SETUP [cite: 2026-01-26] --- */
-body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin: 0; }
+/* --- 1. UNIVERSAL & GRID RESET [cite: 2026-01-26] --- */
+body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin: 0; color: #222; }
+
 .site-wrapper { width: 93%; margin: 0 auto; padding: 20px 0; }
 
-/* --- 2. THE MODAL OVERLAY --- */
+/* --- 2. THE STABLE DIRECTORY GRID [cite: 2026-01-30] --- */
+#directory-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
+    gap: 25px; 
+    width: 100%;
+}
+
+/* --- 3. THE GLOSSY CARD DNA [cite: 2026-01-28] --- */
+.card { 
+    background: linear-gradient(135deg, #fff5ba 0%, #fdf0a0 100%) !important; 
+    border: 2px solid #000; 
+    border-radius: 8px;
+    height: 480px; /* FIXED HEIGHT: Restores the look you liked */
+    display: flex; 
+    flex-direction: column; 
+    position: relative; 
+    overflow: hidden; 
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.1), inset 0 0 10px rgba(255,255,255,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.card:hover { transform: translateY(-5px); box-shadow: 8px 8px 20px rgba(0,0,0,0.2); }
+
+.logo-box { 
+    height: 160px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 10px; 
+    background: #fff;
+}
+
+.logo-box img { 
+    max-height: 100%; 
+    max-width: 100%; 
+    object-fit: contain; /* [cite: 2026-01-30] Kills the giant image bug */
+}
+
+.town-bar { 
+    height: 38px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    text-transform: uppercase; 
+    font-weight: 900; 
+    border-top: 2px solid #000; 
+    border-bottom: 2px solid #000; 
+}
+
+.biz-name { 
+    height: 80px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+    font-weight: bold; 
+    font-size: 1.4rem; 
+    padding: 5px; 
+}
+
+.card-content { 
+    flex-grow: 1; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    text-align: center; 
+    padding-bottom: 15px; 
+}
+
+.tier-badge { 
+    position: absolute; top: 8px; left: 8px; font-size: 0.7rem; 
+    border: 1px solid #222; background: #fff; padding: 2px 5px; z-index: 5; text-transform: uppercase; 
+}
+
+/* --- 4. THE PREMIUM "INDEX CARD" POP-OUT [cite: 2026-01-28] --- */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85); display: none; 
     justify-content: center; align-items: center; z-index: 1000;
 }
 
-/* --- 3. THE "INDEX CARD" CONTAINER [cite: 2026-01-28] --- */
 .modal-container {
-    width: 75%; /* Hard-Locked 75% Width */
+    width: 75%; /* Hard-Locked Width */
     max-width: 1050px;
     height: 580px; /* Fixed Height to kill the scroll effect */
-    background: #fffdf5; /* Professional Index Card Manila */
+    background: #fffdf5; /* Professional Manila Index Card */
     border: 3px solid #000;
-    border-radius: 4px; 
+    border-radius: 4px;
     position: relative;
     display: flex;
     flex-direction: column;
-    box-shadow: 15px 15px 0px rgba(0,0,0,0.2); /* Solid offset shadow */
+    box-shadow: 15px 15px 0px rgba(0,0,0,0.2);
     overflow: hidden; /* HARD LOCK: No scrollbars allowed */
 }
 
-/* Tabbed Header [cite: 2026-01-28] */
 .modal-header-section {
-    display: flex;
-    align-items: center;
-    padding: 15px 25px;
-    background: #e6dc9f; /* Folder Tab Manila Color */
-    border-bottom: 2px solid #000;
+    display: flex; align-items: center; padding: 15px 25px;
+    background: #e6dc9f; border-bottom: 2px solid #000;
 }
 
 .modal-logo-frame {
-    width: 85px; height: 85px;
-    background: #fff; border: 1px solid #000; padding: 5px;
-    box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+    width: 85px; height: 85px; background: #fff; border: 1px solid #000; padding: 5px;
 }
-.modal-main-logo { width: 100%; height: 100%; object-fit: contain; }
 
-/* Content Grid [cite: 2026-01-26] */
 .modal-grid-75 {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 25px;
-    padding: 20px 25px;
-    flex-grow: 1; /* Fills space without expanding or scrolling */
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 25px;
+    padding: 20px 25px; flex-grow: 1;
 }
 
-.glossy-label {
-    text-transform: uppercase; font-size: 0.85rem; font-weight: 900;
-    border-bottom: 1.5px solid #000; margin-bottom: 12px; padding-bottom: 4px;
-    color: #444;
-}
-
-/* --- GLOSSY ACTION BUTTONS [cite: 2026-01-28] --- */
+/* --- ACTION BUTTONS [cite: 2026-01-28] --- */
 .modal-button-row { display: flex; gap: 12px; margin-top: 15px; }
 
 .gloss-btn {
     flex: 1; padding: 12px; text-align: center; text-decoration: none;
     font-weight: bold; color: #fff; border: 2px solid #000; border-radius: 4px;
-    font-size: 0.9rem; text-transform: uppercase;
     box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
 }
 .web-btn { background: #0c30f0; }
 .fb-btn { background: #1877f2; }
-.gloss-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
-/* Feature Boxes [cite: 2026-01-28] */
 .map-box-fixed { border: 1px solid #000; height: 220px; background: #eee; }
 
-.coupon-area {
-    margin-top: 15px; border: 2px dashed #fe4f00; padding: 10px;
-    text-align: center; background: #fff; height: 110px;
-    display: flex; flex-direction: column; justify-content: center;
-}
-.coupon-area img { max-height: 85px; object-fit: contain; }
-
-/* Bottom Story Section [cite: 2026-01-28] */
 .modal-story-fixed { 
-    padding: 15px 25px; 
-    background: #fdfae6; 
-    border-top: 1px solid #000; 
-    height: 110px; /* Locked height */
-    font-size: 0.95rem; line-height: 1.4;
-    overflow: hidden;
+    padding: 15px 25px; background: #fdfae6; border-top: 1px solid #000; 
+    height: 110px; font-size: 0.95rem; line-height: 1.4; overflow: hidden;
 }
 
-/* Mobile Stacking [cite: 2026-01-26] */
+/* --- MOBILE COMPATIBILITY [cite: 2026-01-26] --- */
 @media (max-width: 850px) {
     .modal-container { width: 95%; height: auto; max-height: 95vh; overflow-y: auto; }
     .modal-grid-75 { grid-template-columns: 1fr; }
+    .card { height: auto; padding-bottom: 15px; }
 }

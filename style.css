@@ -7,7 +7,7 @@ body {
 }
 
 .site-wrapper { 
-    width: 93%; /* Universal 90%+ Standard */
+    width: 93%; 
     margin: 0 auto; 
     padding: 20px 0; 
 }
@@ -36,9 +36,9 @@ body {
     justify-content: center;
     gap: 20px;
     padding: 15px;
-    background: #222; /* High-Contrast Dark Bar */
+    background: #222; 
     color: #fff;
-    flex-wrap: wrap; /* [cite: 2026-01-26] Mobile stacking */
+    flex-wrap: wrap; 
 }
 
 .filter-group {
@@ -78,62 +78,33 @@ body {
     cursor: pointer;
 }
 
-.card:hover { 
-    transform: translateY(-5px); 
-    box-shadow: 8px 8px 20px rgba(0,0,0,0.2); 
-}
+.card:hover { transform: translateY(-5px); box-shadow: 8px 8px 20px rgba(0,0,0,0.2); }
 
 .logo-box { height: 160px; display: flex; align-items: center; justify-content: center; padding: 10px; }
 .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
 .town-bar { 
-    height: 38px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    text-transform: uppercase; 
-    font-weight: 900; 
-    border-top: 2px solid #000; 
-    border-bottom: 2px solid #000; 
+    height: 38px; display: flex; align-items: center; justify-content: center; 
+    text-transform: uppercase; font-weight: 900; 
+    border-top: 2px solid #000; border-bottom: 2px solid #000; 
 }
 
 .biz-name { 
-    height: 80px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    text-align: center; 
-    font-weight: bold; 
-    font-size: 1.4rem; 
-    padding: 5px; 
+    height: 80px; display: flex; align-items: center; justify-content: center; 
+    text-align: center; font-weight: bold; font-size: 1.4rem; padding: 5px; 
 }
 
-.card-content { 
-    flex-grow: 1; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    text-align: center; 
-    padding-bottom: 15px; 
-}
+.card-content { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-bottom: 15px; }
 
 .biz-cat { font-weight: bold; color: #333; font-size: 1.1rem; }
 .biz-phone { font-weight: bold; color: #000; margin-bottom: 5px; }
 
 .tier-badge { 
-    position: absolute; 
-    top: 8px; 
-    left: 8px; 
-    font-size: 0.7rem; 
-    border: 1px solid #222; 
-    background: #fff; 
-    padding: 2px 5px; 
-    z-index: 5; 
-    text-transform: uppercase; 
+    position: absolute; top: 8px; left: 8px; font-size: 0.7rem; 
+    border: 1px solid #222; background: #fff; padding: 2px 5px; z-index: 5; text-transform: uppercase; 
 }
 
-/* --- 5. PREMIUM POP-OUT MODAL [cite: 2026-01-28] --- */
+/* --- 5. PREMIUM MODAL 75% WIDE GLOSSY [cite: 2026-01-28] --- */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85); display: none; 
@@ -141,24 +112,59 @@ body {
 }
 
 .modal-container {
-    width: 93%; max-width: 800px; 
+    width: 75%; /* Hard-Locked 75% Width */
+    max-width: 1100px;
     background: linear-gradient(145deg, #fff5ba, #f7eba4) !important;
-    border: 4px solid #000; border-radius: 12px;
+    border: 3px solid #000; border-radius: 12px;
     position: relative; overflow-y: auto; max-height: 90vh;
-    box-shadow: 20px 20px 60px rgba(0,0,0,0.5);
+    box-shadow: 20px 20px 60px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.4);
     animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-.close-modal { 
-    position: absolute; top: 15px; right: 20px; 
-    font-size: 35px; cursor: pointer; font-weight: bold; 
+.close-modal { position: absolute; top: 15px; right: 20px; font-size: 35px; cursor: pointer; font-weight: bold; z-index: 10; }
+
+.modal-header-section {
+    display: flex; align-items: center; gap: 25px; padding: 25px;
+    background: rgba(0,0,0,0.05); border-bottom: 2.5px double #000;
 }
 
+.modal-main-logo {
+    width: 140px; height: 140px; object-fit: contain;
+    border: 2px solid #000; background: #fff; padding: 10px;
+    box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+}
+
+.modal-grid-75 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 25px; }
+
+.glossy-label {
+    text-transform: uppercase; font-size: 0.95rem; font-weight: 900;
+    border-bottom: 2px solid #000; margin: 0 0 15px 0; padding-bottom: 5px;
+}
+
+/* --- GLOSSY ACTION BUTTONS --- */
+.modal-button-row { display: flex; gap: 15px; margin-top: 25px; }
+
+.gloss-btn {
+    flex: 1; padding: 14px; text-align: center; text-decoration: none;
+    font-weight: bold; color: #fff; border: 2px solid #000; border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.4), 3px 3px 0px rgba(0,0,0,0.1);
+    transition: transform 0.2s, filter 0.2s;
+}
+
+.web-btn { background: linear-gradient(to bottom, #0c30f0, #0824b5); }
+.fb-btn { background: linear-gradient(to bottom, #1877f2, #1159b8); }
+.gloss-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+.map-box-gloss { border: 2.5px solid #000; height: 300px; background: #eee; }
+
+.modal-story { padding: 0 25px 25px 25px; }
+
 /* Mobile Stacking [cite: 2026-01-26] */
-@media (max-width: 600px) {
-    .site-wrapper { width: 95%; }
-    .filter-nav { flex-direction: column; align-items: stretch; }
-    .card { height: auto; padding-bottom: 10px; }
+@media (max-width: 850px) {
+    .modal-container { width: 95%; max-height: 95vh; }
+    .modal-grid-75 { grid-template-columns: 1fr; gap: 20px; }
+    .modal-header-section { flex-direction: column; text-align: center; }
+    .card { height: auto; padding-bottom: 15px; }
 }

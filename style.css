@@ -1,17 +1,18 @@
-/* --- UNIVERSAL RESET [cite: 2026-01-26] --- */
+/* --- 1. UNIVERSAL RESET & WRAPPER [cite: 2026-01-26] --- */
 body { 
     background-color: #e5e5e5; 
     font-family: 'Times New Roman', serif; 
     margin: 0; 
+    color: #222;
 }
 
 .site-wrapper { 
-    width: 93%; 
+    width: 93%; /* Universal 90%+ Standard */
     margin: 0 auto; 
     padding: 20px 0; 
 }
 
-/* --- GLOSSY HEADER [cite: 2026-01-28] --- */
+/* --- 2. GLOSSY NEWSPAPER HEADER [cite: 2026-01-28] --- */
 .main-title { 
     text-align: center; 
     padding: 25px; 
@@ -26,9 +27,37 @@ body {
     border-top: 2px solid #222222; 
     padding: 10px; 
     font-weight: bold;
+    font-size: 0.9rem;
 }
 
-/* --- GLOSSY CARDS [cite: 2026-01-28] --- */
+/* --- 3. FILTER NAVIGATION BAR [cite: 2026-01-28] --- */
+.filter-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 15px;
+    background: #222; /* High-Contrast Dark Bar */
+    color: #fff;
+    flex-wrap: wrap; /* [cite: 2026-01-26] Mobile stacking */
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-group select {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 2px solid #38b6ff;
+    background: #fff;
+    font-family: 'Times New Roman', serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* --- 4. GLOSSY CARDS SYSTEM [cite: 2026-01-28] --- */
 #directory-grid { 
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
@@ -45,11 +74,14 @@ body {
     flex-direction: column; 
     position: relative; 
     overflow: hidden; 
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
     cursor: pointer;
 }
 
-.card:hover { transform: translateY(-5px); box-shadow: 8px 8px 20px rgba(0,0,0,0.2); }
+.card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 8px 8px 20px rgba(0,0,0,0.2); 
+}
 
 .logo-box { height: 160px; display: flex; align-items: center; justify-content: center; padding: 10px; }
 .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
@@ -99,4 +131,34 @@ body {
     padding: 2px 5px; 
     z-index: 5; 
     text-transform: uppercase; 
+}
+
+/* --- 5. PREMIUM POP-OUT MODAL [cite: 2026-01-28] --- */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85); display: none; 
+    justify-content: center; align-items: center; z-index: 1000;
+}
+
+.modal-container {
+    width: 93%; max-width: 800px; 
+    background: linear-gradient(145deg, #fff5ba, #f7eba4) !important;
+    border: 4px solid #000; border-radius: 12px;
+    position: relative; overflow-y: auto; max-height: 90vh;
+    box-shadow: 20px 20px 60px rgba(0,0,0,0.5);
+    animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.close-modal { 
+    position: absolute; top: 15px; right: 20px; 
+    font-size: 35px; cursor: pointer; font-weight: bold; 
+}
+
+/* Mobile Stacking [cite: 2026-01-26] */
+@media (max-width: 600px) {
+    .site-wrapper { width: 95%; }
+    .filter-nav { flex-direction: column; align-items: stretch; }
+    .card { height: auto; padding-bottom: 10px; }
 }

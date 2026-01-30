@@ -1,6 +1,6 @@
 /**
- * PROJECT: Clay County Master Directory v9.9.2
- * LOCK: Column P (Index 15) for Coupon Text | No Empty Space
+ * PROJECT: Clay County Master Directory v9.9.3
+ * LOCK: Column O (Index 14) for Image | Column P (Index 15) for Coupon
  * THEME: High-Gloss Balanced Index Card [cite: 2026-01-30]
  */
 
@@ -25,7 +25,9 @@ function openFullModal(bizName) {
                 
                 <div style="border-bottom: 3px solid #000; padding-bottom: 15px; margin-bottom: 15px;">
                     <div style="display: flex; gap: 20px; align-items: center;">
-                        <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" style="width:90px; height:90px; border:2px solid #000; background:#fff;" onerror="this.src='https://via.placeholder.com/90'">
+                        <img src="${biz.couponMedia}" 
+                             style="width:90px; height:90px; border:2px solid #000; background:#fff; object-fit: cover;" 
+                             onerror="this.src='https://via.placeholder.com/90?text=No+Image';">
                         <div>
                             <h2 style="margin:0; font-size: 2.4rem; text-transform: uppercase; line-height:1; color:#000;">${biz.name}</h2>
                             <p style="margin:8px 0 0 0; font-weight: 900; font-size: 1.1rem; color:#444;">📁 ${biz.category} | Est. ${biz.established || 'N/A'}</p>
@@ -51,20 +53,20 @@ function openFullModal(bizName) {
                     <h3 style="text-transform: uppercase; margin:0 0 8px 0; font-size: 1.2rem; color:#000;">About Our Business</h3>
                     <p style="font-size: 1.1rem; margin: 0; line-height: 1.4; color:#000;">${biz.bio || 'Proudly serving the Clay County community.'}</p>
                     
-                    ${biz.couponP && biz.couponP !== "N/A" && biz.couponP !== "No" ? `
+                    ${biz.preview && biz.preview !== "N/A" && biz.preview !== "" ? `
                     <div style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.4); border: 3px solid #fe4f00; box-shadow: 5px 5px 0px rgba(254, 79, 0, 0.2);">
                         <p style="margin:0; font-weight:900; font-size:1rem; color:#fe4f00; text-transform:uppercase; letter-spacing: 1px;">🎫 Community Coupon</p>
-                        <p style="margin:8px 0 0 0; font-weight:bold; font-size:1.2rem; color:#000;">${biz.couponP}</p>
+                        <p style="margin:8px 0 0 0; font-weight:bold; font-size:1.2rem; color:#000;">${biz.preview}</p>
                     </div>` : ''}
                 </div>
             </div>
         `;
     } else {
-        // BASIC TIER: Simplified Center-Aligned Layout
+        // BASIC TIER: Image from Column O
         body.innerHTML = `
             <div class="modal-inner-padding" style="display: flex; flex-direction: column; height: 100%; justify-content: center; text-align: center; color:#000;">
                 <span class="close-x" onclick="closeModal()">×</span>
-                <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" style="width:100px; margin: 0 auto 20px auto; border: 2px solid #000; background:#fff;" onerror="this.src='https://via.placeholder.com/100'">
+                <img src="${biz.couponMedia}" style="width:100px; margin: 0 auto 20px auto; border: 2px solid #000; background:#fff;" onerror="this.src='https://via.placeholder.com/100'">
                 <h2 style="font-size: 2.4rem; text-transform: uppercase; margin: 0;">${biz.name}</h2>
                 <div style="margin-top: 25px; padding: 25px; border: 4px dashed #000; background: rgba(255,255,255,0.2);">
                      <p style="font-weight:900; font-size: 1.4rem; text-transform:uppercase; margin:0;">Visit us in ${biz.town}!</p>
@@ -81,6 +83,7 @@ function closeModal() {
     if (modal) modal.style.display = 'none';
 }
 
+// Global click-off listener
 window.onclick = function(event) {
     const modal = document.getElementById('premium-modal');
     if (event.target == modal) closeModal();

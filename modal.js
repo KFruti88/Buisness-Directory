@@ -1,90 +1,91 @@
 /**
- * PROJECT: Clay County Index Card v2.5
+ * PROJECT: Clay County Index Card v9.3
  * LOCK: Info -> Map -> Bio -> Coupon Flow [cite: 2026-01-30]
+ * STRUCTURE: Isolated Fixed Layer (No Layout Shifting)
  */
 
 function openFullModal(bizName) {
-    // Look for the business in the global window.allData
+    // 1. Find the business in the global window.allData
     const biz = window.allData.find(b => b.name === bizName);
     if (!biz) return;
 
-    const modal = document.getElementById('modal-overlay');
-    const content = document.getElementById('modal-content');
+    // 2. Identify the target containers
+    const modal = document.getElementById('premium-modal');
+    const body = document.getElementById('modal-body-content');
     const tierL = (biz.tier || 'basic').toLowerCase();
     
-    // Safety check for map encoding [cite: 2026-01-29]
+    // 3. Safety check for map encoding [cite: 2026-01-29]
     const mapAddr = encodeURIComponent(`${biz.address}, ${biz.town}, IL`);
 
-    // PREMIUM & PLUS LAYOUT (Full Index Card)
+    // 4. PREMIUM & PLUS LAYOUT (Full Index Card Detail)
     if (tierL === 'premium' || tierL === 'plus') {
-        content.innerHTML = `
-            <div class="index-card">
-                <div class="index-card-header">
-                    <div class="logo-holder">
-                        <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" onerror="this.src='https://via.placeholder.com/100'">
-                    </div>
-                    <div class="title-holder">
-                        <h2>${biz.name}</h2>
-                        <p>${biz.category} | Est. ${biz.established || 'N/A'}</p>
-                    </div>
-                    <span class="close-card" onclick="closeModal()">×</span>
-                </div>
-
-                <div class="index-card-grid">
-                    <div class="info-side">
-                        <p><strong>📍 Address:</strong><br>${biz.address}<br>${biz.town}, IL</p>
-                        <p><strong>📞 Phone:</strong><br>${biz.phone}</p>
-                        <p><strong>🕒 Hours:</strong><br>${biz.hours || 'Call for Hours'}</p>
-                        <div class="modal-links">
-                            ${biz.website && biz.website !== "N/A" ? `<a href="${biz.website}" target="_blank" class="mini-btn">Website</a>` : ''}
-                            ${biz.facebook && biz.facebook !== "N/A" ? `<a href="${biz.facebook}" target="_blank" class="mini-btn fb">Facebook</a>` : ''}
+        body.innerHTML = `
+            <div style="padding: 40px; color: #000;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #000; padding-bottom: 15px; margin-bottom: 25px;">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" style="width:80px; height:80px; border:1px solid #000;" onerror="this.src='https://via.placeholder.com/80'">
+                        <div>
+                            <h2 style="margin:0; font-size: 2.2rem; text-transform: uppercase;">${biz.name}</h2>
+                            <p style="margin:0; font-weight: bold; color: #555;">📁 ${biz.category} | Est. ${biz.established || 'N/A'}</p>
                         </div>
                     </div>
+                </div>
 
-                    <div class="map-side">
-                        <iframe width="100%" height="180" frameborder="0" src="https://maps.google.com/maps?q=${mapAddr}&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                    <div>
+                        <p style="margin: 0 0 15px 0;"><strong>📍 Address:</strong><br>${biz.address}<br>${biz.town}, IL</p>
+                        <p style="margin: 0 0 15px 0;"><strong>📞 Phone:</strong><br>${biz.phone}</p>
+                        <p style="margin: 0 0 15px 0;"><strong>🕒 Hours:</strong><br>${biz.hours || 'Call for Hours'}</p>
+                        <div style="margin-top: 20px; display: flex; gap: 10px;">
+                            ${biz.website !== "N/A" ? `<a href="${biz.website}" target="_blank" style="padding:10px 15px; background:#000; color:#fff; text-decoration:none; font-weight:bold; font-size:0.8rem;">WEBSITE</a>` : ''}
+                            ${biz.facebook !== "N/A" ? `<a href="${biz.facebook}" target="_blank" style="padding:10px 15px; background:#0c0b82; color:#fff; text-decoration:none; font-weight:bold; font-size:0.8rem;">FACEBOOK</a>` : ''}
+                        </div>
+                    </div>
+                    <div style="border: 2px solid #000; background: #eee; height: 220px;">
+                        <iframe width="100%" height="100%" frameborder="0" src="https://maps.google.com/maps?q=${mapAddr}&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
                     </div>
                 </div>
 
-                <div class="bio-section">
-                    <h3 class="label">About Us</h3>
-                    <p>${biz.bio || 'Supporting local businesses in Clay County.'}</p>
+                <div style="margin-top: 30px; border-top: 2px dashed #000; padding-top: 20px;">
+                    <h3 style="text-transform: uppercase; margin-top:0;">About Us</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.5; margin-bottom: 0;">${biz.bio || 'Supporting local businesses in Clay County.'}</p>
                 </div>
-
+                
                 ${biz.couponTxt ? `
-                <div class="coupon-section">
-                    <h3 class="label" style="color:#fe4f00;">Community Coupon</h3>
-                    <div class="coupon-box">
-                         <p class="coupon-text">${biz.couponTxt}</p>
-                    </div>
+                <div style="margin-top: 20px; padding: 15px; background: #fff5ba; border: 2px solid #fe4f00;">
+                    <h4 style="margin:0; color:#fe4f00; text-transform:uppercase;">Community Coupon</h4>
+                    <p style="margin:5px 0 0 0; font-weight:bold;">${biz.couponTxt}</p>
                 </div>` : ''}
             </div>
         `;
     } else {
-        // BASIC TIER: Simple Centered Card
-        content.innerHTML = `
-            <div class="index-card basic-view">
-                <span class="close-card" onclick="closeModal()">×</span>
-                <h2>${biz.name}</h2>
-                <div class="basic-logo-box">
-                    <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" onerror="this.src='https://via.placeholder.com/150'">
+        // 5. BASIC TIER: Simplified Pop-up
+        body.innerHTML = `
+            <div style="padding: 60px; text-align: center; color: #000;">
+                <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" style="width:120px; margin-bottom: 20px; border: 1px solid #000;" onerror="this.src='https://via.placeholder.com/120'">
+                <h2 style="font-size: 2.5rem; text-transform: uppercase; margin-bottom: 10px;">${biz.name}</h2>
+                <p style="font-size: 1.2rem;">📍 ${biz.town} | 📁 ${biz.category}</p>
+                <div style="margin-top: 30px; padding: 20px; border: 3px dashed #000;">
+                     <p style="font-weight:bold; font-size: 1.3rem;">Visit us in ${biz.town}!</p>
                 </div>
-                <p><strong>Town:</strong> ${biz.town}</p>
-                <p>📁 ${biz.category}</p>
-                <button class="close-mini-btn" onclick="closeModal()">Close</button>
             </div>
         `;
     }
 
+    // Show the modal
     modal.style.display = 'flex';
 }
 
+/**
+ * Close Functionality
+ */
 function closeModal() {
-    document.getElementById('modal-overlay').style.display = 'none';
+    const modal = document.getElementById('premium-modal');
+    if (modal) modal.style.display = 'none';
 }
 
-// Global click-off listener
+// Global click-off listener (Close when clicking the dark background)
 window.onclick = function(event) {
-    const modal = document.getElementById('modal-overlay');
+    const modal = document.getElementById('premium-modal');
     if (event.target == modal) closeModal();
 }

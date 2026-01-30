@@ -1,6 +1,6 @@
 /**
- * PROJECT: Clay County Master Directory v8.8
- * LOCKS: Town Middle | Centered Bottom Stack (Phone, CTA, Category)
+ * PROJECT: Clay County Master Directory v9.0
+ * LOCKS: Town Middle | Centered Bottom Stack | Image Coupon Toggle
  * MAPPING: BusinessDirectory A-P Structure [cite: 2026-01-30]
  */
 
@@ -36,7 +36,7 @@ function fetchData() {
                 tier: row[CONFIG.MAP.TIER] || "Basic",
                 phone: row[CONFIG.MAP.PHONE] || "",
                 category: row[CONFIG.MAP.CAT] || "",
-                couponTxt: row[CONFIG.MAP.CPN_TXT] || ""
+                couponTxt: row[CONFIG.MAP.CPN_TXT] || "" // Column N (Index 13)
             })).filter(b => b.name && b.name.trim() !== "");
             
             updateHeader();
@@ -56,9 +56,16 @@ function renderCards(data) {
         const cleanPhone = biz.phone.replace(/\D/g, '').slice(-10);
         const displayPhone = cleanPhone.length === 10 ? `(${cleanPhone.slice(0,3)}) ${cleanPhone.slice(3,6)}-${cleanPhone.slice(6)}` : "";
 
+        // If Column N has text, show the Image. Otherwise, nothing.
+        const couponHTML = (biz.couponTxt && biz.couponTxt.trim() !== "") 
+            ? `<img src="https://github.com/KFruti88/images/blob/main/Coupon.png?raw=true" class="coupon-img-top" title="${biz.couponTxt}">`
+            : "";
+
         return `
         <div class="card ${tierL}" onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')">
-            <div class="coupon-badge-top">${biz.couponTxt}</div>
+            
+            <div class="coupon-container">${couponHTML}</div>
+            
             <div class="tier-badge-top">${biz.tier}</div>
 
             <div class="logo-box">

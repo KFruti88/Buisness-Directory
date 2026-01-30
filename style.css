@@ -1,170 +1,91 @@
-/* --- 1. UNIVERSAL RESET & WRAPPER [cite: 2026-01-26] --- */
-body { 
-    background-color: #e5e5e5; 
-    font-family: 'Times New Roman', serif; 
-    margin: 0; 
-    color: #222;
-}
+/* --- 1. UNIVERSAL & GRID SETUP [cite: 2026-01-26] --- */
+body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin: 0; }
+.site-wrapper { width: 93%; margin: 0 auto; padding: 20px 0; }
 
-.site-wrapper { 
-    width: 93%; 
-    margin: 0 auto; 
-    padding: 20px 0; 
-}
-
-/* --- 2. GLOSSY NEWSPAPER HEADER [cite: 2026-01-28] --- */
-.main-title { 
-    text-align: center; 
-    padding: 25px; 
-    background: linear-gradient(145deg, #fff5ba, #e6dc9f) !important; 
-    border-bottom: 3px solid #000;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.newspaper-meta {
-    display: flex; 
-    justify-content: space-between; 
-    border-top: 2px solid #222222; 
-    padding: 10px; 
-    font-weight: bold;
-    font-size: 0.9rem;
-}
-
-/* --- 3. FILTER NAVIGATION BAR [cite: 2026-01-28] --- */
-.filter-nav {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 15px;
-    background: #222; 
-    color: #fff;
-    flex-wrap: wrap; 
-}
-
-.filter-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.filter-group select {
-    padding: 8px 12px;
-    border-radius: 4px;
-    border: 2px solid #38b6ff;
-    background: #fff;
-    font-family: 'Times New Roman', serif;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/* --- 4. GLOSSY CARDS SYSTEM [cite: 2026-01-28] --- */
-#directory-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
-    gap: 25px; 
-}
-
-.card { 
-    background: linear-gradient(135deg, #fff5ba 0%, #fdf0a0 100%) !important; 
-    border: 2px solid #000; 
-    border-radius: 8px;
-    box-shadow: 5px 5px 15px rgba(0,0,0,0.1), inset 0 0 10px rgba(255,255,255,0.4);
-    height: 480px; 
-    display: flex; 
-    flex-direction: column; 
-    position: relative; 
-    overflow: hidden; 
-    transition: transform 0.3s ease, box-shadow 0.3s ease; 
-    cursor: pointer;
-}
-
-.card:hover { transform: translateY(-5px); box-shadow: 8px 8px 20px rgba(0,0,0,0.2); }
-
-.logo-box { height: 160px; display: flex; align-items: center; justify-content: center; padding: 10px; }
-.logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
-
-.town-bar { 
-    height: 38px; display: flex; align-items: center; justify-content: center; 
-    text-transform: uppercase; font-weight: 900; 
-    border-top: 2px solid #000; border-bottom: 2px solid #000; 
-}
-
-.biz-name { 
-    height: 80px; display: flex; align-items: center; justify-content: center; 
-    text-align: center; font-weight: bold; font-size: 1.4rem; padding: 5px; 
-}
-
-.card-content { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-bottom: 15px; }
-
-.biz-cat { font-weight: bold; color: #333; font-size: 1.1rem; }
-.biz-phone { font-weight: bold; color: #000; margin-bottom: 5px; }
-
-.tier-badge { 
-    position: absolute; top: 8px; left: 8px; font-size: 0.7rem; 
-    border: 1px solid #222; background: #fff; padding: 2px 5px; z-index: 5; text-transform: uppercase; 
-}
-
-/* --- 5. PREMIUM MODAL 75% WIDE GLOSSY [cite: 2026-01-28] --- */
+/* --- 2. THE MODAL OVERLAY --- */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85); display: none; 
     justify-content: center; align-items: center; z-index: 1000;
 }
 
+/* --- 3. THE "INDEX CARD" CONTAINER --- */
 .modal-container {
-    width: 75%; /* Hard-Locked 75% Width */
-    max-width: 1100px;
-    background: linear-gradient(145deg, #fff5ba, #f7eba4) !important;
-    border: 3px solid #000; border-radius: 12px;
-    position: relative; overflow-y: auto; max-height: 90vh;
-    box-shadow: 20px 20px 60px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.4);
-    animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    width: 75%; /* Hard-Locked Width */
+    max-width: 1050px;
+    height: 580px; /* Fixed Height to kill the scroll effect */
+    background: #fffdf5; /* Professional Index Card Cream */
+    border: 2px solid #000;
+    border-radius: 2px; /* Sharper edges for paper look */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 12px 12px 0px rgba(0,0,0,0.15); /* Solid offset shadow */
+    overflow: hidden; /* HARD LOCK: No scrollbars allowed */
 }
 
-@keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-.close-modal { position: absolute; top: 15px; right: 20px; font-size: 35px; cursor: pointer; font-weight: bold; z-index: 10; }
-
+/* Tabbed Header [cite: 2026-01-28] */
 .modal-header-section {
-    display: flex; align-items: center; gap: 25px; padding: 25px;
-    background: rgba(0,0,0,0.05); border-bottom: 2.5px double #000;
+    display: flex;
+    align-items: center;
+    padding: 12px 25px;
+    background: #e6dc9f; /* Manila Folder Tab Color */
+    border-bottom: 2px solid #000;
 }
 
-.modal-main-logo {
-    width: 140px; height: 140px; object-fit: contain;
-    border: 2px solid #000; background: #fff; padding: 10px;
-    box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+.modal-logo-frame {
+    width: 70px; height: 70px;
+    background: #fff; border: 1px solid #000; padding: 5px;
 }
+.modal-main-logo { width: 100%; height: 100%; object-fit: contain; }
 
-.modal-grid-75 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 25px; }
+/* Content Grid [cite: 2026-01-26] */
+.modal-grid-75 {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 25px;
+    padding: 20px 25px;
+    flex-grow: 1; /* Fills space without expanding */
+}
 
 .glossy-label {
-    text-transform: uppercase; font-size: 0.95rem; font-weight: 900;
-    border-bottom: 2px solid #000; margin: 0 0 15px 0; padding-bottom: 5px;
+    text-transform: uppercase; font-size: 0.8rem; font-weight: 900;
+    border-bottom: 1.5px solid #000; margin-bottom: 12px; padding-bottom: 4px;
+    color: #444;
 }
 
-/* --- GLOSSY ACTION BUTTONS --- */
-.modal-button-row { display: flex; gap: 15px; margin-top: 25px; }
+/* Action Buttons */
+.modal-button-row { display: flex; gap: 10px; margin-top: 15px; }
 
 .gloss-btn {
-    flex: 1; padding: 14px; text-align: center; text-decoration: none;
-    font-weight: bold; color: #fff; border: 2px solid #000; border-radius: 8px;
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.4), 3px 3px 0px rgba(0,0,0,0.1);
-    transition: transform 0.2s, filter 0.2s;
+    flex: 1; padding: 10px; text-align: center; text-decoration: none;
+    font-weight: bold; color: #fff; border: 1px solid #000; border-radius: 3px;
+    font-size: 0.85rem; text-transform: uppercase;
 }
+.web-btn { background: #0c30f0; }
+.fb-btn { background: #1877f2; }
 
-.web-btn { background: linear-gradient(to bottom, #0c30f0, #0824b5); }
-.fb-btn { background: linear-gradient(to bottom, #1877f2, #1159b8); }
-.gloss-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+/* Feature Boxes [cite: 2026-01-28] */
+.map-box-gloss { border: 1px solid #000; height: 210px; background: #eee; }
 
-.map-box-gloss { border: 2.5px solid #000; height: 300px; background: #eee; }
+.coupon-area {
+    margin-top: 15px; border: 2px dashed #fe4f00; padding: 10px;
+    text-align: center; background: #fff; height: 110px;
+    display: flex; flex-direction: column; justify-content: center;
+}
+.coupon-area img { max-height: 85px; object-fit: contain; }
 
-.modal-story { padding: 0 25px 25px 25px; }
+/* Bottom Story Section [cite: 2026-01-28] */
+.modal-story { 
+    padding: 15px 25px; 
+    background: #fdfae6; 
+    border-top: 1px solid #000; 
+    height: 100px; /* Locked height */
+    font-size: 0.95rem; line-height: 1.4;
+}
 
 /* Mobile Stacking [cite: 2026-01-26] */
 @media (max-width: 850px) {
-    .modal-container { width: 95%; max-height: 95vh; }
-    .modal-grid-75 { grid-template-columns: 1fr; gap: 20px; }
-    .modal-header-section { flex-direction: column; text-align: center; }
-    .card { height: auto; padding-bottom: 15px; }
+    .modal-container { width: 95%; height: auto; max-height: 95vh; overflow-y: auto; }
+    .modal-grid-75 { grid-template-columns: 1fr; }
 }

@@ -1,9 +1,8 @@
-/* --- 1. UNIVERSAL & GRID RESET [cite: 2026-01-26] --- */
+/* --- 1. UNIVERSAL RESET & GRID LOCK [cite: 2026-01-26] --- */
 body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin: 0; color: #222; }
 
 .site-wrapper { width: 93%; margin: 0 auto; padding: 20px 0; }
 
-/* --- 2. THE STABLE DIRECTORY GRID [cite: 2026-01-30] --- */
 #directory-grid { 
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
@@ -11,69 +10,36 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     width: 100%;
 }
 
-/* --- 3. TRANSPARENT FILTER NAVIGATION [cite: 2026-01-30] --- */
-.filter-nav {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 10px 15px 20px 15px;
-    background: transparent; /* Clean look without the black bar */
-    color: #000;
-    flex-wrap: wrap;
-}
-
-.filter-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-}
-
-.filter-group select {
-    padding: 8px 12px;
-    border-radius: 4px;
-    border: 2px solid #000;
-    background: #fff;
-    font-family: 'Times New Roman', serif;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
-}
-
-.filter-group select:hover { background: #fdfae6; }
-
-/* --- 4. THE GLOSSY CARD DNA [cite: 2026-01-28] --- */
+/* --- 2. THE UNIFORM YELLOW CARD LOCK --- */
 .card { 
-    background: linear-gradient(135deg, #fff5ba 0%, #fdf0a0 100%) !important; 
+    background: #fff5ba !important; /* HARD LOCKED UNIFORM YELLOW */
     border: 2px solid #000; 
-    border-radius: 8px;
-    height: 480px; /* FIXED HEIGHT: Locks the professional look */
+    border-radius: 4px;
+    height: 480px; /* FIXED HEIGHT */
     display: flex; 
     flex-direction: column; 
     position: relative; 
     overflow: hidden; 
-    box-shadow: 5px 5px 15px rgba(0,0,0,0.1), inset 0 0 10px rgba(255,255,255,0.4);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 5px 5px 0px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
     cursor: pointer;
 }
 
-.card:hover { transform: translateY(-5px); box-shadow: 8px 8px 20px rgba(0,0,0,0.2); }
+.card:hover { transform: translateY(-5px); }
 
 .logo-box { 
     height: 160px; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    padding: 10px; 
-    background: #fff;
+    padding: 15px; 
+    background: transparent; /* Maintains yellow background */
 }
 
 .logo-box img { 
     max-height: 100%; 
     max-width: 100%; 
-    object-fit: contain; /* Prevents giant image scramble [cite: 2026-01-30] */
+    object-fit: contain; /* [cite: 2026-01-30] Kills giant image scramble */
 }
 
 .town-bar { 
@@ -85,6 +51,7 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     font-weight: 900; 
     border-top: 2px solid #000; 
     border-bottom: 2px solid #000; 
+    background: rgba(0,0,0,0.05); /* Subtle tone shift while staying yellow */
 }
 
 .biz-name { 
@@ -95,25 +62,30 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     text-align: center; 
     font-weight: bold; 
     font-size: 1.4rem; 
-    padding: 5px; 
+    padding: 10px; 
 }
 
-.card-content { 
-    flex-grow: 1; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    text-align: center; 
-    padding-bottom: 15px; 
+/* --- 3. TRANSPARENT FILTER NAVIGATION [cite: 2026-01-30] --- */
+.filter-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 15px;
+    background: transparent;
+    flex-wrap: wrap;
 }
 
-.tier-badge { 
-    position: absolute; top: 8px; left: 8px; font-size: 0.7rem; 
-    border: 1px solid #222; background: #fff; padding: 2px 5px; z-index: 5; text-transform: uppercase; 
+.filter-group select {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 2px solid #000;
+    background: #fff;
+    font-family: 'Times New Roman', serif;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-/* --- 5. THE PREMIUM "INDEX CARD" POP-OUT [cite: 2026-01-28] --- */
+/* --- 4. THE 75% WIDE INDEX CARD MODAL [cite: 2026-01-28] --- */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85); display: none; 
@@ -121,9 +93,9 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
 }
 
 .modal-container {
-    width: 75%; 
+    width: 75%; /* Hard-Locked Width */
     max-width: 1050px;
-    height: 580px; /* Fixed Height to kill the scroll effect */
+    height: 580px; /* Fixed Height: NO SCROLLBARS */
     background: #fffdf5; /* Professional Manila Index Card */
     border: 3px solid #000;
     border-radius: 4px;
@@ -131,7 +103,7 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     display: flex;
     flex-direction: column;
     box-shadow: 15px 15px 0px rgba(0,0,0,0.2);
-    overflow: hidden; /* HARD LOCK: No scrollbars allowed */
+    overflow: hidden; /* HARD LOCK: No scroll effect */
 }
 
 .modal-header-section {
@@ -147,14 +119,6 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     display: grid; grid-template-columns: 1.2fr 1fr; gap: 25px;
     padding: 20px 25px; flex-grow: 1;
 }
-
-.gloss-btn {
-    flex: 1; padding: 12px; text-align: center; text-decoration: none;
-    font-weight: bold; color: #fff; border: 2px solid #000; border-radius: 4px;
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
-}
-.web-btn { background: #0c30f0; }
-.fb-btn { background: #1877f2; }
 
 .map-box-fixed { border: 1px solid #000; height: 220px; background: #eee; }
 

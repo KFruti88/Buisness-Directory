@@ -1,7 +1,7 @@
 /**
- * PROJECT: Clay County Master Directory v9.2
- * FEATURE: Auto-Meta Handshake & Dynamic Category Loading
- * LOCKS: Town Color Fill | Centered Bottom Stack | Image Coupon
+ * PROJECT: Clay County Master Directory v9.3
+ * LOCKS: Slate Theme | Clean Vol/No Handshake | High-Contrast Labels
+ * MAPPING: BusinessDirectory A-P [cite: 2026-01-30]
  */
 
 const CONFIG = {
@@ -28,16 +28,17 @@ const CONFIG = {
 window.allData = []; 
 
 /**
- * Newspaper Handshake: VOL = Month, NO = Today's Date
+ * Newspaper Handshake: VOL = Month, NO = Day
+ * Removes year and redundant date strings [cite: 2026-01-30]
  */
 function updateNewspaperMeta() {
     const now = new Date();
     const infoBox = document.getElementById('header-info');
     if (infoBox) {
-        const vol = now.getMonth() + 1;
-        const no = now.getDate();
-        // [cite: 2026-01-30] Format: VOL. 1 - NO. 30
-        infoBox.innerText = `VOL. ${vol} — NO. ${no} | ${now.toLocaleDateString()}`;
+        const vol = now.getMonth() + 1; // 1-12
+        const no = now.getDate();       // 1-31
+        // [cite: 2026-01-30] Final Clean Format: VOL. 1 — NO. 30
+        infoBox.innerText = `VOL. ${vol} — NO. ${no}`;
     }
 }
 
@@ -45,19 +46,19 @@ function updateNewspaperMeta() {
  * Dynamic Filter Population: Pulls unique towns/categories from CSV
  */
 function populateFilters(data) {
-    const townSelect = document.getElementById('town-filter');
-    const catSelect = document.getElementById('cat-filter');
+    const townEl = document.getElementById('town-filter');
+    const catEl = document.getElementById('cat-filter');
 
     const towns = [...new Set(data.map(b => b.town))].sort();
-    const categories = [...new Set(data.map(b => b.category))].sort();
+    const cats = [...new Set(data.map(b => b.category))].sort();
 
-    if(townSelect) {
-        townSelect.innerHTML = '<option value="all">All Towns</option>' + 
+    if(townEl) {
+        townEl.innerHTML = '<option value="all">All Towns</option>' + 
             towns.map(t => `<option value="${t}">${t}</option>`).join('');
     }
-    if(catSelect) {
-        catSelect.innerHTML = '<option value="all">All Categories</option>' + 
-            categories.map(c => `<option value="${c}">${c}</option>`).join('');
+    if(catEl) {
+        catEl.innerHTML = '<option value="all">All Categories</option>' + 
+            cats.map(c => `<option value="${c}">${c}</option>`).join('');
     }
 }
 
@@ -80,7 +81,6 @@ function fetchData() {
                 couponTxt: row[CONFIG.MAP.CPN_TXT] || ""
             })).filter(b => b.name && b.name.trim() !== "");
             
-            // EXECUTE HANDSHAKES
             updateNewspaperMeta();
             populateFilters(window.allData);
             renderCards(window.allData);

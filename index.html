@@ -40,14 +40,16 @@
         <div id="directory-grid"></div>
     </div>
 
-    <div id="premium-modal" class="modal-layer">
-        <div id="modal-body" class="index-card-container">
-            </div>
+    <div id="premium-modal" class="modal-overlay-layer">
+        <div class="index-card-popout">
+            <span class="close-x" onclick="closeModal()">×</span>
+            <div id="modal-body-content">
+                </div>
+        </div>
     </div>
 
     <script>
         const smartV = new Date().getTime();
-        // Load the engines with cache-busting strings
         document.write(`<script src="layout.js?v=${smartV}"><\/script>`);
         document.write(`<script src="modal.js?v=${smartV}"><\/script>`);
     </script>

@@ -1,9 +1,11 @@
 /* --- 1. GLOBAL SLATE THEME --- */
 body { 
-    background-color: #333333; /* Dark Gray Site Background */
+    background-color: #333333; 
     margin: 0; 
     font-family: 'Times New Roman', serif; 
 }
+
+.site-wrapper { width: 93%; margin: 0 auto; }
 
 /* --- 2. THE HARD-LOCKED YELLOW HEADER --- */
 .main-title { 
@@ -12,35 +14,30 @@ body {
     border-bottom: 4px solid #000;
 }
 
+.main-title h1 { margin: 0; font-size: 3.2rem; text-transform: uppercase; color: #000; }
+
 .newspaper-meta {
     display: flex; justify-content: space-between; padding: 10px 5%; 
     border-top: 2px solid #222; margin-top: 15px;
     font-weight: 900; text-transform: uppercase;
-    color: #000000 !important; /* Force Black Font for Meta */
+    color: #000000 !important; /* Fixed Font Color */
 }
 
-/* --- 3. DYNAMIC FILTER NAV (Contrast Fix Only) --- */
-.filter-nav {
-    display: flex; justify-content: center; gap: 30px; padding: 20px 0;
-}
+/* --- 3. FILTER NAV (Readability Fix) --- */
+.filter-nav { display: flex; justify-content: center; gap: 30px; padding: 20px 0; }
 
 .filter-group {
     display: flex; align-items: center; gap: 10px;
-    /* [cite: 2026-01-30] FIX: Solid black for labels so they don't wash out */
-    color: #000000 !important; 
-    font-weight: 900;
-    font-size: 1.1rem;
-    text-transform: uppercase;
+    color: #000000 !important; /* Solid Black Labels */
+    font-weight: 900; text-transform: uppercase;
 }
 
-/* --- 4. THE ORIGINAL CARD DNA (HARD LOCKED) --- */
+.filter-group select { padding: 10px 15px; border: 2px solid #000; background: #222; color: #fff5ba; }
+
+/* --- 4. ORIGINAL CARD DNA (HARD LOCKED) --- */
+#directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 25px; padding: 20px 0; }
+
 .card { 
-    background: #fff5ba !important; /* Original Uniform Yellow */
-    border: 2px solid #000; border-radius: 4px; height: 480px; 
-    display: flex; flex-direction: column; position: relative; overflow: hidden; 
-    box-shadow: 8px 8px 0px rgba(0,0,0,0.3); color: #000;
+    background: #fff5ba !important; border: 2px solid #000; border-radius: 4px; 
+    height: 480px; position: relative; overflow: hidden; color: #000;
 }
-
-/* Middle Bar & Bottom Stack Locks */
-.town-bar { height: 38px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; border-top: 2px solid #000; border-bottom: 2px solid #000; }
-.bottom-stack { position: absolute; bottom: 20px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }

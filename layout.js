@@ -1,7 +1,7 @@
 /**
- * PROJECT: Clay County Master Directory v9.1
- * LOCKS: Town Middle Color Fill | Centered Bottom Stack
- * PRIMARY SHEET: BusinessDirectory (A-P) [cite: 2026-01-30]
+ * PROJECT: Clay County Master Directory v9.2
+ * FEATURE: Auto-Meta Handshake & Dynamic Category Loading
+ * LOCKS: Town Color Fill | Centered Bottom Stack | Image Coupon
  */
 
 const CONFIG = {
@@ -10,12 +10,12 @@ const CONFIG = {
     
     // [cite: 2026-01-28] THE "COLOR LOCK" TOWN BRANDING
     TOWN_COLORS: {
-        "Flora": { bg: "#0c0b82", text: "#fe4f00" },          // Deep Blue / Orange
-        "Louisville": { bg: "#010101", text: "#eb1c24" },     // Black / Cardinal Red
-        "Clay City": { bg: "#8a8a88", text: "#0c30f0" },      // Grey / Blue
-        "Xenia": { bg: "#000000", text: "#fdb813" },          // Black / School Bus Yellow
-        "Sailor Springs": { bg: "#000000", text: "#a020f0" }, // Black / Purple
-        "Clay County": { bg: "#333333", text: "#ffffff" }      // Charcoal / White
+        "Flora": { bg: "#0c0b82", text: "#fe4f00" },
+        "Louisville": { bg: "#010101", text: "#eb1c24" },
+        "Clay City": { bg: "#8a8a88", text: "#0c30f0" },
+        "Xenia": { bg: "#000000", text: "#fdb813" },
+        "Sailor Springs": { bg: "#000000", text: "#a020f0" },
+        "Clay County": { bg: "#333333", text: "#ffffff" }
     },
 
     // Hard-Locked A-P Mapping [cite: 2026-01-30]
@@ -27,17 +27,48 @@ const CONFIG = {
 
 window.allData = []; 
 
-function updateHeader() {
+/**
+ * Newspaper Handshake: VOL = Month, NO = Today's Date
+ */
+function updateNewspaperMeta() {
     const now = new Date();
     const infoBox = document.getElementById('header-info');
     if (infoBox) {
-        infoBox.innerText = `VOL. 1 — NO. ${now.getMonth() + 1} | ${now.toLocaleDateString()}`;
+        const vol = now.getMonth() + 1;
+        const no = now.getDate();
+        // [cite: 2026-01-30] Format: VOL. 1 - NO. 30
+        infoBox.innerText = `VOL. ${vol} — NO. ${no} | ${now.toLocaleDateString()}`;
     }
 }
 
+/**
+ * Dynamic Filter Population: Pulls unique towns/categories from CSV
+ */
+function populateFilters(data) {
+    const townSelect = document.getElementById('town-filter');
+    const catSelect = document.getElementById('cat-filter');
+
+    const towns = [...new Set(data.map(b => b.town))].sort();
+    const categories = [...new Set(data.map(b => b.category))].sort();
+
+    if(townSelect) {
+        townSelect.innerHTML = '<option value="all">All Towns</option>' + 
+            towns.map(t => `<option value="${t}">${t}</option>`).join('');
+    }
+    if(catSelect) {
+        catSelect.innerHTML = '<option value="all">All Categories</option>' + 
+            categories.map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+}
+
+/**
+ * Core Data Fetch
+ */
 function fetchData() {
     Papa.parse(`${CONFIG.CSV_URL}&v=${new Date().getTime()}`, {
-        download: true, header: false, skipEmptyLines: true,
+        download: true,
+        header: false,
+        skipEmptyLines: true,
         complete: function(results) {
             window.allData = results.data.slice(1).map(row => ({
                 id: row[CONFIG.MAP.IMG] || "",
@@ -49,44 +80,37 @@ function fetchData() {
                 couponTxt: row[CONFIG.MAP.CPN_TXT] || ""
             })).filter(b => b.name && b.name.trim() !== "");
             
-            updateHeader();
+            // EXECUTE HANDSHAKES
+            updateNewspaperMeta();
+            populateFilters(window.allData);
             renderCards(window.allData);
         }
     });
 }
 
+/**
+ * Render Cards Logic [cite: 2026-01-30]
+ */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
     grid.innerHTML = data.map(biz => {
         const tierL = biz.tier.toLowerCase();
-        
-        // Get Town Brand Colors
         const colors = CONFIG.TOWN_COLORS[biz.town] || CONFIG.TOWN_COLORS["Clay County"];
         
         const cleanPhone = biz.phone.replace(/\D/g, '').slice(-10);
         const displayPhone = cleanPhone.length === 10 ? `(${cleanPhone.slice(0,3)}) ${cleanPhone.slice(3,6)}-${cleanPhone.slice(6)}` : "";
-
         const couponHTML = (biz.couponTxt && biz.couponTxt.trim() !== "") 
-            ? `<img src="https://github.com/KFruti88/images/blob/main/Coupon.png?raw=true" class="coupon-img-top">`
-            : "";
+            ? `<img src="https://github.com/KFruti88/images/blob/main/Coupon.png?raw=true" class="coupon-img-top">` : "";
 
         return `
         <div class="card ${tierL}" onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')">
             <div class="coupon-container">${couponHTML}</div>
             <div class="tier-badge-top">${biz.tier}</div>
-
-            <div class="logo-box">
-                <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" onerror="this.src='https://via.placeholder.com/150'">
-            </div>
-            
-            <div class="town-bar" style="background-color: ${colors.bg} !important; color: ${colors.text} !important;">
-                ${biz.town}
-            </div>
-            
+            <div class="logo-box"><img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" onerror="this.src='https://via.placeholder.com/150'"></div>
+            <div class="town-bar" style="background-color: ${colors.bg} !important; color: ${colors.text} !important;">${biz.town}</div>
             <div class="biz-name">${biz.name}</div>
-
             <div class="bottom-stack">
                 ${(tierL === 'premium' || tierL === 'plus') && displayPhone ? `<div class="biz-phone">📞 ${displayPhone}</div>` : ''}
                 ${tierL === 'premium' ? `<div class="premium-cta">⚡ CLICK FOR DETAILS</div>` : ''}

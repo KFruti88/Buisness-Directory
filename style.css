@@ -1,183 +1,61 @@
-/* --- 1. THE HARD-LOCKED GLOSSY HEADER [cite: 2026-01-30] --- */
+/* --- 1. GLOBAL SLATE THEME [cite: 2026-01-30] --- */
+body { 
+    background-color: #333333; /* Dark Gray Site Background */
+    margin: 0; 
+    font-family: 'Times New Roman', serif; 
+    color: #eeeeee;
+}
+
+.site-wrapper { width: 93%; margin: 0 auto; }
+
+/* --- 2. THE HARD-LOCKED YELLOW HEADER --- */
 .main-title { 
-    text-align: center; 
-    padding: 25px 0; 
-    margin: 0;
-    /* HARD LOCK: Glossy Manila Gradient */
+    text-align: center; padding: 25px 0; margin: 0;
+    /* HARD LOCK: Yellow Glossy Gradient */
     background: linear-gradient(145deg, #fff5ba 0%, #e6dc9f 100%) !important; 
-    border-bottom: 3px solid #000;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    border-bottom: 4px solid #000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     width: 100%;
 }
 
 .main-title h1 {
-    margin: 0;
-    font-size: 3.2rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #000;
-    font-family: 'Times New Roman', serif;
+    margin: 0; font-size: 3.2rem; text-transform: uppercase;
+    letter-spacing: 2px; color: #000;
 }
 
 .newspaper-meta {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    border-top: 2px solid #222; 
-    margin-top: 15px;
-    padding: 10px 5%; 
-    font-weight: 900;
-    font-size: 0.95rem;
-    text-transform: uppercase;
-    background: rgba(0,0,0,0.03);
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 2px solid #222; margin-top: 15px; padding: 10px 5%; 
+    font-weight: 900; font-size: 0.95rem; text-transform: uppercase;
+    background: rgba(0,0,0,0.05); color: #000;
 }
 
-/* --- 2. TRANSPARENT FILTER NAVIGATION [cite: 2026-01-30] --- */
+/* --- 3. DYNAMIC FILTER NAV --- */
 .filter-nav {
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-    padding: 20px 0;
-    background: transparent !important;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    display: flex; justify-content: center; gap: 25px; padding: 30px 0;
 }
 
 .filter-group select {
-    padding: 8px 12px;
-    border: 2px solid #000;
-    background: #fff;
+    padding: 10px 15px; border: 2px solid #fff5ba; border-radius: 4px;
+    background: #222; color: #fff5ba; font-weight: bold; cursor: pointer;
     font-family: 'Times New Roman', serif;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
 }
 
-/* --- 3. THE UNIFORM YELLOW CARD & GRID LOCK [cite: 2026-01-30] --- */
-#directory-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
-    gap: 25px; 
-    width: 93%;
-    margin: 0 auto;
-    padding: 20px 0;
-}
-
+/* --- 4. UNIFORM YELLOW CARD LOCK --- */
 .card { 
     background: #fff5ba !important; /* HARD LOCKED YELLOW */
-    border: 2px solid #000; 
-    border-radius: 4px;
-    height: 480px; 
-    display: flex; 
-    flex-direction: column; 
-    position: relative; 
-    overflow: hidden; 
-    box-shadow: 5px 5px 0px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease;
-    cursor: pointer;
+    border: 2px solid #000; border-radius: 4px; height: 480px; 
+    display: flex; flex-direction: column; position: relative; overflow: hidden; 
+    box-shadow: 8px 8px 0px rgba(0,0,0,0.3); color: #000;
 }
 
-.card:hover { transform: translateY(-5px); }
-
-/* --- 4. TOP CORNER BADGES (5% FROM EDGES) --- */
-.coupon-container {
-    position: absolute; top: 5%; left: 5%; z-index: 15;
-}
-
-.coupon-img-top {
-    width: 45px; height: auto;
-    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
-}
-
-.tier-badge-top {
-    position: absolute; top: 5%; right: 5%;
-    font-size: 0.75rem; font-weight: 900; background: #fff;
-    border: 1.5px solid #000; padding: 2px 6px; z-index: 10;
-    text-transform: uppercase;
-}
-
-/* --- 5. LOGO & MIDDLE BAR LOCKS --- */
-.logo-box { 
-    height: 160px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    padding: 15px; 
-    background: transparent !important; /* Forces yellow through card top */
-}
-
-.logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
-
+/* Middle Town Bar Branded via JS */
 .town-bar { 
-    height: 38px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    text-transform: uppercase; 
-    font-weight: 900; 
-    border-top: 2px solid #000; 
-    border-bottom: 2px solid #000; 
-    background: rgba(0,0,0,0.05); 
+    height: 38px; display: flex; align-items: center; justify-content: center; 
+    text-transform: uppercase; font-weight: 900; border-top: 2px solid #000; border-bottom: 2px solid #000;
 }
 
-.biz-name { 
-    height: 80px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    text-align: center; 
-    font-weight: bold; 
-    font-size: 1.4rem; 
-    padding: 10px;
-    margin-bottom: 80px; /* Safety buffer for bottom stack */
-}
-
-/* --- 6. CENTERED BOTTOM STACK LOCK [cite: 2026-01-30] --- */
 .bottom-stack {
-    position: absolute;
-    bottom: 20px;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    text-align: center;
-    pointer-events: none;
-}
-
-.biz-phone {
-    font-size: 1.25rem; /* Large visibility */
-    font-weight: bold;
-    color: #000;
-}
-
-.premium-cta {
-    color: #fe4f00;
-    font-weight: 900;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.category-locked {
-    font-weight: bold;
-    color: #222;
-    font-size: 1.25rem; /* Large visibility */
-}
-
-/* --- 7. INDEX CARD MODAL [cite: 2026-01-28] --- */
-.modal-container {
-    width: 75%; 
-    max-width: 1050px;
-    height: 580px; 
-    background: #fffdf5; 
-    border: 3px solid #000;
-    box-shadow: 15px 15px 0px rgba(0,0,0,0.2);
-    overflow: hidden; /* HARD LOCK: NO SCROLLBARS */
-}
-
-@media (max-width: 850px) {
-    .modal-container { width: 95%; height: auto; max-height: 95vh; overflow-y: auto; }
-    .card { height: auto; padding-bottom: 20px; }
-    .biz-name { margin-bottom: 100px; }
+    position: absolute; bottom: 20px; left: 0; right: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
 }

@@ -1,14 +1,14 @@
 /**
- * PROJECT: Clay County Directory Engine v6.95
- * LOCK: A-P Spreadsheet Mapping [cite: 2026-01-29]
- * FEATURES: Smart Dropdowns, Emoji Mapping, Premium CTA [cite: 2026-01-28]
+ * PROJECT: Clay County Directory Engine v6.99
+ * LOCK: A-P Spreadsheet Mapping & Global Scope [cite: 2026-01-29]
+ * FEATURES: Smart Dropdowns, Emoji Mapping, Premium CTA, Modal Handshake
  */
 const CONFIG = {
     CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv",
     IMAGE_REPO: "https://raw.githubusercontent.com/KFruti88/images/main/",
     
     // HARD-LOCKED INDICES TO STOP SCRAMBLING [cite: 2026-01-29]
-    MAP: { IMG: 0, NAME: 1, TOWN: 3, PHONE: 5, CAT: 8, TIER: 11 },
+    MAP: { IMG: 0, NAME: 1, TOWN: 3, ADDR: 6, PHONE: 5, CAT: 8, TIER: 11, BIO: 12, EST: 13, COUPON: 14 },
     
     TOWN_COLORS: {
         "Flora": { bg: "#0c0b82", text: "#fe4f00" },
@@ -28,36 +28,37 @@ const CONFIG = {
     }
 };
 
-let masterData = [];
+// [cite: 2026-01-26] Global Data Store for Modal Handshake
+window.allData = []; 
 
-/**
- * 🛠️ EMOJI LOGIC [cite: 2026-01-28]
- */
 function getCategoryEmoji(catText) {
     if (!catText) return "📁";
     const found = Object.keys(CONFIG.CAT_EMOJIS).find(key => catText.includes(key));
     return CONFIG.CAT_EMOJIS[found] || "📁";
 }
 
-/**
- * 🛠️ DATA FETCHING & FILTER POPULATION [cite: 2026-01-26]
- */
 function fetchData() {
-    const v = new Date().getTime(); // Cache busting
+    const v = new Date().getTime(); 
     Papa.parse(`${CONFIG.CSV_URL}&v=${v}`, {
         download: true, header: false, skipEmptyLines: true,
         complete: function(results) {
-            masterData = results.data.slice(1).map(row => ({
+            // [cite: 2026-01-29] Locked A-P JSON Mapping
+            window.allData = results.data.slice(1).map(row => ({
                 ImageID: row[CONFIG.MAP.IMG] || "",
-                Name: row[CONFIG.MAP.NAME] || "",
-                Town: row[CONFIG.MAP.TOWN] || "Clay County",
-                Phone: row[CONFIG.MAP.PHONE] || "",
-                Category: row[CONFIG.MAP.CAT] || "",
-                Tier: row[CONFIG.MAP.TIER] || "Basic"
-            })).filter(b => b.Name && b.Name.trim() !== "" && b.Name !== "Business Name");
+                name: row[CONFIG.MAP.NAME] || "",         // Match lowercase for modal.js
+                town: row[CONFIG.MAP.TOWN] || "Clay County",
+                address: row[CONFIG.MAP.ADDR] || "",
+                phone: row[CONFIG.MAP.PHONE] || "",
+                category: row[CONFIG.MAP.CAT] || "",
+                tier: row[CONFIG.MAP.TIER] || "Basic",
+                full_location: `${row[CONFIG.MAP.ADDR] || ""}, ${row[CONFIG.MAP.TOWN] || ""} IL`,
+                bio: row[CONFIG.MAP.BIO] || "",
+                established: row[CONFIG.MAP.EST] || "",
+                coupon: row[CONFIG.MAP.COUPON] || ""
+            })).filter(b => b.name && b.name.trim() !== "" && b.name !== "Business Name");
             
-            populateFilters(masterData);
-            renderCards(masterData);
+            populateFilters(window.allData);
+            renderCards(window.allData);
         }
     });
 }
@@ -67,73 +68,59 @@ function populateFilters(data) {
     const catSelect = document.getElementById('cat-filter');
     if (!citySelect || !catSelect) return;
 
-    // Get Unique values
-    const cities = [...new Set(data.map(b => b.Town))].sort();
-    const cats = [...new Set(data.map(b => b.Category))].sort();
+    const cities = [...new Set(data.map(b => b.town))].sort();
+    const cats = [...new Set(data.map(b => b.category))].sort();
 
-    // Reset dropdowns to keep the "All" options [cite: 2026-01-28]
     citySelect.innerHTML = '<option value="all">All Cities</option>';
     catSelect.innerHTML = '<option value="all">All Categories</option>';
 
-    cities.forEach(city => {
-        citySelect.innerHTML += `<option value="${city}">${city}</option>`;
-    });
-    cats.forEach(cat => {
-        catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
-    });
+    cities.forEach(city => { citySelect.innerHTML += `<option value="${city}">${city}</option>`; });
+    cats.forEach(cat => { catSelect.innerHTML += `<option value="${cat}">${cat}</option>`; });
 }
 
-/**
- * 🛠️ FILTER APPLICATION [cite: 2026-01-28]
- */
 function applyFilters() {
     const cityVal = document.getElementById('city-filter').value;
     const catVal = document.getElementById('cat-filter').value;
 
-    const filtered = masterData.filter(biz => {
-        const cityMatch = (cityVal === 'all' || biz.Town === cityVal);
-        const catMatch = (catVal === 'all' || biz.Category === catVal);
+    const filtered = window.allData.filter(biz => {
+        const cityMatch = (cityVal === 'all' || biz.town === cityVal);
+        const catMatch = (catVal === 'all' || biz.category === catVal);
         return cityMatch && catMatch;
     });
 
     renderCards(filtered);
 }
 
-/**
- * 🛠️ CARD RENDERING [cite: 2026-01-28]
- */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
     const tierWeight = { "premium": 1, "gold": 1, "plus": 2, "basic": 3 };
     const sortedData = data.sort((a, b) => 
-        (tierWeight[a.Tier.toLowerCase()] || 4) - (tierWeight[b.Tier.toLowerCase()] || 4) || a.Name.localeCompare(b.Name)
+        (tierWeight[a.tier.toLowerCase()] || 4) - (tierWeight[b.tier.toLowerCase()] || 4) || a.name.localeCompare(b.name)
     );
 
     grid.innerHTML = sortedData.map(biz => {
-        const style = CONFIG.TOWN_COLORS[biz.Town.trim()] || CONFIG.TOWN_COLORS["Clay County"];
-        const tierL = biz.Tier.toLowerCase();
-        const emoji = getCategoryEmoji(biz.Category);
+        const style = CONFIG.TOWN_COLORS[biz.town.trim()] || CONFIG.TOWN_COLORS["Clay County"];
+        const tierL = biz.tier.toLowerCase();
+        const emoji = getCategoryEmoji(biz.category);
         
-        const cleanPhone = biz.Phone.replace(/\D/g, '').slice(-10);
-        const displayPhone = cleanPhone.length === 10 ? 
-            `(${cleanPhone.slice(0,3)}) ${cleanPhone.slice(3,6)}-${cleanPhone.slice(6)}` : "";
+        const cleanPhone = biz.phone.replace(/\D/g, '').slice(-10);
+        const displayPhone = cleanPhone.length === 10 ? `(${cleanPhone.slice(0,3)}) ${cleanPhone.slice(3,6)}-${cleanPhone.slice(6)}` : "";
 
         return `
-        <div class="card ${tierL}" onclick="openFullModal('${biz.Name.replace(/'/g, "\\'")}')">
-            <div class="tier-badge">${biz.Tier}</div>
+        <div class="card ${tierL}" onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')">
+            <div class="tier-badge">${biz.tier}</div>
             <div class="logo-box">
                 <img src="${CONFIG.IMAGE_REPO}${biz.ImageID}.jpeg" onerror="this.src='https://via.placeholder.com/150'">
             </div>
             <div class="town-bar" style="background-color: ${style.bg}; color: ${style.text};">
-                ${biz.Town}
+                ${biz.town}
             </div>
-            <div class="biz-name">${biz.Name}</div>
+            <div class="biz-name">${biz.name}</div>
             <div class="card-content">
                 ${(tierL === 'premium' || tierL === 'plus') && displayPhone ? `<div class="biz-phone">📞 ${displayPhone}</div>` : ''}
-                <div class="biz-cat">${emoji} ${biz.Category}</div>
-                
+                <div class="biz-cat">${emoji} ${biz.category}</div>
                 ${tierL === 'premium' ? `<div style="margin-top:10px; font-weight:900; color:#fe4f00; font-size:0.75rem; text-transform:uppercase;">⚡ CLICK FOR DETAILS</div>` : ''}
             </div>
         </div>`;

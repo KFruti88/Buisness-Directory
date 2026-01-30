@@ -4,13 +4,14 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clay County Directory</title>
+    <title>Clay County Directory | Master v6.85</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     
-    <link rel="stylesheet" href="style.css?v=6.81">
+    <link rel="stylesheet" href="style.css?v=6.85">
 </head>
 <body>
 
@@ -18,7 +19,7 @@
         <h1>Clay County Directory</h1>
         <div class="newspaper-meta">
             <div id="header-info">VOL. 1 | LOADING...</div>
-            <div>BUSINESS DIRECTORY PAGES</div>
+            <div style="text-transform: uppercase;">Business Directory Pages</div>
         </div>
     </header>
 
@@ -26,9 +27,22 @@
         <div id="directory-grid"></div>
     </div>
 
+    <div id="premium-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-container">
+            <span class="close-modal" id="close-modal-btn">×</span>
+            <div id="modal-body">
+                </div>
+        </div>
+    </div>
+
     <script>
-        const smartV = new Date().getTime();
+        const smartV = new Date().getTime(); // Unix timestamp for versioning
+        
+        // 1. Load the Layout Engine (Fetched Data + Main Cards)
         document.write(`<script src="layout.js?v=${smartV}"><\/script>`);
+        
+        // 2. Load the Modal Brain (Handles the Pop-out Details)
+        document.write(`<script src="modal.js?v=${smartV}"><\/script>`);
     </script>
 </body>
 </html>

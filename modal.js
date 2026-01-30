@@ -1,23 +1,18 @@
 /**
- * PROJECT: Clay County Master Directory v9.9.3
- * LOCK: Column O (Index 14) for Image | Column P (Index 15) for Coupon
- * THEME: High-Gloss Balanced Index Card [cite: 2026-01-30]
+ * PROJECT: Clay County Corrected Master v9.9.4
+ * LOCK: Logo = Column A (Index 0) | Coupon = Column P (Index 15)
+ * THEME: Balanced 65vh | No Empty Space
  */
 
 function openFullModal(bizName) {
-    // 1. Find the business in the global window.allData
     const biz = window.allData.find(b => b.name === bizName);
     if (!biz) return;
 
-    // 2. Target the isolated Safety Wall containers
     const modal = document.getElementById('premium-modal');
     const body = document.getElementById('modal-body-content');
     const tierL = (biz.tier || 'basic').toLowerCase();
-    
-    // 3. Safety check for map encoding
     const mapAddr = encodeURIComponent(`${biz.address}, ${biz.town}, IL`);
 
-    // 4. BALANCED REFINED LAYOUT (65vh Height Lock)
     if (tierL === 'premium' || tierL === 'plus') {
         body.innerHTML = `
             <div class="modal-inner-padding" style="display: flex; flex-direction: column; height: 100%; justify-content: space-between;">
@@ -25,9 +20,9 @@ function openFullModal(bizName) {
                 
                 <div style="border-bottom: 3px solid #000; padding-bottom: 15px; margin-bottom: 15px;">
                     <div style="display: flex; gap: 20px; align-items: center;">
-                        <img src="${biz.couponMedia}" 
-                             style="width:90px; height:90px; border:2px solid #000; background:#fff; object-fit: cover;" 
-                             onerror="this.src='https://via.placeholder.com/90?text=No+Image';">
+                        <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" 
+                             style="width:90px; height:90px; border:2px solid #000; background:#fff; object-fit: contain;" 
+                             onerror="this.src='https://via.placeholder.com/90?text=LOGO';">
                         <div>
                             <h2 style="margin:0; font-size: 2.4rem; text-transform: uppercase; line-height:1; color:#000;">${biz.name}</h2>
                             <p style="margin:8px 0 0 0; font-weight: 900; font-size: 1.1rem; color:#444;">📁 ${biz.category} | Est. ${biz.established || 'N/A'}</p>
@@ -51,9 +46,9 @@ function openFullModal(bizName) {
 
                 <div style="margin-top: 20px; border-top: 2px dashed #000; padding-top: 15px;">
                     <h3 style="text-transform: uppercase; margin:0 0 8px 0; font-size: 1.2rem; color:#000;">About Our Business</h3>
-                    <p style="font-size: 1.1rem; margin: 0; line-height: 1.4; color:#000;">${biz.bio || 'Proudly serving the Clay County community.'}</p>
+                    <p style="font-size: 1.1rem; margin: 0; line-height: 1.4; color:#000;">${biz.bio || 'Proudly serving the community.'}</p>
                     
-                    ${biz.preview && biz.preview !== "N/A" && biz.preview !== "" ? `
+                    ${biz.preview && biz.preview !== "N/A" && biz.preview !== "No" ? `
                     <div style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.4); border: 3px solid #fe4f00; box-shadow: 5px 5px 0px rgba(254, 79, 0, 0.2);">
                         <p style="margin:0; font-weight:900; font-size:1rem; color:#fe4f00; text-transform:uppercase; letter-spacing: 1px;">🎫 Community Coupon</p>
                         <p style="margin:8px 0 0 0; font-weight:bold; font-size:1.2rem; color:#000;">${biz.preview}</p>
@@ -62,15 +57,13 @@ function openFullModal(bizName) {
             </div>
         `;
     } else {
-        // BASIC TIER: Image from Column O
+        // BASIC TIER: Restored Logo Source
         body.innerHTML = `
             <div class="modal-inner-padding" style="display: flex; flex-direction: column; height: 100%; justify-content: center; text-align: center; color:#000;">
                 <span class="close-x" onclick="closeModal()">×</span>
-                <img src="${biz.couponMedia}" style="width:100px; margin: 0 auto 20px auto; border: 2px solid #000; background:#fff;" onerror="this.src='https://via.placeholder.com/100'">
+                <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" style="width:100px; margin: 0 auto 20px auto; border: 2px solid #000; background:#fff;" onerror="this.src='https://via.placeholder.com/100'">
                 <h2 style="font-size: 2.4rem; text-transform: uppercase; margin: 0;">${biz.name}</h2>
-                <div style="margin-top: 25px; padding: 25px; border: 4px dashed #000; background: rgba(255,255,255,0.2);">
-                     <p style="font-weight:900; font-size: 1.4rem; text-transform:uppercase; margin:0;">Visit us in ${biz.town}!</p>
-                </div>
+                <p style="font-weight:900; font-size: 1.3rem; margin-top:15px;">Visit us in ${biz.town}!</p>
             </div>
         `;
     }
@@ -83,7 +76,6 @@ function closeModal() {
     if (modal) modal.style.display = 'none';
 }
 
-// Global click-off listener
 window.onclick = function(event) {
     const modal = document.getElementById('premium-modal');
     if (event.target == modal) closeModal();

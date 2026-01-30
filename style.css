@@ -32,7 +32,7 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     display: flex;
     justify-content: center;
     gap: 20px;
-    padding: 15px;
+    padding: 10px 15px 20px 15px;
     background: transparent !important;
     color: #000;
     flex-wrap: wrap;
@@ -49,9 +49,9 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
 }
 
-/* --- 4. THE UNIFORM YELLOW CARD DNA --- */
+/* --- 4. THE UNIFORM YELLOW CARD LOCK --- */
 .card { 
-    background: #fff5ba !important; /* HARD LOCKED YELLOW */
+    background: #fff5ba !important; /* HARD LOCKED UNIFORM YELLOW */
     border: 2px solid #000; 
     border-radius: 4px;
     height: 480px; 
@@ -72,13 +72,13 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     align-items: center; 
     justify-content: center; 
     padding: 15px; 
-    background: transparent !important; /* Kills the white top section */
+    background: transparent !important; /* Kills white top section */
 }
 
 .logo-box img { 
     max-height: 100%; 
     max-width: 100%; 
-    object-fit: contain; /* [cite: 2026-01-30] Kills giant image bug */
+    object-fit: contain; /* [cite: 2026-01-30] Kills giant image scramble */
 }
 
 .town-bar { 
@@ -120,14 +120,14 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     width: 75%; 
     max-width: 1050px;
     height: 580px; 
-    background: #fffdf5; /* Manila Index Card Manila */
+    background: #fffdf5; /* Professional Manila Index Card */
     border: 3px solid #000;
     border-radius: 4px;
     position: relative;
     display: flex;
     flex-direction: column;
     box-shadow: 15px 15px 0px rgba(0,0,0,0.2);
-    overflow: hidden; /* HARD LOCK: NO SCROLLBARS */
+    overflow: hidden; /* HARD LOCK: No scrollbars */
 }
 
 .modal-header-section {

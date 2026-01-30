@@ -1,40 +1,59 @@
+/* --- UNIVERSAL RESET [cite: 2026-01-26] --- */
+body { 
+    background-color: #e5e5e5; 
+    font-family: 'Times New Roman', serif; 
+    margin: 0; 
+}
+
+.site-wrapper { 
+    width: 93%; 
+    margin: 0 auto; 
+    padding: 20px 0; 
+}
+
 /* --- GLOSSY HEADER [cite: 2026-01-28] --- */
 .main-title { 
     text-align: center; 
     padding: 25px; 
-    background: linear-gradient(145deg, #fff5ba, #e6dc9f) !important; /* Glossy Gradient */
+    background: linear-gradient(145deg, #fff5ba, #e6dc9f) !important; 
     border-bottom: 3px solid #000;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-/* --- GLOSSY CARD BASE [cite: 2026-01-26, 2026-01-28] --- */
+.newspaper-meta {
+    display: flex; 
+    justify-content: space-between; 
+    border-top: 2px solid #222222; 
+    padding: 10px; 
+    font-weight: bold;
+}
+
+/* --- GLOSSY CARDS [cite: 2026-01-28] --- */
+#directory-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
+    gap: 25px; 
+}
+
 .card { 
     background: linear-gradient(135deg, #fff5ba 0%, #fdf0a0 100%) !important; 
     border: 2px solid #000; 
-    border-radius: 8px; /* Slightly rounded for the glossy feel */
-    box-shadow: 5px 5px 15px rgba(0,0,0,0.1), inset 0 0 10px rgba(255,255,255,0.5);
+    border-radius: 8px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.1), inset 0 0 10px rgba(255,255,255,0.4);
     height: 480px; 
     display: flex; 
     flex-direction: column; 
     position: relative; 
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden; 
+    transition: transform 0.3s ease; 
+    cursor: pointer;
 }
 
-/* Glossy Shine Overlay Effect [cite: 2026-01-26] */
-.card::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 50%;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
-    pointer-events: none;
-}
+.card:hover { transform: translateY(-5px); box-shadow: 8px 8px 20px rgba(0,0,0,0.2); }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 8px 8px 20px rgba(0,0,0,0.2);
-}
+.logo-box { height: 160px; display: flex; align-items: center; justify-content: center; padding: 10px; }
+.logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-/* --- TOWN BAR ENAMEL FINISH [cite: 2026-01-28] --- */
 .town-bar { 
     height: 38px; 
     display: flex; 
@@ -43,15 +62,41 @@
     text-transform: uppercase; 
     font-weight: 900; 
     border-top: 2px solid #000; 
-    border-bottom: 2px solid #000;
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3); /* Inner shine */
-    text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+    border-bottom: 2px solid #000; 
 }
 
-/* --- GLOSSY MODAL [cite: 2026-01-28] --- */
-.modal-container { 
-    background: linear-gradient(145deg, #fff5ba, #f7eba4) !important;
-    border: 4px solid #000;
-    border-radius: 12px;
-    box-shadow: 20px 20px 60px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.4);
+.biz-name { 
+    height: 80px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+    font-weight: bold; 
+    font-size: 1.4rem; 
+    padding: 5px; 
+}
+
+.card-content { 
+    flex-grow: 1; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    text-align: center; 
+    padding-bottom: 15px; 
+}
+
+.biz-cat { font-weight: bold; color: #333; font-size: 1.1rem; }
+.biz-phone { font-weight: bold; color: #000; margin-bottom: 5px; }
+
+.tier-badge { 
+    position: absolute; 
+    top: 8px; 
+    left: 8px; 
+    font-size: 0.7rem; 
+    border: 1px solid #222; 
+    background: #fff; 
+    padding: 2px 5px; 
+    z-index: 5; 
+    text-transform: uppercase; 
 }

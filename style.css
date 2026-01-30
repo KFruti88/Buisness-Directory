@@ -1,156 +1,57 @@
-/* --- GLOBAL STYLES --- */
-:root {
-    --paper-bg: #e5e5e5;
-    --smlc-blue: #222222;
-}
-
-body {
-    background-color: #e5e5e5;
-    font-family: 'Times New Roman', Times, serif;
-    margin: 0;
-    padding: 0;
-}
-
-/* --- DIRECTORY GRID & NEWSPAPER CARDS --- */
-.site-wrapper { 
-    width: 93%; /* Your standard width [cite: 2026-01-26] */
-    margin: 0 auto; padding: 20px 0; 
-}
-
-#directory-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
-    gap: 25px; 
-}
-
-/* --- NAVIGATION --- */
-.nav-header {
-    display: block !important;
-    background-color: #e5e5e5 !important;
-    padding: 15px 0;
-    text-align: center;
-    border-bottom: 2px solid #222222;
-    width: 100%;
-    position: relative;
-    z-index: 999;
-}
-
-.nav-header a {
-    color: #222222 !important;
-    text-decoration: none;
-    font-weight: bold;
-    margin: 0 15px;
-    display: inline-block;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-}
-
-/* --- NEWSPAPER HEADER & META --- */
-.main-title h1 {
-    text-align: center;
-    font-family: 'Times New Roman', serif;
-    font-size: clamp(2rem, 8vw, 4.5rem);
-    margin: 20px 0 5px 0;
-    text-transform: uppercase;
-    letter-spacing: -2px;
-    color: #222222;
-}
-
-.newspaper-meta {
-   width: 100%;             /* Stretches to both edges of the screen */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 3px solid #222222;    /* Single solid line on top */
-    border-bottom: 3px solid #222222; /* Single solid line on bottom */
-    padding: 15px 0;                  /* Space between the lines */
-    background-color: #e5e5e5;        /* Your light gray background */
-    margin-bottom: 40px;
-}
-
-.meta-item {
-    flex: 1;
-    text-align: center;
-    font-weight: bold;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    font-family: Arial, sans-serif;
-    padding: 0 20px; 
-    color: #222222;
-}
-
-.left-meta { text-align: left; }
-.right-meta { text-align: right; }
-.center-header { text-align: center; flex: 1.5; }
-
-
-.directory-pages {
-    /* border: 2px solid #222222;  Fixed the extra '2' here */
-    padding: 4px 15px;
-    font-size: 1.1rem;
-    display: inline-block;
-}
-
-/* -- Count pages text--"/
-.count-text {
-    font-family: Times New Roman, sans-serif;
-    font-size: 0.75rem;
-    color: #222222;
-    margin-top: 5px;
-    font-style: italic;
-    text-transform: none; /* Keeps it from being all caps */
-    letter-spacing: 0.5px;
-}
-
-/* --- DIRECTORY GRID --- */
-.site-wrapper {
-    padding: 0 20px 40px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-#directory-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-/* --- CARD STYLING --- */
-.card { 
-    background-color: #fff5ba !important; /* Yellow Layout Background [cite: 2026-01-26] */
-    border: 2px solid #000; 
-    box-shadow: 6px 6px 0px rgba(0,0,0,0.2); 
-    padding: 0; /* Remove padding to let town bar stretch */
+/* --- GLOSSY HEADER [cite: 2026-01-28] --- */
+.main-title { 
     text-align: center; 
+    padding: 25px; 
+    background: linear-gradient(145deg, #fff5ba, #e6dc9f) !important; /* Glossy Gradient */
+    border-bottom: 3px solid #000;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* --- GLOSSY CARD BASE [cite: 2026-01-26, 2026-01-28] --- */
+.card { 
+    background: linear-gradient(135deg, #fff5ba 0%, #fdf0a0 100%) !important; 
+    border: 2px solid #000; 
+    border-radius: 8px; /* Slightly rounded for the glossy feel */
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.1), inset 0 0 10px rgba(255,255,255,0.5);
+    height: 480px; 
     display: flex; 
     flex-direction: column; 
-    height: 450px; 
     position: relative; 
-    overflow: hidden; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* THE TOWN BAR - Dynamic Middle Box */
+/* Glossy Shine Overlay Effect [cite: 2026-01-26] */
+.card::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 50%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 8px 8px 20px rgba(0,0,0,0.2);
+}
+
+/* --- TOWN BAR ENAMEL FINISH [cite: 2026-01-28] --- */
 .town-bar { 
-    height: 40px; 
+    height: 38px; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
     text-transform: uppercase; 
     font-weight: 900; 
-    font-size: 1.1rem; 
     border-top: 2px solid #000; 
     border-bottom: 2px solid #000;
-    margin: 10px 0;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3); /* Inner shine */
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
 }
 
-.biz-name { 
-    font-size: 1.4rem; 
-    font-weight: bold; 
-    padding: 10px; 
-    flex-grow: 1; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
+/* --- GLOSSY MODAL [cite: 2026-01-28] --- */
+.modal-container { 
+    background: linear-gradient(145deg, #fff5ba, #f7eba4) !important;
+    border: 4px solid #000;
+    border-radius: 12px;
+    box-shadow: 20px 20px 60px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.4);
 }
-
-.logo-box { height: 150px; padding: 15px; display: flex; align-items: center; justify-content: center; }

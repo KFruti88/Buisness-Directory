@@ -1,7 +1,6 @@
 /**
- * PROJECT: Clay County Master Directory v9.2
- * FEATURE: Auto-Meta Handshake & Dynamic Category Loading
- * LOCKS: Town Color Fill | Centered Bottom Stack | Image Coupon
+ * PROJECT: Clay County Master Directory v2.6
+ * LOCKS: Slate Theme | Isolated Modal Trigger | A-P Mapping
  */
 
 const CONFIG = {
@@ -28,7 +27,7 @@ const CONFIG = {
 window.allData = []; 
 
 /**
- * Newspaper Handshake: VOL = Month, NO = Today's Date
+ * Newspaper Handshake: VOL = Month, NO = Day [cite: 2026-01-30]
  */
 function updateNewspaperMeta() {
     const now = new Date();
@@ -36,23 +35,22 @@ function updateNewspaperMeta() {
     if (infoBox) {
         const vol = now.getMonth() + 1;
         const no = now.getDate();
-        // [cite: 2026-01-30] Format: VOL. 1 - NO. 30
-        infoBox.innerText = `VOL. ${vol} — NO. ${no} | ${now.toLocaleDateString()}`;
+        infoBox.innerText = `VOL. ${vol} — NO. ${no}`;
     }
 }
 
 /**
- * Dynamic Filter Population: Pulls unique towns/categories from CSV
+ * Dynamic Filter Population
  */
 function populateFilters(data) {
-    const townSelect = document.getElementById('town-filter');
+    const townSelect = document.getElementById('city-filter');
     const catSelect = document.getElementById('cat-filter');
 
     const towns = [...new Set(data.map(b => b.town))].sort();
     const categories = [...new Set(data.map(b => b.category))].sort();
 
     if(townSelect) {
-        townSelect.innerHTML = '<option value="all">All Towns</option>' + 
+        townSelect.innerHTML = '<option value="all">All Cities</option>' + 
             towns.map(t => `<option value="${t}">${t}</option>`).join('');
     }
     if(catSelect) {
@@ -73,14 +71,19 @@ function fetchData() {
             window.allData = results.data.slice(1).map(row => ({
                 id: row[CONFIG.MAP.IMG] || "",
                 name: row[CONFIG.MAP.NAME] || "",
+                address: row[CONFIG.MAP.ADDR] || "N/A",
                 town: row[CONFIG.MAP.TOWN] || "Clay County", 
-                tier: row[CONFIG.MAP.TIER] || "Basic",
-                phone: row[CONFIG.MAP.PHONE] || "",
+                phone: row[CONFIG.MAP.PHONE] || "N/A",
+                website: row[CONFIG.MAP.WEB] || "N/A",
+                facebook: row[CONFIG.MAP.FB] || "N/A",
                 category: row[CONFIG.MAP.CAT] || "",
+                bio: row[CONFIG.MAP.BIO] || "",
+                hours: row[CONFIG.MAP.HOURS] || "",
+                tier: row[CONFIG.MAP.TIER] || "Basic",
+                established: row[CONFIG.MAP.EST] || "N/A",
                 couponTxt: row[CONFIG.MAP.CPN_TXT] || ""
             })).filter(b => b.name && b.name.trim() !== "");
             
-            // EXECUTE HANDSHAKES
             updateNewspaperMeta();
             populateFilters(window.allData);
             renderCards(window.allData);
@@ -89,7 +92,7 @@ function fetchData() {
 }
 
 /**
- * Render Cards Logic [cite: 2026-01-30]
+ * Render Cards Logic with Modal Trigger
  */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
@@ -98,7 +101,6 @@ function renderCards(data) {
     grid.innerHTML = data.map(biz => {
         const tierL = biz.tier.toLowerCase();
         const colors = CONFIG.TOWN_COLORS[biz.town] || CONFIG.TOWN_COLORS["Clay County"];
-        
         const cleanPhone = biz.phone.replace(/\D/g, '').slice(-10);
         const displayPhone = cleanPhone.length === 10 ? `(${cleanPhone.slice(0,3)}) ${cleanPhone.slice(3,6)}-${cleanPhone.slice(6)}` : "";
         const couponHTML = (biz.couponTxt && biz.couponTxt.trim() !== "") 

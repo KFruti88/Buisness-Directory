@@ -12,7 +12,7 @@
         "website": "N/A",
         "facebook": "agprocorp.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/AgProLouisville/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "14545 US-45, Louisivlle, IL 62858"
     },
@@ -88,18 +88,18 @@
         "image_id": "angela-florist",
         "name": "Angela's Village Florist",
         "tier": "premium",
-        "category": "N/A",
-        "phone": "N/A",
-        "address": "N/A",
-        "town": "N/A",
-        "state_zip": "N/A",
-        "hours": "N/A",
-        "website": "N/A",
-        "facebook": "N/A",
-        "bio": "N/A",
+        "category": "Flower Shop",
+        "phone": "6186622121",
+        "address": "115 E North Ave",
+        "town": "Flora",
+        "state_zip": "IL 62839",
+        "hours": "Mon - Fri 9a - 5p Sat 9a -2pm Sun Closed",
+        "website": "https://l.facebook.com/l.php?u=http%3A%2F%2Fangelasvillageflorist.com%2F%3Ffbclid%3DIwZXh0bgNhZW0CMTAAYnJpZBExemV4NHRzWVQ5RXJJSWk3OXNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR5FeP3w-9ScGBFoAe_Mj8BKeyFiiLPhgLRYXG7td7EnLlH5ro65A23--vQ2Vg_aem_-zn77rbT7rmiNOInsGAB7w&h=AT3AKNerVO11gYdYqW9_HoncL2fvJQuJefCmReDf9sa4-xphu2kLpMY-NkqlMP1go2XlD_GUtVyiVwP3oRXwtLek6DXCbG0KHBderk7F5hYpL2nIH0RWifEsJIhId_3YmxxS3tqG-gLFYZJIFQ",
+        "facebook": "https://www.facebook.com/angelasvillagefloristandmore",
+        "bio": "We offer personalized designs in fresh florals along with artificial. Designing for all occasions and events! Gift items galore along with brands such as Rowe Casa, Candleberry, Bissinger Chocolates, other snacks, balloons, and so much more!",
         "established": "N/A",
         "amazon_tag": "werewolf3788-20",
-        "full_location": "N/A, N/A, N/A"
+        "full_location": "115 E North Ave, Flora, IL 62839"
     },
     {
         "image_id": "N/A",
@@ -182,7 +182,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/AxiomHealthcareFlora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "410 N Stanford Rd, Flora, IL 62839"
     },
@@ -250,7 +250,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/BackyardBBQClayCity/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "412 S Main St,, Clay City, IL 62824"
     },
@@ -335,7 +335,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/BibleGroveChristian/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "188 Antioch Ln, Bible Grove, IL 62858, N/A, N/A"
     },
@@ -522,7 +522,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/BlueMoundChurch/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "14732 Blue Mound Ln, Louisville, IL 62858, N/A, N/A"
     },
@@ -573,7 +573,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/BrightBeginningsFlora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "1210 N State Rd, Flora, IL 62839, N/A, N/A"
     },
@@ -590,7 +590,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/BriscoeSurplus/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "762 N Sanford Rd, Flora, IL 62839, N/A, N/A"
     },
@@ -624,7 +624,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/BrooksMechanicalFlora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "800 W North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -641,7 +641,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/BrownsFurnitureFlora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "110 W North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -743,7 +743,7 @@
         "website": "N/A",
         "facebook": "butcherautomotive.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ButcherAutomotive/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "14326 US-45, Louisville, IL 62858, N/A, N/A"
     },
@@ -981,7 +981,7 @@
         "website": "N/A",
         "facebook": "ceres.coop",
         "bio": "N/A",
-        "established": "https://www.facebook.com/CeresSolutionsCoop/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "Clay City, IL 62824, N/A, N/A"
     },
@@ -1032,7 +1032,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/CharmHairCompany/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "402 W North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -1049,7 +1049,7 @@
         "website": "N/A",
         "facebook": "christschurch.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ChristsChurchFlora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "200 N Olive Rd, Flora, IL 62839, N/A, N/A"
     },
@@ -1083,7 +1083,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/CityDairyFlora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "1102 W North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -1100,7 +1100,7 @@
         "website": "N/A",
         "facebook": "florail.gov",
         "bio": "N/A",
-        "established": "https://www.facebook.com/CityofFloraIL/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "131 E 2nd St, Flora, IL 62839, N/A, N/A"
     },
@@ -1117,7 +1117,7 @@
         "website": "N/A",
         "facebook": "florail.gov",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraPoliceDepartment/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "1110 E North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -1168,7 +1168,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ClayCityBloomBox/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "951 Grant Dr, Clay City, IL 62824, N/A, N/A"
     },
@@ -1253,7 +1253,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ClayCityFire/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "318 S Walnut St SE, Clay City, IL 62824, N/A, N/A"
     },
@@ -1338,7 +1338,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ClayCityPharmacy/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "200 S Main St, Clay City, IL 62824, N/A, N/A"
     },
@@ -1372,7 +1372,7 @@
         "website": "N/A",
         "facebook": "claycitypottery.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ClayCityPottery/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "118 S 1st St SE, Clay City, IL 62824, N/A, N/A"
     },
@@ -1389,7 +1389,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ClayCityParks/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "318 S Walnut St SE, Clay City, IL 62824, N/A, N/A"
     },
@@ -1423,7 +1423,7 @@
         "website": "N/A",
         "facebook": "villageofclaycityil.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/VillageOfClayCity/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "318 S Walnut St SE, Clay City, IL 62824, N/A, N/A"
     },
@@ -1491,7 +1491,7 @@
         "website": "N/A",
         "facebook": "extension.illinois.edu",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ClayCounty4H/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "210 S Church St, Louisville, IL 62858, N/A, N/A"
     },
@@ -1508,7 +1508,7 @@
         "website": "N/A",
         "facebook": "claycounty.illinois.gov",
         "bio": "N/A",
-        "established": "https://www.facebook.com/Clay-County-Animal-Rescue-and-Shelter-142279185836269/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "14394 US-45, Louisville, IL 62858, N/A, N/A"
     },
@@ -1542,7 +1542,7 @@
         "website": "N/A",
         "facebook": "claycounty.illinois.gov",
         "bio": "N/A",
-        "established": "https://www.facebook.com/AmyBrittonClerk/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "111 E Chestnut St, Louisville, IL 62858, N/A, N/A"
     },
@@ -1661,7 +1661,7 @@
         "website": "N/A",
         "facebook": "claycountyfair.net",
         "bio": "N/A",
-        "established": "https://www.facebook.com/claycountyillinoisfair/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "700 N West St, Flora, IL 62839, N/A, N/A"
     },
@@ -1678,7 +1678,7 @@
         "website": "N/A",
         "facebook": "ilfb.org/clay",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ClayCountyFarmBureau/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "401 N Main St, Flora, IL 62839, N/A, N/A"
     },
@@ -1695,7 +1695,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/CCIGS/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "111 Chestnut St, Louisville, IL 62858, N/A, N/A"
     },
@@ -1729,7 +1729,7 @@
         "website": "N/A",
         "facebook": "healthdept.org",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ClayCountyHealthDepartment/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "601 E 12th St, Flora, IL 62839, N/A, N/A"
     },
@@ -1763,7 +1763,7 @@
         "website": "N/A",
         "facebook": "claycountyhospital.org",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ClayCountyHospital/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "911 Stacey Burk Dr, Flora, IL 62839, N/A, N/A"
     },
@@ -1865,7 +1865,7 @@
         "website": "N/A",
         "facebook": "https://www.secureprocessors.org/",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ClayCountyRehab/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "1 Commercial Dr, Flora, IL62839, N/A, N/A"
     },
@@ -1882,7 +1882,7 @@
         "website": "N/A",
         "facebook": "https://www.secureprocessors.org/",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ClayCountyRehab/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "1 Commercial Dr, Flora, IL62839, N/A, N/A"
     },
@@ -1899,7 +1899,7 @@
         "website": "N/A",
         "facebook": "claycountysheriffillinois.org",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ClayCountySheriffsOffice/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "14450 US-45, Louisville, IL 62858, N/A, N/A"
     },
@@ -1916,7 +1916,7 @@
         "website": "N/A",
         "facebook": "claycobank.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ClayCountyStateBank/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "111 N Church St, Louisville, IL 62858, N/A, N/A"
     },
@@ -2069,7 +2069,7 @@
         "website": "N/A",
         "facebook": "countryfinancial.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/LisaErbacherCountryFinancial/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "847 E North Ave Unit A, Flora, IL 62839, N/A, N/A"
     },
@@ -2120,7 +2120,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/CuttinUpLouisville/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "14207 US-45, Louisville, IL 62858, N/A, N/A"
     },
@@ -2443,7 +2443,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/DowntownDinerFlora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "123 W 2nd St, Flora, IL 62839, N/A, N/A"
     },
@@ -2528,7 +2528,7 @@
         "website": "N/A",
         "facebook": "eddystreeserviceinc.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/EddysTreeService/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "Lake Villa, IL 60046, N/A, N/A"
     },
@@ -2545,7 +2545,7 @@
         "website": "N/A",
         "facebook": "edwardjones.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/EJAdvisorCodyFisher/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "825 W North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -2596,7 +2596,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/ErwinInsuranceAgency/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "111 S 3rd St SW, Clay City, IL 62824, N/A, N/A"
     },
@@ -2647,7 +2647,7 @@
         "website": "N/A",
         "facebook": "familyvisionil.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FamilyVisionCenterFlora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "1000 W North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -2681,7 +2681,7 @@
         "website": "N/A",
         "facebook": "fbcflora.org",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FBCFlora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "115 S Sycamore St, Flora, IL 62839, N/A, N/A"
     },
@@ -2715,7 +2715,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FirstChurchOfGodFlora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "1121 Rider St, Flora, IL 62839, N/A, N/A"
     },
@@ -2749,7 +2749,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FSBCFlora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "500 E 12th St, Flora, IL 62839, N/A, N/A"
     },
@@ -2783,7 +2783,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraFUMC/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "103 N Locust St, Flora, IL 62839, N/A, N/A"
     },
@@ -2817,7 +2817,7 @@
         "website": "N/A",
         "facebook": "florafumc.org",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraFUMC/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "103 E 3rd St, Flora, IL 62839, N/A, N/A"
     },
@@ -2834,7 +2834,7 @@
         "website": "N/A",
         "facebook": "illegion.org",
         "bio": "N/A",
-        "established": "https://www.facebook.com/AmericanLegionPost14/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "333 E North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -2851,7 +2851,7 @@
         "website": "N/A",
         "facebook": "claycitybanking.bank",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraBankingCompany/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "207 Gary Hagen Dr, Flora, IL 62839, N/A, N/A"
     },
@@ -2868,7 +2868,7 @@
         "website": "N/A",
         "facebook": "floraschools.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraWolvesBoosters/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "605 S Stanford Rd, Flora, IL 62839, N/A, N/A"
     },
@@ -2919,7 +2919,7 @@
         "website": "N/A",
         "facebook": "florachamber.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraILChamber/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "121 E 2nd St, Flora, IL 62839, N/A, N/A"
     },
@@ -2936,7 +2936,7 @@
         "website": "N/A",
         "facebook": "floraschools.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraSchools/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "605 S Stanford Rd, Flora, IL 62839, N/A, N/A"
     },
@@ -2953,7 +2953,7 @@
         "website": "N/A",
         "facebook": "floraschools.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraSchools/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "605 S Stanford Rd, Flora, IL 62839, N/A, N/A"
     },
@@ -2970,7 +2970,7 @@
         "website": "N/A",
         "facebook": "floradental.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/floradental/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "510 W North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -3004,7 +3004,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraFamilyDiner/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "311 W North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -3038,7 +3038,7 @@
         "website": "N/A",
         "facebook": "florail.gov",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraFireDept/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "1110 E North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -3055,7 +3055,7 @@
         "website": "N/A",
         "facebook": "fccflora.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/fccflora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "100 W 4th St, Flora, IL 62839, N/A, N/A"
     },
@@ -3106,7 +3106,7 @@
         "website": "N/A",
         "facebook": "lionsclubs.org",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraLionsClub/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "PO Box 111, Flora, IL 62839, N/A, N/A"
     },
@@ -3123,7 +3123,7 @@
         "website": "N/A",
         "facebook": "lionsclubs.org",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraLionsClub/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "PO Box 111, Flora, IL 62839, N/A, N/A"
     },
@@ -3140,7 +3140,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraLittleLeague/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "1000 W North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -3208,7 +3208,7 @@
         "website": "N/A",
         "facebook": "florarotary.org",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraRotaryClub/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "207 Hagen Dr, Flora, IL 62839, N/A, N/A"
     },
@@ -3225,7 +3225,7 @@
         "website": "N/A",
         "facebook": "floraschools.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FloraWolvesFootball/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "605 S Stanford Rd, Flora, IL 62839, N/A, N/A"
     },
@@ -3242,7 +3242,7 @@
         "website": "N/A",
         "facebook": "frankandbright.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FrankAndBrightFuneralHome/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "500 N Main St, Flora, IL 62839, N/A, N/A"
     },
@@ -3259,7 +3259,7 @@
         "website": "N/A",
         "facebook": "fullarmorchristianacademy.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FullArmorAcademy/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "600 Erwin St, Louisville, IL 62858, N/A, N/A"
     },
@@ -3276,7 +3276,7 @@
         "website": "N/A",
         "facebook": "fullarmorchristianacademy.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FullArmorAcademy/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "600 Erwin St, Louisville, IL 62858, N/A, N/A"
     },
@@ -3293,7 +3293,7 @@
         "website": "N/A",
         "facebook": "fullarmorchristianacademy.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/FullArmorAcademy/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "600 Erwin St, Louisville, IL 62858, N/A, N/A"
     },
@@ -3361,7 +3361,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/GardnersRestaurant/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "311 W North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -3429,7 +3429,7 @@
         "website": "N/A",
         "facebook": "glamourfarms.com",
         "bio": "N/A",
-        "established": "https://www.facebook.com/glamourfarms/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "14164 US-45, Louisville, IL 62858, N/A, N/A"
     },
@@ -3446,7 +3446,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/GloryDaysFlora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "122 W North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -3463,7 +3463,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/GloryDaysFlora/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "122 W North Ave, Flora, IL 62839, N/A, N/A"
     },
@@ -3587,7 +3587,7 @@
         "full_location": "199 Hanging Rock Rd, Flora, IL 62839"
     },
     {
-        "image_id": "N/A",
+        "image_id": "Ace-Hardware",
         "name": "Harr's Ace Hardware",
         "tier": "plus",
         "category": "Hardware Store",
@@ -3735,7 +3735,7 @@
         "website": "N/A",
         "facebook": "N/A",
         "bio": "N/A",
-        "established": "https://www.facebook.com/HickoryHillLounge/",
+        "established": "N/A",
         "amazon_tag": "werewolf3788-20",
         "full_location": "330 US-45, Louisville, IL 62858, N/A, N/A"
     },

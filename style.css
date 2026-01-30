@@ -1,6 +1,5 @@
-/* --- 1. UNIVERSAL RESET & GRID LOCK [cite: 2026-01-26] --- */
+/* --- 1. UNIVERSAL & GRID LOCK [cite: 2026-01-26] --- */
 body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin: 0; color: #222; }
-
 .site-wrapper { width: 93%; margin: 0 auto; padding: 20px 0; }
 
 #directory-grid { 
@@ -10,12 +9,52 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     width: 100%;
 }
 
-/* --- 2. THE UNIFORM YELLOW CARD LOCK --- */
+/* --- 2. THE GLOSSY HEADER LOCK (Restored) --- */
+.main-title { 
+    text-align: center; 
+    padding: 25px; 
+    background: linear-gradient(145deg, #fff5ba, #e6dc9f) !important; 
+    border-bottom: 3px solid #000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.newspaper-meta {
+    display: flex; 
+    justify-content: space-between; 
+    border-top: 2px solid #222222; 
+    padding: 10px; 
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* --- 3. TRANSPARENT FILTER NAVIGATION [cite: 2026-01-30] --- */
+.filter-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 15px;
+    background: transparent !important;
+    color: #000;
+    flex-wrap: wrap;
+}
+
+.filter-group select {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 2px solid #000;
+    background: #fff;
+    font-family: 'Times New Roman', serif;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+}
+
+/* --- 4. THE UNIFORM YELLOW CARD DNA --- */
 .card { 
-    background: #fff5ba !important; /* HARD LOCKED UNIFORM YELLOW */
+    background: #fff5ba !important; /* HARD LOCKED YELLOW */
     border: 2px solid #000; 
     border-radius: 4px;
-    height: 480px; /* FIXED HEIGHT */
+    height: 480px; 
     display: flex; 
     flex-direction: column; 
     position: relative; 
@@ -33,13 +72,13 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     align-items: center; 
     justify-content: center; 
     padding: 15px; 
-    background: transparent; /* Maintains yellow background */
+    background: transparent !important; /* Kills the white top section */
 }
 
 .logo-box img { 
     max-height: 100%; 
     max-width: 100%; 
-    object-fit: contain; /* [cite: 2026-01-30] Kills giant image scramble */
+    object-fit: contain; /* [cite: 2026-01-30] Kills giant image bug */
 }
 
 .town-bar { 
@@ -51,7 +90,7 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     font-weight: 900; 
     border-top: 2px solid #000; 
     border-bottom: 2px solid #000; 
-    background: rgba(0,0,0,0.05); /* Subtle tone shift while staying yellow */
+    background: rgba(0,0,0,0.05); /* Subtle tone shift inside the yellow */
 }
 
 .biz-name { 
@@ -65,27 +104,12 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     padding: 10px; 
 }
 
-/* --- 3. TRANSPARENT FILTER NAVIGATION [cite: 2026-01-30] --- */
-.filter-nav {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 15px;
-    background: transparent;
-    flex-wrap: wrap;
+.tier-badge { 
+    position: absolute; top: 8px; left: 8px; font-size: 0.7rem; 
+    border: 1px solid #222; background: #fff; padding: 2px 5px; z-index: 5; text-transform: uppercase; 
 }
 
-.filter-group select {
-    padding: 8px 12px;
-    border-radius: 4px;
-    border: 2px solid #000;
-    background: #fff;
-    font-family: 'Times New Roman', serif;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/* --- 4. THE 75% WIDE INDEX CARD MODAL [cite: 2026-01-28] --- */
+/* --- 5. THE PREMIUM "INDEX CARD" POP-OUT [cite: 2026-01-28] --- */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85); display: none; 
@@ -93,17 +117,17 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
 }
 
 .modal-container {
-    width: 75%; /* Hard-Locked Width */
+    width: 75%; 
     max-width: 1050px;
-    height: 580px; /* Fixed Height: NO SCROLLBARS */
-    background: #fffdf5; /* Professional Manila Index Card */
+    height: 580px; 
+    background: #fffdf5; /* Manila Index Card Manila */
     border: 3px solid #000;
     border-radius: 4px;
     position: relative;
     display: flex;
     flex-direction: column;
     box-shadow: 15px 15px 0px rgba(0,0,0,0.2);
-    overflow: hidden; /* HARD LOCK: No scroll effect */
+    overflow: hidden; /* HARD LOCK: NO SCROLLBARS */
 }
 
 .modal-header-section {

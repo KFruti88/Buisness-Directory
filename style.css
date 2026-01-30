@@ -1,41 +1,46 @@
-/* --- 1. UNIVERSAL & GRID LOCK [cite: 2026-01-26] --- */
-body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin: 0; color: #222; }
-.site-wrapper { width: 93%; margin: 0 auto; padding: 20px 0; }
-
-#directory-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
-    gap: 25px; 
+/* --- 1. THE HARD-LOCKED GLOSSY HEADER [cite: 2026-01-30] --- */
+.main-title { 
+    text-align: center; 
+    padding: 25px 0; 
+    margin: 0;
+    /* HARD LOCK: The exact glossy manila gradient you like */
+    background: linear-gradient(145deg, #fff5ba 0%, #e6dc9f 100%) !important; 
+    border-bottom: 3px solid #000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     width: 100%;
 }
 
-/* --- 2. THE GLOSSY HEADER LOCK (Restored) --- */
-.main-title { 
-    text-align: center; 
-    padding: 25px; 
-    background: linear-gradient(145deg, #fff5ba, #e6dc9f) !important; 
-    border-bottom: 3px solid #000;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+.main-title h1 {
+    margin: 0;
+    font-size: 3.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #000;
+    font-family: 'Times New Roman', serif;
 }
 
+/* The Meta Row (Volume/Date/Category) */
 .newspaper-meta {
     display: flex; 
     justify-content: space-between; 
-    border-top: 2px solid #222222; 
-    padding: 10px; 
-    font-weight: bold;
-    font-size: 0.9rem;
+    align-items: center;
+    border-top: 2px solid #222; 
+    margin-top: 15px;
+    padding: 10px 5%; 
+    font-weight: 900;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    background: rgba(0,0,0,0.03);
 }
 
-/* --- 3. TRANSPARENT FILTER NAVIGATION [cite: 2026-01-30] --- */
+/* --- 2. TRANSPARENT FILTER NAVIGATION [cite: 2026-01-30] --- */
 .filter-nav {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    padding: 10px 15px 20px 15px;
+    gap: 25px;
+    padding: 20px 0;
     background: transparent !important;
-    color: #000;
-    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
 .filter-group select {
@@ -49,7 +54,16 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
 }
 
-/* --- 4. THE UNIFORM YELLOW CARD LOCK --- */
+/* --- 3. THE UNIFORM YELLOW CARD & GRID LOCK [cite: 2026-01-30] --- */
+#directory-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
+    gap: 25px; 
+    width: 93%;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
 .card { 
     background: #fff5ba !important; /* HARD LOCKED UNIFORM YELLOW */
     border: 2px solid #000; 
@@ -72,13 +86,13 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     align-items: center; 
     justify-content: center; 
     padding: 15px; 
-    background: transparent !important; /* Kills white top section */
+    background: transparent !important; /* Forces yellow background through */
 }
 
 .logo-box img { 
     max-height: 100%; 
     max-width: 100%; 
-    object-fit: contain; /* [cite: 2026-01-30] Kills giant image scramble */
+    object-fit: contain; 
 }
 
 .town-bar { 
@@ -90,7 +104,7 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     font-weight: 900; 
     border-top: 2px solid #000; 
     border-bottom: 2px solid #000; 
-    background: rgba(0,0,0,0.05); /* Subtle tone shift inside the yellow */
+    background: rgba(0,0,0,0.05); /* framed but stays yellow */
 }
 
 .biz-name { 
@@ -104,12 +118,7 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
     padding: 10px; 
 }
 
-.tier-badge { 
-    position: absolute; top: 8px; left: 8px; font-size: 0.7rem; 
-    border: 1px solid #222; background: #fff; padding: 2px 5px; z-index: 5; text-transform: uppercase; 
-}
-
-/* --- 5. THE PREMIUM "INDEX CARD" POP-OUT [cite: 2026-01-28] --- */
+/* --- 4. THE 75% WIDE INDEX CARD MODAL [cite: 2026-01-28] --- */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85); display: none; 
@@ -119,41 +128,15 @@ body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin:
 .modal-container {
     width: 75%; 
     max-width: 1050px;
-    height: 580px; 
-    background: #fffdf5; /* Professional Manila Index Card */
+    height: 580px; /* Locked Height: No scroll effect */
+    background: #fffdf5; 
     border: 3px solid #000;
-    border-radius: 4px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
     box-shadow: 15px 15px 0px rgba(0,0,0,0.2);
-    overflow: hidden; /* HARD LOCK: No scrollbars */
+    overflow: hidden; /* HARD LOCK: NO SCROLLBARS */
 }
 
-.modal-header-section {
-    display: flex; align-items: center; padding: 15px 25px;
-    background: #e6dc9f; border-bottom: 2px solid #000;
-}
-
-.modal-logo-frame {
-    width: 85px; height: 85px; background: #fff; border: 1px solid #000; padding: 5px;
-}
-
-.modal-grid-75 {
-    display: grid; grid-template-columns: 1.2fr 1fr; gap: 25px;
-    padding: 20px 25px; flex-grow: 1;
-}
-
-.map-box-fixed { border: 1px solid #000; height: 220px; background: #eee; }
-
-.modal-story-fixed { 
-    padding: 15px 25px; background: #fdfae6; border-top: 1px solid #000; 
-    height: 110px; font-size: 0.95rem; line-height: 1.4; overflow: hidden;
-}
-
-/* --- MOBILE COMPATIBILITY [cite: 2026-01-26] --- */
+/* Mobile Stacking Rules [cite: 2026-01-26] */
 @media (max-width: 850px) {
     .modal-container { width: 95%; height: auto; max-height: 95vh; overflow-y: auto; }
-    .modal-grid-75 { grid-template-columns: 1fr; }
     .card { height: auto; padding-bottom: 15px; }
 }

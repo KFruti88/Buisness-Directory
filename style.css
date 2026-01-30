@@ -3,7 +3,7 @@
     text-align: center; 
     padding: 25px 0; 
     margin: 0;
-    /* HARD LOCK: The exact glossy manila gradient you like */
+    /* HARD LOCK: The exact glossy manila gradient */
     background: linear-gradient(145deg, #fff5ba 0%, #e6dc9f 100%) !important; 
     border-bottom: 3px solid #000;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
@@ -19,7 +19,6 @@
     font-family: 'Times New Roman', serif;
 }
 
-/* The Meta Row (Volume/Date/Category) */
 .newspaper-meta {
     display: flex; 
     justify-content: space-between; 
@@ -45,7 +44,6 @@
 
 .filter-group select {
     padding: 8px 12px;
-    border-radius: 4px;
     border: 2px solid #000;
     background: #fff;
     font-family: 'Times New Roman', serif;
@@ -54,7 +52,7 @@
     box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
 }
 
-/* --- 3. THE UNIFORM YELLOW CARD & GRID LOCK [cite: 2026-01-30] --- */
+/* --- 3. THE UNIFORM YELLOW CARD DNA [cite: 2026-01-30] --- */
 #directory-grid { 
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); 
@@ -65,7 +63,7 @@
 }
 
 .card { 
-    background: #fff5ba !important; /* HARD LOCKED UNIFORM YELLOW */
+    background: #fff5ba !important; /* HARD LOCKED YELLOW */
     border: 2px solid #000; 
     border-radius: 4px;
     height: 480px; 
@@ -80,20 +78,30 @@
 
 .card:hover { transform: translateY(-5px); }
 
+/* Badge Placements (5% from edges) */
+.tier-badge-top {
+    position: absolute; top: 5%; right: 5%;
+    font-size: 0.75rem; font-weight: 900; background: #fff;
+    border: 1.5px solid #000; padding: 2px 6px; z-index: 10;
+}
+
+.coupon-badge-top {
+    position: absolute; top: 5%; left: 5%;
+    font-size: 0.7rem; font-weight: bold; color: #fe4f00;
+    background: #fff; border: 1px dashed #fe4f00; padding: 2px 6px; z-index: 10;
+}
+
+/* --- 4. LOGO & MIDDLE BAR LOCKS --- */
 .logo-box { 
     height: 160px; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
     padding: 15px; 
-    background: transparent !important; /* Forces yellow background through */
+    background: transparent !important; /* Forces yellow through */
 }
 
-.logo-box img { 
-    max-height: 100%; 
-    max-width: 100%; 
-    object-fit: contain; 
-}
+.logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
 
 .town-bar { 
     height: 38px; 
@@ -104,7 +112,7 @@
     font-weight: 900; 
     border-top: 2px solid #000; 
     border-bottom: 2px solid #000; 
-    background: rgba(0,0,0,0.05); /* framed but stays yellow */
+    background: rgba(0,0,0,0.05); 
 }
 
 .biz-name { 
@@ -115,28 +123,57 @@
     text-align: center; 
     font-weight: bold; 
     font-size: 1.4rem; 
-    padding: 10px; 
+    padding: 10px;
+    margin-bottom: 80px; /* Safety buffer for bottom stack */
 }
 
-/* --- 4. THE 75% WIDE INDEX CARD MODAL [cite: 2026-01-28] --- */
-.modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85); display: none; 
-    justify-content: center; align-items: center; z-index: 1000;
+/* --- 5. CENTERED BOTTOM STACK LOCK [cite: 2026-01-30] --- */
+.bottom-stack {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    pointer-events: none;
 }
 
+.biz-phone {
+    font-size: 1.25rem; /* Large visibility */
+    font-weight: bold;
+    color: #000;
+}
+
+.premium-cta {
+    color: #fe4f00;
+    font-weight: 900;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.category-locked {
+    font-weight: bold;
+    color: #222;
+    font-size: 1.25rem; /* Large visibility */
+}
+
+/* --- 6. INDEX CARD MODAL [cite: 2026-01-28] --- */
 .modal-container {
     width: 75%; 
     max-width: 1050px;
-    height: 580px; /* Locked Height: No scroll effect */
+    height: 580px; 
     background: #fffdf5; 
     border: 3px solid #000;
     box-shadow: 15px 15px 0px rgba(0,0,0,0.2);
     overflow: hidden; /* HARD LOCK: NO SCROLLBARS */
 }
 
-/* Mobile Stacking Rules [cite: 2026-01-26] */
 @media (max-width: 850px) {
     .modal-container { width: 95%; height: auto; max-height: 95vh; overflow-y: auto; }
-    .card { height: auto; padding-bottom: 15px; }
+    .card { height: auto; padding-bottom: 20px; }
+    .biz-name { margin-bottom: 100px; }
 }

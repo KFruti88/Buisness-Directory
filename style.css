@@ -17,36 +17,48 @@ body {
     width: 100%;
 }
 .main-title h1 { margin: 0; font-size: 3.2rem; text-transform: uppercase; letter-spacing: 2px; color: #000; }
-.newspaper-meta { display: flex; justify-content: space-between; padding: 10px 5%; border-top: 2px solid #222; margin-top: 15px; font-weight: 900; color: #000; background: rgba(0,0,0,0.05); }
 
-/* --- 3. THE GLASS PANE (MODAL OVERLAY) --- */
-.modal-layer {
+/* FIX: Solid Black Font for readability on Yellow Glossy Header [cite: 2026-01-30] */
+.newspaper-meta { 
+    display: flex; justify-content: space-between; padding: 10px 5%; 
+    border-top: 2px solid #222; margin-top: 15px; 
+    font-weight: 900; color: #000 !important; 
+    background: rgba(0,0,0,0.05); 
+}
+
+.filter-group { color: #000 !important; font-weight: 900; text-transform: uppercase; }
+.filter-group select { padding: 10px 15px; border: 2px solid #000; background: #222; color: #fff5ba; cursor: pointer; }
+
+/* --- 3. THE SAFETY WALL (MODAL OVERLAY) --- */
+.modal-overlay-layer {
     display: none; 
-    position: fixed; /* FIXED: Prevents layout shifting */
-    z-index: 9999; 
+    position: fixed; /* FIXED: Removes modal from document flow to prevent layout trash */
+    z-index: 99999; /* Stays above everything */
     left: 0; top: 0; width: 100%; height: 100%;
     background-color: rgba(0,0,0,0.85);
     justify-content: center; align-items: center;
 }
 
 /* --- 4. THE INDEX CARD (75% WIDE) [cite: 2026-01-28] --- */
-.index-card-container {
-    background-color: #fffdf5; 
+.index-card-popout {
+    background-color: #fffdf5; /* Manila Index Card */
     width: 75%; max-width: 1000px; height: 550px;
     border: 3px solid #000;
     box-shadow: 15px 15px 0px rgba(0,0,0,0.5);
     position: relative;
-    overflow-y: auto; /* Internal scroll only */
+    overflow-y: auto; /* Internal scrolling only; keeps modal size stable */
     color: #000;
 }
 
-.close-card { position: absolute; top: 15px; right: 20px; font-size: 30px; cursor: pointer; font-weight: bold; z-index: 10000; color: #000; }
+.close-x { position: absolute; top: 10px; right: 20px; font-size: 35px; cursor: pointer; font-weight: bold; color: #000; z-index: 100001; }
 
 /* --- 5. THE UNIFORM YELLOW CARDS --- */
+#directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 25px; padding: 20px 0; }
+
 .card { 
     background: #fff5ba !important; border: 2px solid #000; border-radius: 4px; height: 480px; 
     display: flex; flex-direction: column; position: relative; overflow: hidden; 
-    box-shadow: 8px 8px 0px rgba(0,0,0,0.3); color: #000;
+    box-shadow: 8px 8px 0px rgba(0,0,0,0.3); color: #000; cursor: pointer;
 }
 .town-bar { height: 38px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; border-top: 2px solid #000; border-bottom: 2px solid #000; }
 .bottom-stack { position: absolute; bottom: 20px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }

@@ -1,77 +1,46 @@
-/* --- 1. GLOBAL SLATE THEME [cite: 2026-01-30] --- */
+/* --- 1. GLOBAL SLATE THEME --- */
 body { 
     background-color: #333333; /* Dark Gray Site Background */
     margin: 0; 
     font-family: 'Times New Roman', serif; 
-    color: #eeeeee;
 }
-
-.site-wrapper { width: 93%; margin: 0 auto; }
 
 /* --- 2. THE HARD-LOCKED YELLOW HEADER --- */
 .main-title { 
     text-align: center; padding: 25px 0; margin: 0;
-    /* HARD LOCK: Yellow Glossy Gradient */
     background: linear-gradient(145deg, #fff5ba 0%, #e6dc9f 100%) !important; 
     border-bottom: 4px solid #000;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-.main-title h1 {
-    margin: 0; font-size: 3.2rem; text-transform: uppercase;
-    letter-spacing: 2px; color: #000;
-}
-
-/* --- 3. CLEAN NEWSPAPER META (VOL=Month, NO=Day) --- */
 .newspaper-meta {
-    display: flex; justify-content: space-between; align-items: center;
-    border-top: 2px solid #222; margin-top: 15px; padding: 10px 5%; 
-    font-weight: 900; font-size: 1.15rem; text-transform: uppercase;
-    background: rgba(0,0,0,0.05); 
-    /* [cite: 2026-01-30] KILL WHITE FONT: Force Solid Black */
-    color: #000000 !important; 
-    letter-spacing: 1px;
+    display: flex; justify-content: space-between; padding: 10px 5%; 
+    border-top: 2px solid #222; margin-top: 15px;
+    font-weight: 900; text-transform: uppercase;
+    color: #000000 !important; /* Force Black Font for Meta */
 }
 
-/* --- 4. DYNAMIC FILTER NAV (Contrast Lock) --- */
+/* --- 3. DYNAMIC FILTER NAV (Contrast Fix Only) --- */
 .filter-nav {
     display: flex; justify-content: center; gap: 30px; padding: 20px 0;
-    background: transparent;
 }
 
 .filter-group {
     display: flex; align-items: center; gap: 10px;
-    /* [cite: 2026-01-30] HARD LOCK: Black labels for readability */
+    /* [cite: 2026-01-30] FIX: Solid black for labels so they don't wash out */
     color: #000000 !important; 
     font-weight: 900;
     font-size: 1.1rem;
     text-transform: uppercase;
 }
 
-.filter-group select {
-    padding: 10px 15px; border: 2px solid #000000; border-radius: 4px;
-    background: #222; color: #fff5ba; font-weight: bold; cursor: pointer;
-}
-
-/* --- 5. UNIFORM YELLOW CARD LOCK --- */
-#directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 25px; width: 93%; margin: 0 auto; padding: 20px 0; }
-
+/* --- 4. THE ORIGINAL CARD DNA (HARD LOCKED) --- */
 .card { 
-    background: #fff5ba !important; /* HARD LOCKED YELLOW */
+    background: #fff5ba !important; /* Original Uniform Yellow */
     border: 2px solid #000; border-radius: 4px; height: 480px; 
     display: flex; flex-direction: column; position: relative; overflow: hidden; 
     box-shadow: 8px 8px 0px rgba(0,0,0,0.3); color: #000;
 }
 
-.logo-box { height: 160px; display: flex; align-items: center; justify-content: center; background: transparent !important; padding: 15px; }
-
-/* Middle Town Bar & Bottom Stack Locks */
+/* Middle Bar & Bottom Stack Locks */
 .town-bar { height: 38px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; border-top: 2px solid #000; border-bottom: 2px solid #000; }
 .bottom-stack { position: absolute; bottom: 20px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.biz-phone, .category-locked { font-size: 1.25rem; font-weight: bold; }
-.premium-cta { color: #fe4f00; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; }
-
-/* --- 6. ASSET LOCKS --- */
-.coupon-container { position: absolute; top: 5%; left: 5%; z-index: 15; }
-.coupon-img-top { width: 45px; height: auto; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2)); }
-.tier-badge-top { position: absolute; top: 5%; right: 5%; font-size: 0.75rem; font-weight: 900; background: #fff; border: 1.5px solid #000; padding: 2px 6px; z-index: 10; text-transform: uppercase; }

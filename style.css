@@ -18,7 +18,7 @@ body {
 }
 .main-title h1 { margin: 0; font-size: 3.2rem; text-transform: uppercase; letter-spacing: 2px; color: #000; }
 
-/* FIX: Solid Black Font for readability on Yellow Glossy Header [cite: 2026-01-30] */
+/* Readability Fix: Force Solid Black on Yellow Header [cite: 2026-01-30] */
 .newspaper-meta { 
     display: flex; justify-content: space-between; padding: 10px 5%; 
     border-top: 2px solid #222; margin-top: 15px; 
@@ -32,27 +32,39 @@ body {
 /* --- 3. THE SAFETY WALL (MODAL OVERLAY) --- */
 .modal-overlay-layer {
     display: none; 
-    position: fixed; /* FIXED: Removes modal from document flow to prevent layout trash */
-    z-index: 99999; /* Stays above everything */
+    position: fixed; /* FIXED: Floats on top like a sticker on glass */
+    z-index: 99999; 
     left: 0; top: 0; width: 100%; height: 100%;
     background-color: rgba(0,0,0,0.85);
     justify-content: center; align-items: center;
 }
 
-/* --- 4. THE INDEX CARD (75% WIDE) [cite: 2026-01-28] --- */
+/* --- 4. THE HIGH-GLOSS YELLOW CARD [cite: 2026-01-30] --- */
 .index-card-popout {
-    background-color: #fffdf5; /* Manila Index Card */
-    width: 75%; max-width: 1000px; height: 550px;
-    border: 3px solid #000;
-    box-shadow: 15px 15px 0px rgba(0,0,0,0.5);
+    /* [cite: 2026-01-30] Glossy Yellow Gradient matching Header */
+    background: linear-gradient(145deg, #fff5ba 0%, #e6dc9f 100%) !important;
+    width: 75%; max-width: 1100px; height: 580px;
+    border: 4px solid #000;
+    box-shadow: 25px 25px 0px rgba(0,0,0,0.6);
     position: relative;
-    overflow-y: auto; /* Internal scrolling only; keeps modal size stable */
+    overflow-y: auto;
     color: #000;
 }
 
-.close-x { position: absolute; top: 10px; right: 20px; font-size: 35px; cursor: pointer; font-weight: bold; color: #000; z-index: 100001; }
+/* Glassy Highlight Effect Overlay */
+.index-card-popout::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 50%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+}
 
-/* --- 5. THE UNIFORM YELLOW CARDS --- */
+.close-x { position: absolute; top: 15px; right: 25px; font-size: 40px; cursor: pointer; font-weight: bold; color: #000; z-index: 100001; }
+
+.modal-inner-padding { padding: 40px; position: relative; z-index: 10; }
+
+/* --- 5. THE UNIFORM YELLOW CARDS (GRID) --- */
 #directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 25px; padding: 20px 0; }
 
 .card { 

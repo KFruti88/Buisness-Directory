@@ -38,26 +38,26 @@ body {
     justify-content: center; align-items: center;
 }
 
-/* --- 4. THE COMPACT HIGH-GLOSS CARD [cite: 2026-01-30] --- */
+/* --- 4. THE BALANCED HIGH-GLOSS CARD [cite: 2026-01-30] --- */
 .index-card-popout {
     background: linear-gradient(145deg, #fff5ba 0%, #e6dc9f 100%) !important;
     width: 75%; 
-    max-width: 1000px; 
+    max-width: 1100px; 
     
-    /* HALF-HEIGHT LOCK [cite: 2026-01-30] */
-    height: 50vh; 
-    min-height: 420px; /* Floor height to keep info visible */
+    /* [cite: 2026-01-30] THE "SLIGHTLY TALLER" LOCK */
+    height: 65vh; /* 65% of screen height */
+    min-height: 500px; /* Floor height for smaller screens */
     
     border: 4px solid #000;
-    box-shadow: 20px 20px 0px rgba(0,0,0,0.5);
+    box-shadow: 25px 25px 0px rgba(0,0,0,0.6);
     position: relative;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Zero-scroll mandate */
+    overflow: hidden; /* No scrollbars on card */
     color: #000;
 }
 
-/* Glassy Highlight Effect Overlay */
+/* Glassy highlight overlay */
 .index-card-popout::before {
     content: "";
     position: absolute;
@@ -68,7 +68,7 @@ body {
 }
 
 .modal-inner-padding { 
-    padding: 20px 30px; 
+    padding: 30px 40px; 
     position: relative; 
     z-index: 10; 
     display: flex; 
@@ -79,10 +79,10 @@ body {
 
 .close-x { position: absolute; top: 10px; right: 20px; font-size: 35px; cursor: pointer; font-weight: bold; color: #000; z-index: 100001; }
 
-/* Scale the map down to fit the smaller box */
+/* Map size for 65% height */
 .map-side-container {
-    height: 140px !important;
-    border: 2px solid #000;
+    height: 220px !important;
+    border: 3px solid #000;
 }
 
 /* --- 5. THE UNIFORM YELLOW CARDS (GRID) --- */
@@ -93,3 +93,5 @@ body {
     display: flex; flex-direction: column; position: relative; overflow: hidden; 
     box-shadow: 8px 8px 0px rgba(0,0,0,0.3); color: #000; cursor: pointer;
 }
+.town-bar { height: 38px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; border-top: 2px solid #000; border-bottom: 2px solid #000; }
+.bottom-stack { position: absolute; bottom: 20px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }

@@ -4,14 +4,13 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clay County Directory | Master v6.85</title>
+    <title>Clay County Directory | v6.91 Filter Master</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     
-    <link rel="stylesheet" href="style.css?v=6.85">
+    <link rel="stylesheet" href="style.css?v=6.91">
 </head>
 <body>
 
@@ -20,6 +19,21 @@
         <div class="newspaper-meta">
             <div id="header-info">VOL. 1 | LOADING...</div>
             <div style="text-transform: uppercase;">Business Directory Pages</div>
+        </div>
+        
+        <div class="filter-nav">
+            <div class="filter-group">
+                <label for="city-filter">📍 Select City:</label>
+                <select id="city-filter" onchange="applyFilters()">
+                    <option value="all">All Cities</option>
+                    </select>
+            </div>
+            <div class="filter-group">
+                <label for="cat-filter">📁 Select Category:</label>
+                <select id="cat-filter" onchange="applyFilters()">
+                    <option value="all">All Categories</option>
+                    </select>
+            </div>
         </div>
     </header>
 
@@ -36,12 +50,12 @@
     </div>
 
     <script>
-        const smartV = new Date().getTime(); // Unix timestamp for versioning
+        const smartV = new Date().getTime();
         
-        // 1. Load the Layout Engine (Fetched Data + Main Cards)
+        // 1. Load the Layout Engine (Handles Fetch, Card Build, and Filter Logic)
         document.write(`<script src="layout.js?v=${smartV}"><\/script>`);
         
-        // 2. Load the Modal Brain (Handles the Pop-out Details)
+        // 2. Load the Modal Engine (Handles Premium Deep-Dives)
         document.write(`<script src="modal.js?v=${smartV}"><\/script>`);
     </script>
 </body>

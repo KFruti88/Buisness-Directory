@@ -38,22 +38,24 @@ body {
     justify-content: center; align-items: center;
 }
 
-/* --- 4. THE HIGH-GLOSS DYNAMIC CARD [cite: 2026-01-30] --- */
+/* --- 4. THE HIGH-GLOSS VERTICAL MASTER [cite: 2026-01-30] --- */
 .index-card-popout {
     background: linear-gradient(145deg, #fff5ba 0%, #e6dc9f 100%) !important;
-    width: 90%; 
+    
+    /* WIDTH REMAINS LOCKED [cite: 2026-01-28] */
+    width: 75%; 
     max-width: 1100px; 
     
-    /* [cite: 2026-01-30] ZERO-SCROLL LOCK */
-    height: auto;
-    max-height: 90vh; /* Scaled to fit 90% of current screen height */
+    /* [cite: 2026-01-30] TALLER HEIGHT LOCK */
+    height: 96vh; /* Fills nearly the entire screen height */
+    margin: 2vh 0; /* Vertical centering */
     
     border: 4px solid #000;
-    box-shadow: 25px 25px 0px rgba(0,0,0,0.6);
+    box-shadow: 30px 30px 0px rgba(0,0,0,0.6);
     position: relative;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Physically prevents internal scrolling */
+    overflow: hidden; /* Zero-scroll mandate */
     color: #000;
 }
 
@@ -68,23 +70,22 @@ body {
 }
 
 .modal-inner-padding { 
-    padding: 30px; 
+    padding: 40px; 
     position: relative; 
     z-index: 10; 
     display: flex; 
     flex-direction: column; 
     height: 100%;
     box-sizing: border-box;
+    justify-content: space-between; /* Spreads content to fill vertical space */
 }
 
-.close-x { position: absolute; top: 10px; right: 20px; font-size: 35px; cursor: pointer; font-weight: bold; color: #000; z-index: 100001; }
+.close-x { position: absolute; top: 15px; right: 25px; font-size: 40px; cursor: pointer; font-weight: bold; color: #000; z-index: 100001; }
 
-/* Responsive Font & Map Scaling for Small Screens */
-@media (max-height: 700px) {
-    .modal-inner-padding { padding: 15px; }
-    .modal-inner-padding h2 { font-size: 1.8rem !important; }
-    .modal-inner-padding p { font-size: 0.9rem !important; }
-    .map-side-container { height: 160px !important; }
+/* Ensure the map takes advantage of the extra height */
+.map-side-container {
+    height: 350px !important; /* Larger interactive area */
+    border: 3px solid #000;
 }
 
 /* --- 5. THE UNIFORM YELLOW CARDS (GRID) --- */

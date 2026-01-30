@@ -1,7 +1,7 @@
 /**
- * PROJECT: Clay County Master Directory v8.7
- * PRIMARY SHEET: BusinessDirectory (A-P)
- * LOCKS: Town Middle | Category Bottom-Middle | Phone Plus/Premium Only
+ * PROJECT: Clay County Master Directory v8.8
+ * LOCKS: Town Middle | Centered Bottom Stack (Phone, CTA, Category)
+ * MAPPING: BusinessDirectory A-P Structure [cite: 2026-01-30]
  */
 
 const CONFIG = {
@@ -69,13 +69,13 @@ function renderCards(data) {
             
             <div class="biz-name">${biz.name}</div>
 
-            <div class="card-content">
+            <div class="bottom-stack">
                 ${(tierL === 'premium' || tierL === 'plus') && displayPhone ? `<div class="biz-phone">📞 ${displayPhone}</div>` : ''}
                 
                 ${tierL === 'premium' ? `<div class="premium-cta">⚡ CLICK FOR DETAILS</div>` : ''}
+                
+                <div class="category-locked">📁 ${biz.category}</div>
             </div>
-
-            <div class="category-bottom">📁 ${biz.category}</div>
         </div>`;
     }).join('');
 }

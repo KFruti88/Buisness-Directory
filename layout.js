@@ -1,6 +1,7 @@
 /**
- * PROJECT: Clay County Directory Engine v6.82
+ * PROJECT: Clay County Directory Engine v6.83
  * LOCK: A-P Spreadsheet Mapping [cite: 2026-01-29]
+ * UPDATE: Added "Click for Details" to Premium Tier [cite: 2026-01-28]
  */
 const CONFIG = {
     CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv",
@@ -19,7 +20,6 @@ const CONFIG = {
         "Clay County": { bg: "#333333", text: "#ffffff" }
     },
 
-    // [cite: 2026-01-28] Emoji-Mapping Engine
     CAT_EMOJIS: {
         "Restaurant": "🍴", "Food": "🍔", "Bar": "🍺", "Grill": "🥩",
         "Beauty": "💈", "Salon": "💇", "Retail": "🛍️", "Shop": "🏷️",
@@ -39,7 +39,6 @@ function fetchData() {
     Papa.parse(`${CONFIG.CSV_URL}&v=${v}`, {
         download: true, header: false, skipEmptyLines: true,
         complete: function(results) {
-            // Mapping directly to A-P Column Layout
             const data = results.data.slice(1).map(row => ({
                 ImageID: row[CONFIG.MAP.IMG] || "",
                 Name: row[CONFIG.MAP.NAME] || "",
@@ -58,7 +57,6 @@ function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
 
-    // Premium/Plus Sorting Logic [cite: 2026-01-28]
     const tierWeight = { "premium": 1, "gold": 1, "plus": 2, "basic": 3 };
     const sortedData = data.sort((a, b) => 
         (tierWeight[a.Tier.toLowerCase()] || 4) - (tierWeight[b.Tier.toLowerCase()] || 4) || a.Name.localeCompare(b.Name)
@@ -69,13 +67,12 @@ function renderCards(data) {
         const tierL = biz.Tier.toLowerCase();
         const emoji = getCategoryEmoji(biz.Category);
         
-        // Format phone to (XXX) XXX-XXXX [cite: 2026-01-26]
         const cleanPhone = biz.Phone.replace(/\D/g, '').slice(-10);
         const displayPhone = cleanPhone.length === 10 ? 
             `(${cleanPhone.slice(0,3)}) ${cleanPhone.slice(3,6)}-${cleanPhone.slice(6)}` : "";
 
         return `
-        <div class="card ${tierL}">
+        <div class="card ${tierL}" onclick="openFullModal('${biz.Name.replace(/'/g, "\\'")}')">
             <div class="tier-badge">${biz.Tier}</div>
             <div class="logo-box">
                 <img src="${CONFIG.IMAGE_REPO}${biz.ImageID}.jpeg" onerror="this.src='https://via.placeholder.com/150'">
@@ -87,6 +84,8 @@ function renderCards(data) {
             <div class="card-content">
                 ${(tierL === 'premium' || tierL === 'plus') && displayPhone ? `<div class="biz-phone">📞 ${displayPhone}</div>` : ''}
                 <div class="biz-cat">${emoji} ${biz.Category}</div>
+                
+                ${tierL === 'premium' ? `<div style="margin-top:10px; font-weight:900; color:#fe4f00; font-size:0.8rem; text-transform:uppercase;">⚡ Click for Details</div>` : ''}
             </div>
         </div>`;
     }).join('');

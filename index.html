@@ -6,135 +6,29 @@
     <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clay County Directory | v6.8 Final Lock</title>
+    <title>Clay County Directory</title>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <style>
-        /* --- UNIVERSAL & GLOSSY STYLES [cite: 2026-01-26, 2026-01-28] --- */
-        body { background-color: #e5e5e5; font-family: 'Times New Roman', serif; margin: 0; }
-        .site-wrapper { width: 93%; margin: 0 auto; padding: 20px 0; }
-        .main-title { 
-            text-align: center; padding: 25px; 
-            background: linear-gradient(145deg, #fff5ba, #e6dc9f) !important; 
-            border-bottom: 3px solid #000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        #directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 25px; }
-        
-        .card { 
-            background: linear-gradient(135deg, #fff5ba 0%, #fdf0a0 100%) !important; 
-            border: 2px solid #000; border-radius: 8px;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.1), inset 0 0 10px rgba(255,255,255,0.4);
-            height: 480px; display: flex; flex-direction: column; position: relative; overflow: hidden; 
-            transition: transform 0.3s ease; cursor: pointer;
-        }
-        .card:hover { transform: translateY(-5px); box-shadow: 8px 8px 20px rgba(0,0,0,0.2); }
-        
-        /* --- CONTENT BOXES [cite: 2026-01-28] --- */
-        .logo-box { height: 160px; display: flex; align-items: center; justify-content: center; padding: 10px; }
-        .logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
-        .town-bar { height: 38px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; border-top: 2px solid #000; border-bottom: 2px solid #000; }
-        .biz-name { height: 80px; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: bold; font-size: 1.4rem; padding: 5px; }
-        .card-content { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-bottom: 15px; }
-        .biz-cat { font-weight: bold; color: #333; font-size: 1.1rem; }
-        .biz-phone { font-weight: bold; color: #000; margin-bottom: 5px; }
-        .tier-badge { position: absolute; top: 8px; left: 8px; font-size: 0.7rem; border: 1px solid #222; background: #fff; padding: 2px 5px; z-index: 5; text-transform: uppercase; }
-    </style>
+    
+    <link rel="stylesheet" href="style.css?v=6.81">
 </head>
 <body>
+
     <header class="main-title">
         <h1>Clay County Directory</h1>
-        <div style="display:flex; justify-content:space-between; border-top:2px solid #222222; padding:10px; font-weight:bold;">
+        <div class="newspaper-meta">
             <div id="header-info">VOL. 1 | LOADING...</div>
-            <div style="text-transform: uppercase;">Business Directory Pages</div>
+            <div>BUSINESS DIRECTORY PAGES</div>
         </div>
     </header>
-    <div class="site-wrapper"><div id="directory-grid"></div></div>
+
+    <div class="site-wrapper">
+        <div id="directory-grid"></div>
+    </div>
 
     <script>
-        const CONFIG = {
-            CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv",
-            IMAGE_REPO: "https://raw.githubusercontent.com/KFruti88/images/main/",
-            // [cite: 2026-01-29] HARD-LOCKED INDICES
-            MAP: { IMG: 0, NAME: 1, TOWN: 3, PHONE: 5, CAT: 8, TIER: 11 },
-            TOWN_COLORS: {
-                "Flora": { bg: "#0c0b82", text: "#fe4f00" },
-                "Louisville": { bg: "#010101", text: "#eb1c24" },
-                "North Clay": { bg: "#010101", text: "#eb1c24" },
-                "Clay City": { bg: "#8a8a88", text: "#0c30f0" },
-                "Xenia": { bg: "#000000", text: "#fdb813" },
-                "Sailor Springs": { bg: "#000000", text: "#a020f0" },
-                "Clay County": { bg: "#333333", text: "#ffffff" }
-            },
-            // [cite: 2026-01-28] Emoji-Mapping Engine
-            CAT_EMOJIS: {
-                "Restaurant": "🍴", "Food": "🍔", "Bar": "🍺", "Grill": "🥩",
-                "Beauty": "💈", "Salon": "💇", "Retail": "🛍️", "Shop": "🏷️",
-                "Automotive": "🚗", "Repair": "🔧", "Construction": "🏗️", 
-                "Manufacturing": "🏭", "Health": "🏥", "Church": "⛪"
-            }
-        };
-
-        function getCategoryEmoji(catText) {
-            if (!catText) return "📁";
-            const found = Object.keys(CONFIG.CAT_EMOJIS).find(key => catText.includes(key));
-            return CONFIG.CAT_EMOJIS[found] || "📁";
-        }
-
-        function fetchData() {
-            const v = new Date().getTime(); 
-            Papa.parse(`${CONFIG.CSV_URL}&v=${v}`, {
-                download: true, header: false, skipEmptyLines: true,
-                complete: function(results) {
-                    const data = results.data.slice(1).map(row => ({
-                        ImageID: row[CONFIG.MAP.IMG] || "",
-                        Name: row[CONFIG.MAP.NAME] || "",
-                        Town: row[CONFIG.MAP.TOWN] || "Clay County",
-                        Phone: row[CONFIG.MAP.PHONE] || "",
-                        Category: row[CONFIG.MAP.CAT] || "",
-                        Tier: row[CONFIG.MAP.TIER] || "Basic"
-                    })).filter(b => b.Name.trim() !== "" && b.Name !== "Business Name");
-                    renderCards(data);
-                }
-            });
-        }
-
-        function renderCards(data) {
-            const grid = document.getElementById('directory-grid');
-            const tierWeight = { "premium": 1, "gold": 1, "plus": 2, "basic": 3 };
-            const sortedData = data.sort((a, b) => (tierWeight[a.Tier.toLowerCase()] || 4) - (tierWeight[b.Tier.toLowerCase()] || 4) || a.Name.localeCompare(b.Name));
-
-            grid.innerHTML = sortedData.map(biz => {
-                const style = CONFIG.TOWN_COLORS[biz.Town.trim()] || CONFIG.TOWN_COLORS["Clay County"];
-                const tierL = biz.Tier.toLowerCase();
-                const emoji = getCategoryEmoji(biz.Category);
-                
-                const cleanPhone = biz.Phone.replace(/\D/g, '').slice(-10);
-                const displayPhone = cleanPhone.length === 10 ? `(${cleanPhone.slice(0,3)}) ${cleanPhone.slice(3,6)}-${cleanPhone.slice(6)}` : "";
-
-                return `
-                <div class="card ${tierL}">
-                    <div class="tier-badge">${biz.Tier}</div>
-                    <div class="logo-box">
-                        <img src="${CONFIG.IMAGE_REPO}${biz.ImageID}.jpeg" onerror="this.src='https://via.placeholder.com/150'">
-                    </div>
-                    <div class="town-bar" style="background-color: ${style.bg}; color: ${style.text};">
-                        ${biz.Town}
-                    </div>
-                    <div class="biz-name">${biz.Name}</div>
-                    <div class="card-content">
-                        ${(tierL === 'premium' || tierL === 'plus') && displayPhone ? `<div class="biz-phone">📞 ${displayPhone}</div>` : ''}
-                        <div class="biz-cat">${emoji} ${biz.Category}</div>
-                    </div>
-                </div>`;
-            }).join('');
-            updateHeader();
-        }
-
-        function updateHeader() {
-            const now = new Date();
-            document.getElementById('header-info').innerText = `VOL. 1 — NO. ${now.getMonth() + 1} | ${now.toLocaleDateString()}`;
-        }
-        document.addEventListener("DOMContentLoaded", fetchData);
+        const smartV = new Date().getTime();
+        document.write(`<script src="layout.js?v=${smartV}"><\/script>`);
     </script>
 </body>
 </html>

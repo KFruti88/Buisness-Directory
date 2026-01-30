@@ -2,25 +2,42 @@
 **Version:** 2.4 (Color Swaps & Full Layout Logic)
 **Status:** Use these rules for all HTML/CSS/JS generation.
 
-## 📍 1. Column Index Mapping (Zero-Based)
-| Index | Data Field | Implementation Logic |
-| :--- | :--- | :--- |
-| **0** | Image ID | Primary Logo / Business Image. |
-| **1** | Name | Business Title. |
-| **3** | Tier | Priority Level (Index 2 is SKIPPED). |
-| **4** | Category | Business category/tag. |
-| **5** | Phone | 10-digit clickable format (No +1). |
-| **6** | Addressed | **Street Address only.** |
-| **7** | **Town** | **COLOR LOCK TRIGGER** (Flora, Louisville, Clay City, etc.). |
-| **8** | State Zip | **State and Zip only.** |
-| **9** | Hours | Operating schedule. |
-| **10** | Website | Main URL button. |
-| **11** | Facebook | Social media button. |
-| **12** | Bio | Full business description text. |
-| **13** | Established | Display as "Since [Year]". |
-| **14** | Coupon Text | Special deal description. |
-| **15** | Coupon Link | URL or Image link for the deal. |
-| **16** | GitHub Preview | Fallback/Secondary image source. |
+{
+  "sheetLayout": {
+    "MasterData": {
+      "Column_A": { "index": 0, "label": "Empty Space", "content": null },
+      "Column_B": { "index": 1, "label": "Business Name", "key": "name" },
+      "Column_C": { "index": 2, "label": "Address", "key": "address" },
+      "Column_D": { "index": 3, "label": "Town", "key": "town" },
+      "Column_E": { "index": 4, "label": "State Zip", "key": "zip" },
+      "Column_F": { "index": 5, "label": "Phone", "key": "phone", "format": "10-digits" },
+      "Column_G": { "index": 6, "label": "Website", "key": "website" },
+      "Column_H": { "index": 7, "label": "Facebook", "key": "facebook" },
+      "Column_I": { "index": 8, "label": "Category", "key": "category" },
+      "Column_J": { "index": 9, "label": "Bio", "key": "bio" },
+      "Column_K": { "index": 10, "label": "Hours", "key": "hours" },
+      "Column_L": { "index": 11, "label": "Established", "key": "established" }
+    },
+    "BusinessDirectory": {
+      "Column_A": { "index": 0, "label": "Image ID", "key": "id" },
+      "Column_B": { "index": 1, "label": "Name", "key": "name" },
+      "Column_C": { "index": 2, "label": "Address", "key": "address" },
+      "Column_D": { "index": 3, "label": "Town", "key": "town" },
+      "Column_E": { "index": 4, "label": "State Zip", "key": "zip" },
+      "Column_F": { "index": 5, "label": "Phone", "key": "phone" },
+      "Column_G": { "index": 6, "label": "Website", "key": "website" },
+      "Column_H": { "index": 7, "label": "Facebook", "key": "facebook" },
+      "Column_I": { "index": 8, "label": "Category", "key": "category" },
+      "Column_J": { "index": 9, "label": "Bio", "key": "bio" },
+      "Column_K": { "index": 10, "label": "Hours", "key": "hours" },
+      "Column_L": { "index": 11, "label": "Tier", "key": "tier" },
+      "Column_M": { "index": 12, "label": "Established", "key": "established" },
+      "Column_N": { "index": 13, "label": "Coupon Text", "key": "couponText" },
+      "Column_O": { "index": 14, "label": "Coupon Link/Image", "key": "couponMedia" },
+      "Column_P": { "index": 15, "label": "GitHub Preview", "key": "preview" }
+    }
+  }
+}
 
 ## 🎨 2. Town Color Lock Branding
 - **Flora:** BG: `#0c0b82` | Text: `#fe4f00` (Deep Blue / Orange)

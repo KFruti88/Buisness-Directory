@@ -1,7 +1,7 @@
 /**
- * PROJECT: Clay County Directory Engine v6.83
+ * PROJECT: Clay County Directory Engine v6.95
  * LOCK: A-P Spreadsheet Mapping [cite: 2026-01-29]
- * UPDATE: Added "Click for Details" to Premium Tier [cite: 2026-01-28]
+ * FEATURES: Smart Dropdowns, Emoji Mapping, Premium CTA [cite: 2026-01-28]
  */
 const CONFIG = {
     CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv",
@@ -28,18 +28,26 @@ const CONFIG = {
     }
 };
 
+let masterData = [];
+
+/**
+ * 🛠️ EMOJI LOGIC [cite: 2026-01-28]
+ */
 function getCategoryEmoji(catText) {
     if (!catText) return "📁";
     const found = Object.keys(CONFIG.CAT_EMOJIS).find(key => catText.includes(key));
     return CONFIG.CAT_EMOJIS[found] || "📁";
 }
 
+/**
+ * 🛠️ DATA FETCHING & FILTER POPULATION [cite: 2026-01-26]
+ */
 function fetchData() {
-    const v = new Date().getTime(); // Cache busting [cite: 2026-01-26]
+    const v = new Date().getTime(); // Cache busting
     Papa.parse(`${CONFIG.CSV_URL}&v=${v}`, {
         download: true, header: false, skipEmptyLines: true,
         complete: function(results) {
-            const data = results.data.slice(1).map(row => ({
+            masterData = results.data.slice(1).map(row => ({
                 ImageID: row[CONFIG.MAP.IMG] || "",
                 Name: row[CONFIG.MAP.NAME] || "",
                 Town: row[CONFIG.MAP.TOWN] || "Clay County",
@@ -48,11 +56,52 @@ function fetchData() {
                 Tier: row[CONFIG.MAP.TIER] || "Basic"
             })).filter(b => b.Name && b.Name.trim() !== "" && b.Name !== "Business Name");
             
-            renderCards(data);
+            populateFilters(masterData);
+            renderCards(masterData);
         }
     });
 }
 
+function populateFilters(data) {
+    const citySelect = document.getElementById('city-filter');
+    const catSelect = document.getElementById('cat-filter');
+    if (!citySelect || !catSelect) return;
+
+    // Get Unique values
+    const cities = [...new Set(data.map(b => b.Town))].sort();
+    const cats = [...new Set(data.map(b => b.Category))].sort();
+
+    // Reset dropdowns to keep the "All" options [cite: 2026-01-28]
+    citySelect.innerHTML = '<option value="all">All Cities</option>';
+    catSelect.innerHTML = '<option value="all">All Categories</option>';
+
+    cities.forEach(city => {
+        citySelect.innerHTML += `<option value="${city}">${city}</option>`;
+    });
+    cats.forEach(cat => {
+        catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
+    });
+}
+
+/**
+ * 🛠️ FILTER APPLICATION [cite: 2026-01-28]
+ */
+function applyFilters() {
+    const cityVal = document.getElementById('city-filter').value;
+    const catVal = document.getElementById('cat-filter').value;
+
+    const filtered = masterData.filter(biz => {
+        const cityMatch = (cityVal === 'all' || biz.Town === cityVal);
+        const catMatch = (catVal === 'all' || biz.Category === catVal);
+        return cityMatch && catMatch;
+    });
+
+    renderCards(filtered);
+}
+
+/**
+ * 🛠️ CARD RENDERING [cite: 2026-01-28]
+ */
 function renderCards(data) {
     const grid = document.getElementById('directory-grid');
     if (!grid) return;
@@ -85,7 +134,7 @@ function renderCards(data) {
                 ${(tierL === 'premium' || tierL === 'plus') && displayPhone ? `<div class="biz-phone">📞 ${displayPhone}</div>` : ''}
                 <div class="biz-cat">${emoji} ${biz.Category}</div>
                 
-                ${tierL === 'premium' ? `<div style="margin-top:10px; font-weight:900; color:#fe4f00; font-size:0.8rem; text-transform:uppercase;">⚡ Click for Details</div>` : ''}
+                ${tierL === 'premium' ? `<div style="margin-top:10px; font-weight:900; color:#fe4f00; font-size:0.75rem; text-transform:uppercase;">⚡ CLICK FOR DETAILS</div>` : ''}
             </div>
         </div>`;
     }).join('');

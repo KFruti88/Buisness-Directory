@@ -1,6 +1,6 @@
 /* --- 1. GLOBAL SLATE THEME [cite: 2026-01-30] --- */
 body { 
-    background-color: #333333; /* Dark Gray Site Background */
+    background-color: #333333; 
     margin: 0; 
     font-family: 'Times New Roman', serif; 
     color: #eeeeee;
@@ -11,51 +11,42 @@ body {
 /* --- 2. THE HARD-LOCKED YELLOW HEADER --- */
 .main-title { 
     text-align: center; padding: 25px 0; margin: 0;
-    /* HARD LOCK: Yellow Glossy Gradient */
     background: linear-gradient(145deg, #fff5ba 0%, #e6dc9f 100%) !important; 
     border-bottom: 4px solid #000;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     width: 100%;
 }
+.main-title h1 { margin: 0; font-size: 3.2rem; text-transform: uppercase; letter-spacing: 2px; color: #000; }
+.newspaper-meta { display: flex; justify-content: space-between; padding: 10px 5%; border-top: 2px solid #222; margin-top: 15px; font-weight: 900; color: #000; background: rgba(0,0,0,0.05); }
 
-.main-title h1 {
-    margin: 0; font-size: 3.2rem; text-transform: uppercase;
-    letter-spacing: 2px; color: #000;
+/* --- 3. THE GLASS PANE (MODAL OVERLAY) --- */
+.modal-layer {
+    display: none; 
+    position: fixed; /* FIXED: Prevents layout shifting */
+    z-index: 9999; 
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.85);
+    justify-content: center; align-items: center;
 }
 
-.newspaper-meta {
-    display: flex; justify-content: space-between; align-items: center;
-    border-top: 2px solid #222; margin-top: 15px; padding: 10px 5%; 
-    font-weight: 900; font-size: 0.95rem; text-transform: uppercase;
-    background: rgba(0,0,0,0.05); color: #000;
+/* --- 4. THE INDEX CARD (75% WIDE) [cite: 2026-01-28] --- */
+.index-card-container {
+    background-color: #fffdf5; 
+    width: 75%; max-width: 1000px; height: 550px;
+    border: 3px solid #000;
+    box-shadow: 15px 15px 0px rgba(0,0,0,0.5);
+    position: relative;
+    overflow-y: auto; /* Internal scroll only */
+    color: #000;
 }
 
-/* --- 3. DYNAMIC FILTER NAV --- */
-.filter-nav {
-    display: flex; justify-content: center; gap: 25px; padding: 30px 0;
-}
+.close-card { position: absolute; top: 15px; right: 20px; font-size: 30px; cursor: pointer; font-weight: bold; z-index: 10000; color: #000; }
 
-.filter-group select {
-    padding: 10px 15px; border: 2px solid #fff5ba; border-radius: 4px;
-    background: #222; color: #fff5ba; font-weight: bold; cursor: pointer;
-    font-family: 'Times New Roman', serif;
-}
-
-/* --- 4. UNIFORM YELLOW CARD LOCK --- */
+/* --- 5. THE UNIFORM YELLOW CARDS --- */
 .card { 
-    background: #fff5ba !important; /* HARD LOCKED YELLOW */
-    border: 2px solid #000; border-radius: 4px; height: 480px; 
+    background: #fff5ba !important; border: 2px solid #000; border-radius: 4px; height: 480px; 
     display: flex; flex-direction: column; position: relative; overflow: hidden; 
     box-shadow: 8px 8px 0px rgba(0,0,0,0.3); color: #000;
 }
-
-/* Middle Town Bar Branded via JS */
-.town-bar { 
-    height: 38px; display: flex; align-items: center; justify-content: center; 
-    text-transform: uppercase; font-weight: 900; border-top: 2px solid #000; border-bottom: 2px solid #000;
-}
-
-.bottom-stack {
-    position: absolute; bottom: 20px; left: 0; right: 0;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-}
+.town-bar { height: 38px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; font-weight: 900; border-top: 2px solid #000; border-bottom: 2px solid #000; }
+.bottom-stack { position: absolute; bottom: 20px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }

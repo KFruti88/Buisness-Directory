@@ -15,12 +15,16 @@ function openFullModal(bizName) {
     // Safety check for map encoding [cite: 2026-01-29]
     const mapAddr = encodeURIComponent(`${biz.address}, ${biz.town}, IL`);
 
+    // Handle mixed extensions (png, jpg, jpeg)
+    const imgPath = biz.id.includes('.') ? biz.id : `${biz.id}.jpeg`;
+    const couponPath = (biz.coupon && biz.coupon.includes('.')) ? biz.coupon : `${biz.coupon}.png`;
+
     // PREMIUM LAYOUT: Full Contact Details
     if (tierL === 'premium') {
         body.innerHTML = `
             <div class="index-card-header">
                 <div class="logo-holder">
-                    <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" onerror="this.src='https://via.placeholder.com/100'">
+                    <img src="${CONFIG.IMAGE_REPO}${imgPath}" onerror="this.src='https://via.placeholder.com/100'">
                 </div>
                 <div class="title-holder">
                     <h2 style="margin:0; font-size:1.8rem;">${biz.name}</h2>
@@ -53,7 +57,7 @@ function openFullModal(bizName) {
             ${biz.coupon && biz.coupon !== "N/A" ? `
             <div class="coupon-section">
                 <h3 class="label" style="color:#fe4f00;">Community Coupon</h3>
-                <img src="${CONFIG.IMAGE_REPO}${biz.coupon}.png" onerror="this.style.display='none'">
+                <img src="${CONFIG.IMAGE_REPO}${couponPath}" onerror="this.style.display='none'">
             </div>` : ''}
         `;
     } else if (tierL === 'plus') {
@@ -63,7 +67,7 @@ function openFullModal(bizName) {
                 <h2>${biz.name}</h2>
                 <p style="font-size: 1.5rem; font-weight: bold; margin: 15px 0;">📞 ${biz.phone}</p>
                 <div style="border:3px dashed #000; padding:20px; background:#fff;">
-                    <img src="${CONFIG.IMAGE_REPO}${biz.coupon}.png" style="max-width:100%;" onerror="this.src='https://via.placeholder.com/200?text=Visit+Us!'">
+                    <img src="${CONFIG.IMAGE_REPO}${couponPath}" style="max-width:100%;" onerror="this.src='https://via.placeholder.com/200?text=Visit+Us!'">
                 </div>
                 <button onclick="closeModal()" style="margin-top:20px; cursor:pointer;">Close</button>
             </div>
@@ -74,7 +78,7 @@ function openFullModal(bizName) {
             <div style="text-align:center; padding:30px;">
                 <h2>${biz.name}</h2>
                 <div style="border:3px dashed #000; padding:20px; background:#fff;">
-                    <img src="${CONFIG.IMAGE_REPO}${biz.coupon}.png" style="max-width:100%;" onerror="this.src='https://via.placeholder.com/200?text=Visit+Us!'">
+                    <img src="${CONFIG.IMAGE_REPO}${couponPath}" style="max-width:100%;" onerror="this.src='https://via.placeholder.com/200?text=Visit+Us!'">
                 </div>
                 <button onclick="closeModal()" style="margin-top:20px; cursor:pointer;">Close</button>
             </div>

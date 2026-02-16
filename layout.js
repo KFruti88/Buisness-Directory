@@ -89,6 +89,8 @@ function renderCards(data) {
             ? `<img src="https://github.com/KFruti88/images/blob/main/Coupon.png?raw=true" class="coupon-img-top" alt="Coupon Available">`
             : "";
 
+        const imgPath = biz.id.includes('.') ? biz.id : `${biz.id}.jpeg`;
+
         return `
         <div class="business-card ${tierL}" onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')">
             <!-- 1. TOP RIGHT BADGE (Basic/Plus/Premium) -->
@@ -99,7 +101,7 @@ function renderCards(data) {
             
             <!-- 3. MAIN IMAGE AREA -->
             <div class="card-image-container">
-                <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" class="business-image" alt="${biz.name} Logo" onerror="this.src='https://via.placeholder.com/150'">
+                <img src="${CONFIG.IMAGE_REPO}${imgPath}" class="business-image" alt="${biz.name} Logo" onerror="this.src='https://via.placeholder.com/150'">
             </div>
 
             <!-- 4. BLACK TOWN BAR -->
@@ -115,7 +117,8 @@ function renderCards(data) {
                 <span class="category-tag">📁 ${biz.category}</span>
                 ${(tierL === 'premium' || tierL === 'plus') && displayPhone 
                     ? `<span class="details-link">📞 ${displayPhone}</span>` 
-                    : (tierL === 'premium' ? `<span class="details-link">See Details</span>` : '')}
+                    : ''}
+                ${tierL === 'premium' ? `<span class="details-link" style="color: #fe4f00; font-weight: 900; text-transform: uppercase; margin-top: 5px;">⚡ View Details</span>` : ''}
             </div>
         </div>`;
     }).join('');

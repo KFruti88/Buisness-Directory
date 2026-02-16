@@ -17,6 +17,8 @@ function openFullModal(bizName) {
 
     // PREMIUM & PLUS LAYOUT
     if (tierL === 'premium' || tierL === 'plus') {
+    // PREMIUM LAYOUT: Full Contact Details
+    if (tierL === 'premium') {
         body.innerHTML = `
             <div class="index-card-header">
                 <div class="logo-holder">
@@ -55,6 +57,18 @@ function openFullModal(bizName) {
                 <h3 class="label" style="color:#fe4f00;">Community Coupon</h3>
                 <img src="${CONFIG.IMAGE_REPO}${biz.coupon}.png" onerror="this.style.display='none'">
             </div>` : ''}
+        `;
+    } else if (tierL === 'plus') {
+        // PLUS TIER: Phone + Coupon
+        body.innerHTML = `
+            <div style="text-align:center; padding:30px;">
+                <h2>${biz.name}</h2>
+                <p style="font-size: 1.5rem; font-weight: bold; margin: 15px 0;">📞 ${biz.phone}</p>
+                <div style="border:3px dashed #000; padding:20px; background:#fff;">
+                    <img src="${CONFIG.IMAGE_REPO}${biz.coupon}.png" style="max-width:100%;" onerror="this.src='https://via.placeholder.com/200?text=Visit+Us!'">
+                </div>
+                <button onclick="closeModal()" style="margin-top:20px; cursor:pointer;">Close</button>
+            </div>
         `;
     } else {
         // BASIC TIER: Simple Coupon Pop

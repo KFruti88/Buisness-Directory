@@ -42,11 +42,19 @@ function fetchData() {
             window.allData = results.data.slice(1).map(row => ({
                 id: row[CONFIG.MAP.IMG] || "",
                 name: row[CONFIG.MAP.NAME] || "",
+                address: row[CONFIG.MAP.ADDR] || "N/A",
                 town: row[CONFIG.MAP.TOWN] || "Clay County", 
-                tier: row[CONFIG.MAP.TIER] || "Basic",
+                zip: row[CONFIG.MAP.ZIP] || "",
                 phone: row[CONFIG.MAP.PHONE] || "",
+                website: row[CONFIG.MAP.WEB] || "N/A",
+                facebook: row[CONFIG.MAP.FB] || "N/A",
                 category: row[CONFIG.MAP.CAT] || "",
-                couponTxt: row[CONFIG.MAP.CPN_TXT] || ""
+                bio: row[CONFIG.MAP.BIO] || "",
+                hours: row[CONFIG.MAP.HOURS] || "",
+                tier: row[CONFIG.MAP.TIER] || "Basic",
+                established: row[CONFIG.MAP.EST] || "",
+                couponTxt: row[CONFIG.MAP.CPN_TXT] || "",
+                coupon: row[CONFIG.MAP.CPN_IMG] || ""
             })).filter(b => b.name && b.name.trim() !== "");
             
             updateHeader();
@@ -94,6 +102,12 @@ function renderCards(data) {
             </div>
         </div>`;
     }).join('');
+}
+
+function filterData() {
+    const town = document.getElementById('town-filter').value;
+    const filtered = town === 'all' ? window.allData : window.allData.filter(b => b.town === town);
+    renderCards(filtered);
 }
 
 document.addEventListener("DOMContentLoaded", fetchData);

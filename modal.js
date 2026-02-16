@@ -8,8 +8,8 @@ function openFullModal(bizName) {
     const biz = window.allData.find(b => b.name === bizName);
     if (!biz) return;
 
-    const modal = document.getElementById('premium-modal');
-    const body = document.getElementById('modal-body');
+    const modal = document.getElementById('modal-overlay');
+    const body = document.getElementById('modal-content');
     const tierL = (biz.tier || 'basic').toLowerCase();
     
     // Safety check for map encoding [cite: 2026-01-29]
@@ -20,7 +20,7 @@ function openFullModal(bizName) {
         body.innerHTML = `
             <div class="index-card-header">
                 <div class="logo-holder">
-                    <img src="${CONFIG.IMAGE_REPO}${biz.ImageID}.jpeg" onerror="this.src='https://via.placeholder.com/100'">
+                    <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" onerror="this.src='https://via.placeholder.com/100'">
                 </div>
                 <div class="title-holder">
                     <h2 style="margin:0; font-size:1.8rem;">${biz.name}</h2>
@@ -73,5 +73,5 @@ function openFullModal(bizName) {
 }
 
 function closeModal() {
-    document.getElementById('premium-modal').style.display = 'none';
+    document.getElementById('modal-overlay').style.display = 'none';
 }

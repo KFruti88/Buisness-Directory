@@ -15,8 +15,6 @@ function openFullModal(bizName) {
     // Safety check for map encoding [cite: 2026-01-29]
     const mapAddr = encodeURIComponent(`${biz.address}, ${biz.town}, IL`);
 
-    // PREMIUM & PLUS LAYOUT
-    if (tierL === 'premium' || tierL === 'plus') {
     // PREMIUM LAYOUT: Full Contact Details
     if (tierL === 'premium') {
         body.innerHTML = `

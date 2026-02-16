@@ -87,3 +87,51 @@
 .coupon-container { position: absolute; top: 5%; left: 5%; z-index: 15; }
 .coupon-img-top { width: 45px; height: auto; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2)); }
 .tier-badge-top { position: absolute; top: 5%; right: 5%; font-size: 0.75rem; font-weight: 900; background: #fff; border: 1.5px solid #000; padding: 2px 6px; z-index: 10; text-transform: uppercase; }
+
+/* --- 6. MODAL POPOUT STYLES --- */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-container {
+    background: #fff;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 3px solid #000;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    position: relative;
+}
+
+.index-card-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 2px solid #000;
+    background: #fdf6d8;
+}
+
+.logo-holder { width: 60px; height: 60px; margin-right: 15px; }
+.logo-holder img { width: 100%; height: 100%; object-fit: contain; }
+.close-card { margin-left: auto; font-size: 2rem; cursor: pointer; font-weight: bold; }
+
+.index-card-grid { display: flex; flex-wrap: wrap; gap: 15px; padding: 15px; }
+.info-side { flex: 1; min-width: 200px; }
+.map-side { flex: 1; min-width: 200px; }
+.bio-section, .coupon-section { padding: 15px; border-top: 1px solid #ccc; }
+.mini-btn { 
+    display: inline-block; padding: 5px 10px; 
+    background: #000; color: #fff; 
+    text-decoration: none; margin-right: 5px; 
+    font-size: 0.8rem; font-weight: bold;
+}

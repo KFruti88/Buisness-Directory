@@ -61,6 +61,11 @@ function fetchData() {
             console.log(`✅ Live Data Loaded: ${window.allData.length} businesses found.`);
             updateHeader();
             renderCards(window.allData);
+        },
+        error: function(err) {
+            console.error("❌ Data Fetch Error:", err);
+            const infoBox = document.getElementById('header-info');
+            if (infoBox) infoBox.innerText = "⚠️ CONNECTION FAILED - CHECK CONSOLE";
         }
     });
 }

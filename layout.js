@@ -5,7 +5,7 @@
  */
 
 const CONFIG = {
-    CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRDgQs5fH6y8PWw9zJ7_3237SB2lxlsx8Gnw8o8xvTr94vVtWwzs6qqidajKbPepQDS36GNo97bX_4b/pub?gid=0&single=true&output=csv",
+    CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSOri1Xv-jHW8JnLbK0lBG_Or0e99RcIXqoBHc31HE5RxppszjFz3akDCHXaZxFmrepuCOUTD9jLL0B/pub?gid=0&single=true&output=csv",
     IMAGE_REPO: "https://raw.githubusercontent.com/KFruti88/images/main/",
     
     // [cite: 2026-01-28] THE "COLOR LOCK" TOWN BRANDING
@@ -24,6 +24,7 @@ const CONFIG = {
         CAT: 8, BIO: 9, HOURS: 10, TIER: 11, EST: 12, CPN_TXT: 13, CPN_IMG: 14 
     }
 };
+window.CONFIG = CONFIG; // Ensure global visibility for modal.js
 
 window.allData = []; 
 
@@ -57,6 +58,7 @@ function fetchData() {
                 coupon: row[CONFIG.MAP.CPN_IMG] || ""
             })).filter(b => b.name && b.name.trim() !== "");
             
+            console.log(`✅ Live Data Loaded: ${window.allData.length} businesses found.`);
             updateHeader();
             renderCards(window.allData);
         }

@@ -44,6 +44,5 @@ Coupon Integration: Supports a "Live Coupon" badge system to drive customer traf
 Frontend: HTML5, CSS3 (Newspaper Aesthetic), JavaScript (ES6).
 Make sure to add a Universal Browser, Univeral Devices, and Universal Screen
 
-Data Engine: PapaParse integration for real-time CSV processing.
-
-Modular Codebase: Separated into config.js (Business Rules) and layout.js (Visual Engine) to allow for rapid layout adjustments without risking data integrity.
+Data Engine: "Serverless" Live Fetch via PapaParse (Direct Google Sheet Connection).
+Note: GitHub Actions/Workflows are NOT required. The site pulls data live from the spreadsheet every time it loads.

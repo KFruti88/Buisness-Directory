@@ -86,28 +86,29 @@ function renderCards(data) {
         const displayPhone = cleanPhone.length === 10 ? `(${cleanPhone.slice(0,3)}) ${cleanPhone.slice(3,6)}-${cleanPhone.slice(6)}` : "";
 
         const couponHTML = (biz.couponTxt && biz.couponTxt.trim() !== "") 
-            ? `<img src="https://github.com/KFruti88/images/blob/main/Coupon.png?raw=true" class="coupon-img-top">`
+            ? `<img src="https://github.com/KFruti88/images/blob/main/Coupon.png?raw=true" class="coupon-img-top" alt="Coupon Available">`
             : "";
 
         return `
-        <div class="card ${tierL}" onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')">
+        <div class="business-card ${tierL}" onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')">
+            <div class="badge">${biz.tier}</div>
             <div class="coupon-container">${couponHTML}</div>
-            <div class="tier-badge-top">${biz.tier}</div>
+            
+            <div class="card-image">
+                <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" alt="${biz.name} Logo" onerror="this.src='https://via.placeholder.com/150'">
+            </div>
 
-            <div class="logo-box">
-                <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" onerror="this.src='https://via.placeholder.com/150'">
+            <div class="black-box" style="background-color: ${colors.bg} !important; color: ${colors.text} !important;">
+                <h3 class="town-name">${biz.town}</h3>
             </div>
-            
-            <div class="town-bar" style="background-color: ${colors.bg} !important; color: ${colors.text} !important;">
-                ${biz.town}
-            </div>
-            
+
             <div class="biz-name">${biz.name}</div>
 
-            <div class="bottom-stack">
-                ${(tierL === 'premium' || tierL === 'plus') && displayPhone ? `<div class="biz-phone">📞 ${displayPhone}</div>` : ''}
-                ${tierL === 'premium' ? `<div class="premium-cta">⚡ CLICK FOR DETAILS</div>` : ''}
-                <div class="category-locked">📁 ${biz.category}</div>
+            <div class="card-footer">
+                <span class="category-text">${biz.category}</span>
+                <div class="hours-info">
+                    ${(tierL === 'premium' || tierL === 'plus') && displayPhone ? `📞 ${displayPhone}` : `<i class="folder-icon"></i> ${biz.hours || 'See Details'}`}
+                </div>
             </div>
         </div>`;
     }).join('');

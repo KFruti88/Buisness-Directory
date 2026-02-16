@@ -28,15 +28,16 @@ window.CONFIG = CONFIG; // Ensure global visibility for modal.js
 
 window.allData = []; 
 
-function updateHeader() {
+function updateHeader(isLoading = false) {
     const now = new Date();
     const infoBox = document.getElementById('header-info');
     if (infoBox) {
-        infoBox.innerText = `VOL. ${now.getMonth() + 1} — NO. ${now.getDate()}`;
+        infoBox.innerText = `VOL. ${now.getMonth() + 1} — NO. ${now.getDate()}${isLoading ? ' | LOADING...' : ''}`;
     }
 }
 
 function fetchData() {
+    updateHeader(true);
     Papa.parse(`${CONFIG.CSV_URL}&v=${new Date().getTime()}`, {
         download: true, header: false, skipEmptyLines: true,
         complete: function(results) {
@@ -59,7 +60,7 @@ function fetchData() {
             })).filter(b => b.name && b.name.trim() !== "");
             
             console.log(`✅ Live Data Loaded: ${window.allData.length} businesses found.`);
-            updateHeader();
+            updateHeader(false);
             renderCards(window.allData);
         },
         error: function(err) {

@@ -6,7 +6,7 @@
 
 const CONFIG = {
     CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSOri1Xv-jHW8JnLbK0lBG_Or0e99RcIXqoBHc31HE5RxppszjFz3akDCHXaZxFmrepuCOUTD9jLL0B/pub?gid=0&single=true&output=csv",
-    IMAGE_REPO: "https://raw.githubusercontent.com/KFruti88/images/main/",
+    IMAGE_REPO: "https://raw.githubusercontent.com/skventuresigns-design/media/main/",
     
     // [cite: 2026-01-28] THE "COLOR LOCK" TOWN BRANDING
     TOWN_COLORS: {
@@ -20,8 +20,8 @@ const CONFIG = {
 
     // Hard-Locked A-P Mapping [cite: 2026-01-30]
     MAP: { 
-        IMG: 0, NAME: 1, ADDR: 2, TOWN: 3, ZIP: 4, PHONE: 5, WEB: 6, FB: 7, 
-        CAT: 8, BIO: 9, HOURS: 10, TIER: 11, EST: 12, CPN_TXT: 13, CPN_IMG: 14 
+        NAME: 0, TOWN: 1, PHONE: 2, CAT: 3, TIER: 4, IMG: 5, WEB: 6, ADDR: 7, 
+        HOURS: 8, FB: 10, CPN_TXT: 11, EST: 12, BIO: 13, ZIP: 7, CPN_IMG: 5 
     }
 };
 window.CONFIG = CONFIG; // Ensure global visibility for modal.js
@@ -91,19 +91,26 @@ function renderCards(data) {
 
         return `
         <div class="business-card ${tierL}" onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')">
+            <!-- 1. TOP RIGHT BADGE (Basic/Plus/Premium) -->
             <div class="tier-badge-top">${biz.tier}</div>
+            
+            <!-- 2. TOP LEFT COUPON ICON -->
             <div class="coupon-container">${couponHTML}</div>
             
+            <!-- 3. MAIN IMAGE AREA -->
             <div class="card-image-container">
                 <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" class="business-image" alt="${biz.name} Logo" onerror="this.src='https://via.placeholder.com/150'">
             </div>
 
+            <!-- 4. BLACK TOWN BAR -->
             <div class="town-black-box" style="background-color: ${colors.bg} !important; color: ${colors.text} !important;">
                 <h3 class="town-text">${biz.town}</h3>
             </div>
 
+            <!-- 5. BUSINESS NAME -->
             <div class="biz-name">${biz.name}</div>
 
+            <!-- 6. BOTTOM FOOTER (Category & Phone/Link) -->
             <div class="card-footer">
                 <span class="category-tag">📁 ${biz.category}</span>
                 <span class="details-link">${(tierL === 'premium' || tierL === 'plus') && displayPhone ? '📞 ' + displayPhone : 'See Details'}</span>

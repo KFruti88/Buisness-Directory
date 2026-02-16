@@ -35,6 +35,12 @@ function updateHeader(isLoading = false) {
         // Vol = Month, No = Day
         infoBox.innerText = `VOL. ${now.getMonth() + 1} — NO. ${now.getDate()}${isLoading ? ' | LOADING...' : ''}`;
     }
+
+    // Fix typo in static HTML header if present
+    const h1 = document.querySelector('.main-title h1');
+    if (h1 && h1.innerText.trim() === "Clay Count") {
+        h1.innerText = "Clay County";
+    }
 }
 
 function fetchData() {

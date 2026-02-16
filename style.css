@@ -9,28 +9,79 @@
 
 /* --- 2. THE UNIFORM YELLOW CARD DNA --- */
 #directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 25px; width: 93%; margin: 0 auto; padding: 20px 0; }
-.card { 
-    background: #fff5ba !important; border: 2px solid #000; border-radius: 4px;
-    height: 480px; display: flex; flex-direction: column; position: relative; overflow: hidden; 
-    box-shadow: 5px 5px 0px rgba(0,0,0,0.1); cursor: pointer;
+
+.business-card {
+    background-color: #fdf6d8; /* Vintage paper color */
+    border: 2px solid #000;
+    width: 90%; /* Responsive width */
+    max-width: 320px;
+    margin: 0 auto; /* Centered in grid */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 5px 0px #000;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
 }
-.logo-box { height: 160px; display: flex; align-items: center; justify-content: center; background: transparent !important; padding: 15px; }
-.logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; }
+
+.card-image-container {
+    width: 100%;
+    height: 140px;
+    background-color: #e0e0e0;
+    border-bottom: 2px solid #000;
+}
+
+.business-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
 /* --- 3. THE BRANDED TOWN BAR [cite: 2026-01-28] --- */
-.town-bar { 
-    height: 38px; display: flex; align-items: center; justify-content: center; 
-    text-transform: uppercase; font-weight: 900; border-top: 2px solid #000; border-bottom: 2px solid #000;
-    font-size: 1.1rem; letter-spacing: 1px; width: 100%;
+.town-black-box {
+    background-color: #000;
+    color: #fff;
+    padding: 12px 5px;
+    text-align: center;
 }
 
-.biz-name { height: 80px; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: bold; font-size: 1.4rem; padding: 10px; margin-bottom: 80px; }
+.town-text {
+    margin: 0;
+    font-family: 'serif'; 
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.biz-name { 
+    text-align: center; 
+    font-weight: bold; 
+    font-size: 1.3rem; 
+    padding: 15px 10px; 
+    margin: 0; 
+    line-height: 1.2;
+}
 
 /* --- 4. CENTERED BOTTOM STACK --- */
-.bottom-stack { position: absolute; bottom: 20px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; pointer-events: none; }
-.biz-phone { font-size: 1.25rem; font-weight: bold; color: #000; }
-.category-locked { font-weight: bold; color: #222; font-size: 1.25rem; }
-.premium-cta { color: #fe4f00; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; }
+.card-footer {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.category-tag {
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+
+.details-link {
+    color: #000;
+    text-decoration: underline;
+    font-size: 0.9rem;
+}
 
 /* --- 5. ASSET LOCKS (COUPON & TIER) --- */
 .coupon-container { position: absolute; top: 5%; left: 5%; z-index: 15; }

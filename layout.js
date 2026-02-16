@@ -91,24 +91,22 @@ function renderCards(data) {
 
         return `
         <div class="business-card ${tierL}" onclick="openFullModal('${biz.name.replace(/'/g, "\\'")}')">
-            <div class="badge">${biz.tier}</div>
+            <div class="tier-badge-top">${biz.tier}</div>
             <div class="coupon-container">${couponHTML}</div>
             
-            <div class="card-image">
-                <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" alt="${biz.name} Logo" onerror="this.src='https://via.placeholder.com/150'">
+            <div class="card-image-container">
+                <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" class="business-image" alt="${biz.name} Logo" onerror="this.src='https://via.placeholder.com/150'">
             </div>
 
-            <div class="black-box" style="background-color: ${colors.bg} !important; color: ${colors.text} !important;">
-                <h3 class="town-name">${biz.town}</h3>
+            <div class="town-black-box" style="background-color: ${colors.bg} !important; color: ${colors.text} !important;">
+                <h3 class="town-text">${biz.town}</h3>
             </div>
 
             <div class="biz-name">${biz.name}</div>
 
             <div class="card-footer">
-                <span class="category-text">${biz.category}</span>
-                <div class="hours-info">
-                    ${(tierL === 'premium' || tierL === 'plus') && displayPhone ? `📞 ${displayPhone}` : `<i class="folder-icon"></i> ${biz.hours || 'See Details'}`}
-                </div>
+                <span class="category-tag">📁 ${biz.category}</span>
+                <span class="details-link">${(tierL === 'premium' || tierL === 'plus') && displayPhone ? '📞 ' + displayPhone : 'See Details'}</span>
             </div>
         </div>`;
     }).join('');

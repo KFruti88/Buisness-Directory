@@ -113,7 +113,9 @@ function renderCards(data) {
             <!-- 6. BOTTOM FOOTER (Category & Phone/Link) -->
             <div class="card-footer">
                 <span class="category-tag">📁 ${biz.category}</span>
-                <span class="details-link">${(tierL === 'premium' || tierL === 'plus') && displayPhone ? '📞 ' + displayPhone : 'See Details'}</span>
+                ${(tierL === 'premium' || tierL === 'plus') && displayPhone 
+                    ? `<span class="details-link">📞 ${displayPhone}</span>` 
+                    : (tierL === 'premium' ? `<span class="details-link">See Details</span>` : '')}
             </div>
         </div>`;
     }).join('');

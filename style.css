@@ -104,9 +104,9 @@
 
 .modal-container {
     background: #fff;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90vh;
+    width: 95%;
+    max-width: 800px;
+    max-height: 95vh;
     overflow-y: auto;
     border: 3px solid #000;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
@@ -116,12 +116,12 @@
 .index-card-header {
     display: flex;
     align-items: center;
-    padding: 15px;
+    padding: 10px 15px;
     border-bottom: 2px solid #000;
     background: #fdf6d8;
 }
 
-.logo-holder { width: 60px; height: 60px; margin-right: 15px; }
+.logo-holder { width: 80px; height: 80px; margin-right: 15px; }
 .logo-holder img { width: 100%; height: 100%; object-fit: contain; }
 .close-card { margin-left: auto; font-size: 2rem; cursor: pointer; font-weight: bold; }
 

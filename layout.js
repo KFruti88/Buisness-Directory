@@ -32,6 +32,7 @@ function updateHeader(isLoading = false) {
     const now = new Date();
     const infoBox = document.getElementById('header-info');
     if (infoBox) {
+        // Vol = Month, No = Day
         infoBox.innerText = `VOL. ${now.getMonth() + 1} — NO. ${now.getDate()}${isLoading ? ' | LOADING...' : ''}`;
     }
 }
@@ -93,12 +94,10 @@ function renderCards(data) {
             <div class="coupon-container">${couponHTML}</div>
             <div class="tier-badge-top">${biz.tier}</div>
 
-            <!-- Image above the town box -->
             <div class="logo-box">
                 <img src="${CONFIG.IMAGE_REPO}${biz.id}.jpeg" onerror="this.src='https://via.placeholder.com/150'">
             </div>
             
-            <!-- Town in the middle box -->
             <div class="town-bar" style="background-color: ${colors.bg} !important; color: ${colors.text} !important;">
                 ${biz.town}
             </div>
@@ -108,7 +107,6 @@ function renderCards(data) {
             <div class="bottom-stack">
                 ${(tierL === 'premium' || tierL === 'plus') && displayPhone ? `<div class="biz-phone">📞 ${displayPhone}</div>` : ''}
                 ${tierL === 'premium' ? `<div class="premium-cta">⚡ CLICK FOR DETAILS</div>` : ''}
-                <!-- Category next to the folder -->
                 <div class="category-locked">📁 ${biz.category}</div>
             </div>
         </div>`;
